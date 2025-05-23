@@ -1,0 +1,582 @@
+
+AVR64DD32-MAIN-Controller.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         0000001a  00806000  00000356  000003ea  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000356  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000001  0080601a  0080601a  00000404  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000404  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000434  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000001f0  00000000  00000000  00000470  2**3
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   000045b2  00000000  00000000  00000660  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00002a7d  00000000  00000000  00004c12  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00001233  00000000  00000000  0000768f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  0000044c  00000000  00000000  000088c4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00002409  00000000  00000000  00008d10  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00001014  00000000  00000000  0000b119  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000178  00000000  00000000  0000c12d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 48 00 	jmp	0x90	; 0x90 <__ctors_end>
+   4:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+   8:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+   c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  10:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  14:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  18:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  1c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  20:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  24:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  28:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  2c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  30:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  34:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  38:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  3c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  40:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  44:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  48:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  4c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  50:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  54:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  58:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  5c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  60:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  64:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  68:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  6c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  70:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  74:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  78:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  7c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  80:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  84:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  88:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+  8c:	0c 94 65 00 	jmp	0xca	; 0xca <__bad_interrupt>
+
+00000090 <__ctors_end>:
+  90:	11 24       	eor	r1, r1
+  92:	1f be       	out	0x3f, r1	; 63
+  94:	cf ef       	ldi	r28, 0xFF	; 255
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	df e7       	ldi	r29, 0x7F	; 127
+  9a:	de bf       	out	0x3e, r29	; 62
+
+0000009c <__do_copy_data>:
+  9c:	10 e6       	ldi	r17, 0x60	; 96
+  9e:	a0 e0       	ldi	r26, 0x00	; 0
+  a0:	b0 e6       	ldi	r27, 0x60	; 96
+  a2:	e6 e5       	ldi	r30, 0x56	; 86
+  a4:	f3 e0       	ldi	r31, 0x03	; 3
+  a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x10>
+  a8:	05 90       	lpm	r0, Z+
+  aa:	0d 92       	st	X+, r0
+  ac:	aa 31       	cpi	r26, 0x1A	; 26
+  ae:	b1 07       	cpc	r27, r17
+  b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0xc>
+
+000000b2 <__do_clear_bss>:
+  b2:	20 e6       	ldi	r18, 0x60	; 96
+  b4:	aa e1       	ldi	r26, 0x1A	; 26
+  b6:	b0 e6       	ldi	r27, 0x60	; 96
+  b8:	01 c0       	rjmp	.+2      	; 0xbc <.do_clear_bss_start>
+
+000000ba <.do_clear_bss_loop>:
+  ba:	1d 92       	st	X+, r1
+
+000000bc <.do_clear_bss_start>:
+  bc:	ab 31       	cpi	r26, 0x1B	; 27
+  be:	b2 07       	cpc	r27, r18
+  c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
+  c2:	0e 94 36 01 	call	0x26c	; 0x26c <main>
+  c6:	0c 94 a9 01 	jmp	0x352	; 0x352 <_exit>
+
+000000ca <__bad_interrupt>:
+  ca:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000ce <ADC0_init>:
+ * - Prescaler: Division by 4
+ * - Resolution: 12-bit
+ * - Enables the ADC.
+ */
+void ADC0_init() {
+    ADC0.CTRLB = ADC_SAMPNUM_ACC128_gc; // 1 measurements
+  ce:	e0 e0       	ldi	r30, 0x00	; 0
+  d0:	f6 e0       	ldi	r31, 0x06	; 6
+  d2:	87 e0       	ldi	r24, 0x07	; 7
+  d4:	81 83       	std	Z+1, r24	; 0x01
+    ADC0.CTRLC = ADC_PRESC_DIV4_gc; // 24Mhz / 16 ADC speed
+  d6:	81 e0       	ldi	r24, 0x01	; 1
+  d8:	82 83       	std	Z+2, r24	; 0x02
+    ADC0.CTRLA = ADC_ENABLE_bm | ADC_RESSEL_12BIT_gc; // 12-bit resolution
+  da:	80 83       	st	Z, r24
+  dc:	08 95       	ret
+
+000000de <CLOCK_XOSCHF_clock_init>:
+#include "Settings.h"
+
+void CLOCK_XOSCHF_clock_init()
+{
+	/* Enable external (32 MHz) clock input */
+	ccp_write_io((uint8_t *) &CLKCTRL.XOSCHFCTRLA, CLKCTRL_SELHF_EXTCLOCK_gc | CLKCTRL_FRQRANGE_24M_gc | CLKCTRL_ENABLE_bm);
+  de:	6b e0       	ldi	r22, 0x0B	; 11
+  e0:	80 e8       	ldi	r24, 0x80	; 128
+  e2:	90 e0       	ldi	r25, 0x00	; 0
+  e4:	0e 94 a3 01 	call	0x346	; 0x346 <ccp_write_io>
+
+	/* Set the main clock to use external clock as source */
+	ccp_write_io((uint8_t *) &CLKCTRL.MCLKCTRLA, CLKCTRL_CLKSEL_EXTCLK_gc);
+  e8:	63 e0       	ldi	r22, 0x03	; 3
+  ea:	80 e6       	ldi	r24, 0x60	; 96
+  ec:	90 e0       	ldi	r25, 0x00	; 0
+  ee:	0e 94 a3 01 	call	0x346	; 0x346 <ccp_write_io>
+
+	/* Wait for system oscillator change to complete */
+	while (CLKCTRL.MCLKSTATUS & CLKCTRL_SOSC_bm)
+  f2:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <__TEXT_REGION_LENGTH__+0x7f0065>
+  f6:	80 fd       	sbrc	r24, 0
+  f8:	fc cf       	rjmp	.-8      	; 0xf2 <CLOCK_XOSCHF_clock_init+0x14>
+	{};
+	/* Configuration complete;*/
+  fa:	08 95       	ret
+
+000000fc <GPIO_init>:
+
+#include "Settings.h"
+
+void GPIO_init(){
+    // Configure USART0 and USART1 pin routing
+    PORTMUX.USARTROUTEA = PORTMUX_USART0_ALT1_gc | PORTMUX_USART1_ALT2_gc; // Set USART0 to alternative pins set 1, USART1 to alternative pins set 2
+  fc:	e0 ee       	ldi	r30, 0xE0	; 224
+  fe:	f5 e0       	ldi	r31, 0x05	; 5
+ 100:	81 e1       	ldi	r24, 0x11	; 17
+ 102:	82 83       	std	Z+2, r24	; 0x02
+    PORTMUX.TWIROUTEA = PORTMUX_TWI0_DEFAULT_gc; // Set TWI0 to default pins
+ 104:	16 82       	std	Z+6, r1	; 0x06
+
+    // Configure Port A (PA) for RX LED, I2C SDA, SCL, USART0 TX, TX LED and XDIR
+    PORTA.DIRSET = PIN1_bm | PIN2_bm | PIN3_bm | PIN4_bm | PIN6_bm | PIN7_bm; // Set PA2, PA3, PA4, PA7 as output (RX LED, I2C SDA, SCL, USART0 TX, TX LED, XDIR)
+ 106:	e0 e0       	ldi	r30, 0x00	; 0
+ 108:	f4 e0       	ldi	r31, 0x04	; 4
+ 10a:	8e ed       	ldi	r24, 0xDE	; 222
+ 10c:	81 83       	std	Z+1, r24	; 0x01
+    PORTA.DIRCLR = PIN5_bm; // Set PA5 as input (USART0 RX)
+ 10e:	90 e2       	ldi	r25, 0x20	; 32
+ 110:	92 83       	std	Z+2, r25	; 0x02
+    PORTA.PIN4CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA4 (I2C SCL)
+ 112:	88 e0       	ldi	r24, 0x08	; 8
+ 114:	84 8b       	std	Z+20, r24	; 0x14
+    PORTA.PIN5CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA5 (USART0 RX)
+ 116:	85 8b       	std	Z+21, r24	; 0x15
+
+    // Configure Port D (PD) for USART1 TX and RX
+    PORTD.DIRSET = PIN5_bm | PIN6_bm; //Set PD5 as output (Clock change command) and PD6 as output (USART1 TX)
+ 118:	e0 e6       	ldi	r30, 0x60	; 96
+ 11a:	f4 e0       	ldi	r31, 0x04	; 4
+ 11c:	20 e6       	ldi	r18, 0x60	; 96
+ 11e:	21 83       	std	Z+1, r18	; 0x01
+	PORTD.OUTSET = PIN5_bm; // Set PD5 high (No action, to be controlled by software)
+ 120:	95 83       	std	Z+5, r25	; 0x05
+    PORTD.OUTCLR = PIN7_bm; // Set PD7 as input (USART1 RX)
+ 122:	90 e8       	ldi	r25, 0x80	; 128
+ 124:	96 83       	std	Z+6, r25	; 0x06
+    PORTD.PIN6CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD6 (USART1 TX)
+ 126:	86 8b       	std	Z+22, r24	; 0x16
+    PORTD.PIN7CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD7 (USART1 RX)
+ 128:	87 8b       	std	Z+23, r24	; 0x17
+
+    // Configure Port F (PF) for Keypad row and column control
+    PORTF.DIRSET = PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm; // Set PF0, PF1, PF2, PF3 as output (Keypad rows)
+ 12a:	e0 ea       	ldi	r30, 0xA0	; 160
+ 12c:	f4 e0       	ldi	r31, 0x04	; 4
+ 12e:	9f e0       	ldi	r25, 0x0F	; 15
+ 130:	91 83       	std	Z+1, r25	; 0x01
+    PORTF.OUTSET = PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm; // Set Keypad rows to high
+ 132:	95 83       	std	Z+5, r25	; 0x05
+
+    PORTF.DIRCLR = PIN4_bm | PIN5_bm | PIN6_bm; // Set PF4 PF5 PF6 as inputs (Keypad columns 1-3)
+ 134:	90 e7       	ldi	r25, 0x70	; 112
+ 136:	92 83       	std	Z+2, r25	; 0x02
+
+    PORTF.PIN4CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF4 (Keypad column 1)
+ 138:	84 8b       	std	Z+20, r24	; 0x14
+    PORTF.PIN5CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF5 (Keypad column 2)
+ 13a:	85 8b       	std	Z+21, r24	; 0x15
+    PORTF.PIN6CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF6 (Keypad column 3)
+ 13c:	86 8b       	std	Z+22, r24	; 0x16
+
+    // Configure ADC pins for wind speed, wind direction, and sun light level sensors
+    PORTC.PIN0CTRL &= ~PORT_ISC_gm; // Disable interrupt sense for PC0 (Wind direction sensor)
+ 13e:	e0 e4       	ldi	r30, 0x40	; 64
+ 140:	f4 e0       	ldi	r31, 0x04	; 4
+ 142:	90 89       	ldd	r25, Z+16	; 0x10
+ 144:	98 7f       	andi	r25, 0xF8	; 248
+ 146:	90 8b       	std	Z+16, r25	; 0x10
+    PORTC.PIN0CTRL |= PORT_ISC_INPUT_DISABLE_gc; // Disable input sense for PC0
+ 148:	90 89       	ldd	r25, Z+16	; 0x10
+ 14a:	94 60       	ori	r25, 0x04	; 4
+ 14c:	90 8b       	std	Z+16, r25	; 0x10
+    PORTC.PIN0CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC0
+ 14e:	90 89       	ldd	r25, Z+16	; 0x10
+ 150:	97 7f       	andi	r25, 0xF7	; 247
+ 152:	90 8b       	std	Z+16, r25	; 0x10
+    PORTC.PIN1CTRL &= ~PORT_ISC_gm; // Disable interrupt sense for PC1 (Wind speed sensor)
+ 154:	91 89       	ldd	r25, Z+17	; 0x11
+ 156:	98 7f       	andi	r25, 0xF8	; 248
+ 158:	91 8b       	std	Z+17, r25	; 0x11
+    PORTC.PIN1CTRL |= PORT_ISC_INPUT_DISABLE_gc; // Disable input sense for PC1
+ 15a:	91 89       	ldd	r25, Z+17	; 0x11
+ 15c:	94 60       	ori	r25, 0x04	; 4
+ 15e:	91 8b       	std	Z+17, r25	; 0x11
+    PORTC.PIN1CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC1
+ 160:	91 89       	ldd	r25, Z+17	; 0x11
+ 162:	97 7f       	andi	r25, 0xF7	; 247
+ 164:	91 8b       	std	Z+17, r25	; 0x11
+    PORTC.PIN2CTRL &= ~PORT_ISC_gm; // Disable interrupt sense for PC2 (Sun light sensor)
+ 166:	92 89       	ldd	r25, Z+18	; 0x12
+ 168:	98 7f       	andi	r25, 0xF8	; 248
+ 16a:	92 8b       	std	Z+18, r25	; 0x12
+    PORTC.PIN2CTRL |= PORT_ISC_INPUT_DISABLE_gc; // Disable input sense for PC2
+ 16c:	92 89       	ldd	r25, Z+18	; 0x12
+ 16e:	94 60       	ori	r25, 0x04	; 4
+ 170:	92 8b       	std	Z+18, r25	; 0x12
+    PORTC.PIN2CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC2
+ 172:	92 89       	ldd	r25, Z+18	; 0x12
+ 174:	97 7f       	andi	r25, 0xF7	; 247
+ 176:	92 8b       	std	Z+18, r25	; 0x12
+
+	PORTC.DIRSET = PIN3_bm; //Set PC3 as Clock change command RX LED
+ 178:	81 83       	std	Z+1, r24	; 0x01
+ 17a:	08 95       	ret
+
+0000017c <I2C_init>:
+        }
+    }
+
+    TWI0.MCTRLB |= TWI_MCMD_STOP_gc; // Send STOP signal to release the bus
+    return data;
+}
+ 17c:	e0 e0       	ldi	r30, 0x00	; 0
+ 17e:	f9 e0       	ldi	r31, 0x09	; 9
+ 180:	82 e0       	ldi	r24, 0x02	; 2
+ 182:	80 83       	st	Z, r24
+ 184:	85 e0       	ldi	r24, 0x05	; 5
+ 186:	86 83       	std	Z+6, r24	; 0x06
+ 188:	81 e0       	ldi	r24, 0x01	; 1
+ 18a:	83 83       	std	Z+3, r24	; 0x03
+ 18c:	85 83       	std	Z+5, r24	; 0x05
+ 18e:	08 95       	ret
+
+00000190 <TransmitAdd>:
+ 190:	90 e0       	ldi	r25, 0x00	; 0
+ 192:	88 0f       	add	r24, r24
+ 194:	99 1f       	adc	r25, r25
+ 196:	86 2b       	or	r24, r22
+ 198:	80 93 07 09 	sts	0x0907, r24	; 0x800907 <__TEXT_REGION_LENGTH__+0x7f0907>
+ 19c:	40 e2       	ldi	r20, 0x20	; 32
+ 19e:	51 ea       	ldi	r21, 0xA1	; 161
+ 1a0:	67 e0       	ldi	r22, 0x07	; 7
+ 1a2:	70 e0       	ldi	r23, 0x00	; 0
+ 1a4:	09 c0       	rjmp	.+18     	; 0x1b8 <TransmitAdd+0x28>
+ 1a6:	41 50       	subi	r20, 0x01	; 1
+ 1a8:	51 09       	sbc	r21, r1
+ 1aa:	61 09       	sbc	r22, r1
+ 1ac:	71 09       	sbc	r23, r1
+ 1ae:	21 f4       	brne	.+8      	; 0x1b8 <TransmitAdd+0x28>
+ 1b0:	83 e0       	ldi	r24, 0x03	; 3
+ 1b2:	80 93 04 09 	sts	0x0904, r24	; 0x800904 <__TEXT_REGION_LENGTH__+0x7f0904>
+ 1b6:	05 c0       	rjmp	.+10     	; 0x1c2 <TransmitAdd+0x32>
+ 1b8:	80 91 05 09 	lds	r24, 0x0905	; 0x800905 <__TEXT_REGION_LENGTH__+0x7f0905>
+ 1bc:	80 7c       	andi	r24, 0xC0	; 192
+ 1be:	99 f3       	breq	.-26     	; 0x1a6 <TransmitAdd+0x16>
+ 1c0:	80 e0       	ldi	r24, 0x00	; 0
+ 1c2:	90 91 05 09 	lds	r25, 0x0905	; 0x800905 <__TEXT_REGION_LENGTH__+0x7f0905>
+ 1c6:	94 fd       	sbrc	r25, 4
+ 1c8:	81 e0       	ldi	r24, 0x01	; 1
+ 1ca:	90 91 05 09 	lds	r25, 0x0905	; 0x800905 <__TEXT_REGION_LENGTH__+0x7f0905>
+ 1ce:	9c 70       	andi	r25, 0x0C	; 12
+ 1d0:	09 f0       	breq	.+2      	; 0x1d4 <TransmitAdd+0x44>
+ 1d2:	82 e0       	ldi	r24, 0x02	; 2
+ 1d4:	88 23       	and	r24, r24
+ 1d6:	19 f0       	breq	.+6      	; 0x1de <TransmitAdd+0x4e>
+ 1d8:	93 e0       	ldi	r25, 0x03	; 3
+ 1da:	90 93 04 09 	sts	0x0904, r25	; 0x800904 <__TEXT_REGION_LENGTH__+0x7f0904>
+ 1de:	80 93 1a 60 	sts	0x601A, r24	; 0x80601a <__data_end>
+ 1e2:	08 95       	ret
+
+000001e4 <TransmitByte>:
+ 1e4:	28 2f       	mov	r18, r24
+ 1e6:	90 91 05 09 	lds	r25, 0x0905	; 0x800905 <__TEXT_REGION_LENGTH__+0x7f0905>
+ 1ea:	94 fd       	sbrc	r25, 4
+ 1ec:	02 c0       	rjmp	.+4      	; 0x1f2 <TransmitByte+0xe>
+ 1ee:	80 e0       	ldi	r24, 0x00	; 0
+ 1f0:	01 c0       	rjmp	.+2      	; 0x1f4 <TransmitByte+0x10>
+ 1f2:	81 e0       	ldi	r24, 0x01	; 1
+ 1f4:	90 91 05 09 	lds	r25, 0x0905	; 0x800905 <__TEXT_REGION_LENGTH__+0x7f0905>
+ 1f8:	9c 70       	andi	r25, 0x0C	; 12
+ 1fa:	09 f0       	breq	.+2      	; 0x1fe <TransmitByte+0x1a>
+ 1fc:	82 e0       	ldi	r24, 0x02	; 2
+ 1fe:	88 23       	and	r24, r24
+ 200:	19 f0       	breq	.+6      	; 0x208 <TransmitByte+0x24>
+ 202:	93 e0       	ldi	r25, 0x03	; 3
+ 204:	90 93 04 09 	sts	0x0904, r25	; 0x800904 <__TEXT_REGION_LENGTH__+0x7f0904>
+ 208:	81 11       	cpse	r24, r1
+ 20a:	14 c0       	rjmp	.+40     	; 0x234 <TransmitByte+0x50>
+ 20c:	20 93 08 09 	sts	0x0908, r18	; 0x800908 <__TEXT_REGION_LENGTH__+0x7f0908>
+ 210:	40 e2       	ldi	r20, 0x20	; 32
+ 212:	51 ea       	ldi	r21, 0xA1	; 161
+ 214:	67 e0       	ldi	r22, 0x07	; 7
+ 216:	70 e0       	ldi	r23, 0x00	; 0
+ 218:	09 c0       	rjmp	.+18     	; 0x22c <TransmitByte+0x48>
+ 21a:	41 50       	subi	r20, 0x01	; 1
+ 21c:	51 09       	sbc	r21, r1
+ 21e:	61 09       	sbc	r22, r1
+ 220:	71 09       	sbc	r23, r1
+ 222:	21 f4       	brne	.+8      	; 0x22c <TransmitByte+0x48>
+ 224:	83 e0       	ldi	r24, 0x03	; 3
+ 226:	80 93 04 09 	sts	0x0904, r24	; 0x800904 <__TEXT_REGION_LENGTH__+0x7f0904>
+ 22a:	04 c0       	rjmp	.+8      	; 0x234 <TransmitByte+0x50>
+ 22c:	90 91 05 09 	lds	r25, 0x0905	; 0x800905 <__TEXT_REGION_LENGTH__+0x7f0905>
+ 230:	96 ff       	sbrs	r25, 6
+ 232:	f3 cf       	rjmp	.-26     	; 0x21a <TransmitByte+0x36>
+ 234:	80 93 1a 60 	sts	0x601A, r24	; 0x80601a <__data_end>
+ 238:	08 95       	ret
+
+0000023a <WriteToReg>:
+ * @param reg Register address to write to.
+ * @param data Data to write to the register.
+ * 
+ * This function writes the data to a specific register of an I2C device.
+ */
+void WriteToReg(uint8_t addr, uint8_t reg, uint8_t data) {
+ 23a:	cf 93       	push	r28
+ 23c:	df 93       	push	r29
+ 23e:	c6 2f       	mov	r28, r22
+ 240:	d4 2f       	mov	r29, r20
+    if (!TransmitAdd(addr, WRITE)) { // Transmit address for write
+ 242:	60 e0       	ldi	r22, 0x00	; 0
+ 244:	0e 94 c8 00 	call	0x190	; 0x190 <TransmitAdd>
+ 248:	81 11       	cpse	r24, r1
+ 24a:	08 c0       	rjmp	.+16     	; 0x25c <WriteToReg+0x22>
+        if (!TransmitByte(reg)) { // Write register address
+ 24c:	8c 2f       	mov	r24, r28
+ 24e:	0e 94 f2 00 	call	0x1e4	; 0x1e4 <TransmitByte>
+ 252:	81 11       	cpse	r24, r1
+ 254:	03 c0       	rjmp	.+6      	; 0x25c <WriteToReg+0x22>
+            TransmitByte(data); // Write the data with STOP
+ 256:	8d 2f       	mov	r24, r29
+ 258:	0e 94 f2 00 	call	0x1e4	; 0x1e4 <TransmitByte>
+        }
+    }
+
+    TWI0.MCTRLB |= TWI_MCMD_STOP_gc; // Send STOP signal
+ 25c:	e0 e0       	ldi	r30, 0x00	; 0
+ 25e:	f9 e0       	ldi	r31, 0x09	; 9
+ 260:	84 81       	ldd	r24, Z+4	; 0x04
+ 262:	83 60       	ori	r24, 0x03	; 3
+ 264:	84 83       	std	Z+4, r24	; 0x04
+}
+ 266:	df 91       	pop	r29
+ 268:	cf 91       	pop	r28
+ 26a:	08 95       	ret
+
+0000026c <main>:
+#include "Settings.h"
+
+int main(void)
+{
+    // Initialize system clock, GPIO, I2C, ADC, USART, and screen
+    CLOCK_XOSCHF_clock_init();
+ 26c:	0e 94 6f 00 	call	0xde	; 0xde <CLOCK_XOSCHF_clock_init>
+    GPIO_init();
+ 270:	0e 94 7e 00 	call	0xfc	; 0xfc <GPIO_init>
+    I2C_init();
+ 274:	0e 94 be 00 	call	0x17c	; 0x17c <I2C_init>
+    ADC0_init();
+ 278:	0e 94 67 00 	call	0xce	; 0xce <ADC0_init>
+    USART0_init();
+ 27c:	0e 94 8b 01 	call	0x316	; 0x316 <USART0_init>
+    USART1_init();
+ 280:	0e 94 98 01 	call	0x330	; 0x330 <USART1_init>
+    screen_init();
+ 284:	0e 94 53 01 	call	0x2a6	; 0x2a6 <screen_init>
+
+    screen_clear(); // Clear the screen
+ 288:	0e 94 66 01 	call	0x2cc	; 0x2cc <screen_clear>
+ 28c:	ff cf       	rjmp	.-2      	; 0x28c <main+0x20>
+
+0000028e <screen_command>:
+    if (contrast > 0x3f) {
+        contrast = 0x3f;  ///< Ensure contrast does not exceed maximum
+    }
+    screen_command(0x81);  ///< Send command to set contrast
+    screen_command(contrast);  ///< Set the contrast value
+}
+ 28e:	48 2f       	mov	r20, r24
+ 290:	60 e0       	ldi	r22, 0x00	; 0
+ 292:	8c e3       	ldi	r24, 0x3C	; 60
+ 294:	0e 94 1d 01 	call	0x23a	; 0x23a <WriteToReg>
+ 298:	08 95       	ret
+
+0000029a <screen_data>:
+ 29a:	48 2f       	mov	r20, r24
+ 29c:	60 e4       	ldi	r22, 0x40	; 64
+ 29e:	8c e3       	ldi	r24, 0x3C	; 60
+ 2a0:	0e 94 1d 01 	call	0x23a	; 0x23a <WriteToReg>
+ 2a4:	08 95       	ret
+
+000002a6 <screen_init>:
+ 2a6:	cf 93       	push	r28
+ 2a8:	60 e0       	ldi	r22, 0x00	; 0
+ 2aa:	8c e3       	ldi	r24, 0x3C	; 60
+ 2ac:	0e 94 c8 00 	call	0x190	; 0x190 <TransmitAdd>
+ 2b0:	c0 e0       	ldi	r28, 0x00	; 0
+ 2b2:	08 c0       	rjmp	.+16     	; 0x2c4 <screen_init+0x1e>
+ 2b4:	ec 2f       	mov	r30, r28
+ 2b6:	f0 e0       	ldi	r31, 0x00	; 0
+ 2b8:	e0 50       	subi	r30, 0x00	; 0
+ 2ba:	f0 4a       	sbci	r31, 0xA0	; 160
+ 2bc:	80 81       	ld	r24, Z
+ 2be:	0e 94 f2 00 	call	0x1e4	; 0x1e4 <TransmitByte>
+ 2c2:	cf 5f       	subi	r28, 0xFF	; 255
+ 2c4:	ca 31       	cpi	r28, 0x1A	; 26
+ 2c6:	b0 f3       	brcs	.-20     	; 0x2b4 <screen_init+0xe>
+ 2c8:	cf 91       	pop	r28
+ 2ca:	08 95       	ret
+
+000002cc <screen_clear>:
+ * @brief Clears the ST7567S display.
+ * 
+ * This function clears the entire display by setting all pixels to 0 and restoring 
+ * the default contrast.
+ */
+void screen_clear() {
+ 2cc:	0f 93       	push	r16
+ 2ce:	1f 93       	push	r17
+ 2d0:	cf 93       	push	r28
+ 2d2:	df 93       	push	r29
+    for (int page = 0; page < 8; page++) {
+ 2d4:	00 e0       	ldi	r16, 0x00	; 0
+ 2d6:	10 e0       	ldi	r17, 0x00	; 0
+ 2d8:	16 c0       	rjmp	.+44     	; 0x306 <screen_clear+0x3a>
+        screen_command(0xB0 + page);  ///< Select page
+ 2da:	80 eb       	ldi	r24, 0xB0	; 176
+ 2dc:	80 0f       	add	r24, r16
+ 2de:	0e 94 47 01 	call	0x28e	; 0x28e <screen_command>
+        screen_command(0x00);  ///< Set column address
+ 2e2:	80 e0       	ldi	r24, 0x00	; 0
+ 2e4:	0e 94 47 01 	call	0x28e	; 0x28e <screen_command>
+        screen_command(0x10);  ///< Set column address
+ 2e8:	80 e1       	ldi	r24, 0x10	; 16
+ 2ea:	0e 94 47 01 	call	0x28e	; 0x28e <screen_command>
+
+        for (int column = 0; column < 128; column++) {
+ 2ee:	c0 e0       	ldi	r28, 0x00	; 0
+ 2f0:	d0 e0       	ldi	r29, 0x00	; 0
+ 2f2:	04 c0       	rjmp	.+8      	; 0x2fc <screen_clear+0x30>
+            screen_data(0x00);  ///< Clear each column
+ 2f4:	80 e0       	ldi	r24, 0x00	; 0
+ 2f6:	0e 94 4d 01 	call	0x29a	; 0x29a <screen_data>
+    for (int page = 0; page < 8; page++) {
+        screen_command(0xB0 + page);  ///< Select page
+        screen_command(0x00);  ///< Set column address
+        screen_command(0x10);  ///< Set column address
+
+        for (int column = 0; column < 128; column++) {
+ 2fa:	21 96       	adiw	r28, 0x01	; 1
+ 2fc:	c0 38       	cpi	r28, 0x80	; 128
+ 2fe:	d1 05       	cpc	r29, r1
+ 300:	cc f3       	brlt	.-14     	; 0x2f4 <screen_clear+0x28>
+ * 
+ * This function clears the entire display by setting all pixels to 0 and restoring 
+ * the default contrast.
+ */
+void screen_clear() {
+    for (int page = 0; page < 8; page++) {
+ 302:	0f 5f       	subi	r16, 0xFF	; 255
+ 304:	1f 4f       	sbci	r17, 0xFF	; 255
+ 306:	08 30       	cpi	r16, 0x08	; 8
+ 308:	11 05       	cpc	r17, r1
+ 30a:	3c f3       	brlt	.-50     	; 0x2da <screen_clear+0xe>
+        for (int column = 0; column < 128; column++) {
+            screen_data(0x00);  ///< Clear each column
+        }
+    }
+    //screen_contrast(SSD1306_CONTRAST);  ///< Restore contrast
+}
+ 30c:	df 91       	pop	r29
+ 30e:	cf 91       	pop	r28
+ 310:	1f 91       	pop	r17
+ 312:	0f 91       	pop	r16
+ 314:	08 95       	ret
+
+00000316 <USART0_init>:
+ * @return 0 on success.
+ */
+int USART0_printChar(char c, FILE *stream) {
+	USART0_sendChar(c); // Send character
+	return 0;
+}
+ 316:	e0 e0       	ldi	r30, 0x00	; 0
+ 318:	f8 e0       	ldi	r31, 0x08	; 8
+ 31a:	80 e4       	ldi	r24, 0x40	; 64
+ 31c:	90 e0       	ldi	r25, 0x00	; 0
+ 31e:	80 87       	std	Z+8, r24	; 0x08
+ 320:	91 87       	std	Z+9, r25	; 0x09
+ 322:	81 e0       	ldi	r24, 0x01	; 1
+ 324:	85 83       	std	Z+5, r24	; 0x05
+ 326:	82 ec       	ldi	r24, 0xC2	; 194
+ 328:	86 83       	std	Z+6, r24	; 0x06
+ 32a:	83 e0       	ldi	r24, 0x03	; 3
+ 32c:	87 83       	std	Z+7, r24	; 0x07
+ 32e:	08 95       	ret
+
+00000330 <USART1_init>:
+ * 
+ * This function configures USART1 for asynchronous communication, enabling both
+ * transmission and reception at a baud rate of 2.5 Mbps with double-speed operation.
+ */
+void USART1_init() {
+	USART1.BAUD = (uint16_t)USART1_BAUD_RATE(2500000); // Set baud rate to 2.5 Mbps
+ 330:	e0 e2       	ldi	r30, 0x20	; 32
+ 332:	f8 e0       	ldi	r31, 0x08	; 8
+ 334:	8d e4       	ldi	r24, 0x4D	; 77
+ 336:	90 e0       	ldi	r25, 0x00	; 0
+ 338:	80 87       	std	Z+8, r24	; 0x08
+ 33a:	91 87       	std	Z+9, r25	; 0x09
+	USART1.CTRLB = USART_RXEN_bm | USART_TXEN_bm | USART_RXMODE_CLK2X_gc; // Enable RX, TX, double speed mode
+ 33c:	82 ec       	ldi	r24, 0xC2	; 194
+ 33e:	86 83       	std	Z+6, r24	; 0x06
+	USART1.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | USART_SBMODE_1BIT_gc; // Configure for 8-bit, no parity, 1 stop bit, asynchronous mode
+ 340:	83 e0       	ldi	r24, 0x03	; 3
+ 342:	87 83       	std	Z+7, r24	; 0x07
+ 344:	08 95       	ret
+
+00000346 <ccp_write_io>:
+ 346:	dc 01       	movw	r26, r24
+ 348:	28 ed       	ldi	r18, 0xD8	; 216
+ 34a:	20 93 34 00 	sts	0x0034, r18	; 0x800034 <__TEXT_REGION_LENGTH__+0x7f0034>
+ 34e:	6c 93       	st	X, r22
+ 350:	08 95       	ret
+
+00000352 <_exit>:
+ 352:	f8 94       	cli
+
+00000354 <__stop_program>:
+ 354:	ff cf       	rjmp	.-2      	; 0x354 <__stop_program>
