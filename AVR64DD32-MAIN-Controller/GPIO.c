@@ -23,18 +23,12 @@ void GPIO_init(){
     PORTD.DIRSET = PIN5_bm | PIN6_bm; //Set PD5 as output (Clock change command) and PD6 as output (USART1 TX)
 	PORTD.OUTSET = PIN5_bm; // Set PD5 high (No action, to be controlled by software)
     PORTD.OUTCLR = PIN7_bm; // Set PD7 as input (USART1 RX)
-    PORTD.PIN6CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD6 (USART1 TX)
-    PORTD.PIN7CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD7 (USART1 RX)
+    //PORTD.PIN6CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD6 (USART1 TX)
+    //PORTD.PIN7CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD7 (USART1 RX)
 
     // Configure Port F (PF) for Keypad row and column control
     PORTF.DIRSET = PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm; // Set PF0, PF1, PF2, PF3 as output (Keypad rows)
     PORTF.OUTSET = PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm; // Set Keypad rows to high
-
-    PORTF.DIRCLR = PIN4_bm | PIN5_bm | PIN6_bm; // Set PF4 PF5 PF6 as inputs (Keypad columns 1-3)
-
-    PORTF.PIN4CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF4 (Keypad column 1)
-    PORTF.PIN5CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF5 (Keypad column 2)
-    PORTF.PIN6CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF6 (Keypad column 3)
 
     // Configure ADC pins for wind speed, wind direction, and sun light level sensors
     PORTC.PIN0CTRL &= ~PORT_ISC_gm; // Disable interrupt sense for PC0 (Wind direction sensor)
@@ -47,5 +41,5 @@ void GPIO_init(){
     PORTC.PIN2CTRL |= PORT_ISC_INPUT_DISABLE_gc; // Disable input sense for PC2
     PORTC.PIN2CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC2
 
-	PORTC.DIRSET = PIN3_bm; //Set PC3 as Clock change command RX LED
+	PORTC.DIRSET = PIN0_bm; //Set PC0 as RX LED
 }

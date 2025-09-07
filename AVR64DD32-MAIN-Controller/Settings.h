@@ -53,6 +53,8 @@
 #include "i2c.h"
 #include "SSD1306.h"
 #include "windows.h"
+#include "RS485LED.h"
+#include "FOUSART.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function Prototypes
@@ -412,5 +414,10 @@ void screen_write_formatted_text(const char *format, uint8_t line, alignment_t a
  */
 void windows();
 
+
+void RS485_Led(RS485_LED_t LED);
+uint8_t crc8_cdma2000(uint64_t data);
+uint64_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
+void FOReceiver();
 
 #endif /* SETTINGS_H_ */

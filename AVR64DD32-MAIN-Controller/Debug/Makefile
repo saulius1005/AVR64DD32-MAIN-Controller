@@ -39,9 +39,13 @@ SUBDIRS :=
 C_SRCS +=  \
 ../ADC.c \
 ../CLK.c \
+../CRC.c \
+../FOUSART.c \
 ../GPIO.c \
 ../i2c.c \
 ../main.c \
+../RS485LED.c \
+../RS485USART.c \
 ../SSD1306.c \
 ../USART.c \
 ../Windows.c
@@ -56,9 +60,13 @@ ASM_SRCS +=
 OBJS +=  \
 ADC.o \
 CLK.o \
+CRC.o \
+FOUSART.o \
 GPIO.o \
 i2c.o \
 main.o \
+RS485LED.o \
+RS485USART.o \
 SSD1306.o \
 USART.o \
 Windows.o
@@ -66,9 +74,13 @@ Windows.o
 OBJS_AS_ARGS +=  \
 ADC.o \
 CLK.o \
+CRC.o \
+FOUSART.o \
 GPIO.o \
 i2c.o \
 main.o \
+RS485LED.o \
+RS485USART.o \
 SSD1306.o \
 USART.o \
 Windows.o
@@ -76,9 +88,13 @@ Windows.o
 C_DEPS +=  \
 ADC.d \
 CLK.d \
+CRC.d \
+FOUSART.d \
 GPIO.d \
 i2c.d \
 main.d \
+RS485LED.d \
+RS485USART.d \
 SSD1306.d \
 USART.d \
 Windows.d
@@ -86,9 +102,13 @@ Windows.d
 C_DEPS_AS_ARGS +=  \
 ADC.d \
 CLK.d \
+CRC.d \
+FOUSART.d \
 GPIO.d \
 i2c.d \
 main.d \
+RS485LED.d \
+RS485USART.d \
 SSD1306.d \
 USART.d \
 Windows.d
@@ -121,6 +141,20 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
+./CRC.o: .././CRC.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./FOUSART.o: .././FOUSART.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 ./GPIO.o: .././GPIO.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
@@ -136,6 +170,20 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./main.o: .././main.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./RS485LED.o: .././RS485LED.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./RS485USART.o: .././RS485USART.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

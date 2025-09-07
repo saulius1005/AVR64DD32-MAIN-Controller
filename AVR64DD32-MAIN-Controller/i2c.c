@@ -19,7 +19,7 @@
  * the SDA hold time, SDA setup time, and enabling the I2C master mode.
  * It also sets the baud rate for communication.
  */
-void I2C_init(void) {
+void I2C_init() {
     // Configure SDA hold, SDA setup, and enable fast mode plus (FMP)
     TWI0.CTRLA = TWI_SDAHOLD_OFF_gc | TWI_SDASETUP_4CYC_gc | TWI_FMPEN_ON_gc;
 
