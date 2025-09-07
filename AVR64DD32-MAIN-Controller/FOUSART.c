@@ -7,41 +7,71 @@
 #include "Settings.h"
 #include "FOUSARTVar.h"
 
+uint64_t hexToUint64(const char *str) {
+	uint64_t result = 0;
+	char c;
+
+	while ((c = *str++)) {
+		result <<= 4; // kiekvienas hex simbolis = 4 bitai
+
+		if (c >= '0' && c <= '9') {
+			result |= (uint64_t)(c - '0');
+			} else if (c >= 'A' && c <= 'F') {
+			result |= (uint64_t)(c - 'A' + 10);
+			} else if (c >= 'a' && c <= 'f') {
+			result |= (uint64_t)(c - 'a' + 10);
+			} else {
+			// netinkamas simbolis
+			return 0;
+		}
+	}
+	return result;
+}
+
 void FODataSplitter(char *command) {
 	const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
 	const uint8_t count = sizeof(lengths) / sizeof(lengths[0]);
+	char temp[16];
 
-	const char *p = command;
-	uint8_t EndSwitchesValue = 0,
-			crc = 0;
+	strncpy(temp, command, 15);
+	temp[15] = '\0';
+	uint64_t datatocheck = hexToUint64(temp);
+	strncpy(temp, command + 15, 2); 
+	temp[2] = '\0';
+	uint8_t crctocheck = (uint8_t)strtol(temp, NULL, 16);
 
-	for (uint8_t i = 0; i < count; i++) {
-		char token[10] = {0};
+	if(verify_crc8_cdma2000(datatocheck, crctocheck)){ //if data valid update it
+		//screen_write_formatted_text("data is correct", 1, ALIGN_CENTER);//uncomment if nedded// crc ok
+		const char *p = command;
+		uint8_t EndSwitchesValue = 0;
 
-		memcpy(token, p, lengths[i]);
-		token[lengths[i]] = '\0';
+		for (uint8_t i = 0; i < count; i++) {
+			char token[10] = {0};
 
-		switch (i) {
-			case 0: SensorData.Elevation   = (uint16_t)strtol(token, NULL, 16); break;
-			case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16); break;
-			case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16); break;
-			case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16); break;
-			case 4: EndSwitchesValue       = (uint8_t)strtol(token, NULL, 16); break;
-			case 5: crc					   = (uint8_t)strtol(token, NULL, 16); break;
+			memcpy(token, p, lengths[i]);
+			token[lengths[i]] = '\0';
+
+			switch (i) {
+				case 0: SensorData.Elevation   = (uint16_t)strtol(token, NULL, 16); break;
+				case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16); break;
+				case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16); break;
+				case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16); break;
+				case 4: EndSwitchesValue       = (uint8_t)strtol(token, NULL, 16); break; //common end switches value
+			}
+
+			p += lengths[i];
 		}
+		//spliting end switch value to separate end switch value according to axis
+		SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
+		SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
+		SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
+		SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
 
-		p += lengths[i];
 	}
-
-	SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
-	SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
-	SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
-	SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
-
-	screen_write_formatted_text("%lx", 5, ALIGN_CENTER, (((uint64_t)SensorData.Elevation << 44) | ((uint64_t)SensorData.Azimuth << 28) | ((uint64_t)SensorData.PVU << 16) | ((uint32_t)SensorData.PVI << 4) | EndSwitchesValue));
-	screen_write_formatted_text("%x", 6, ALIGN_CENTER, crc);
-	screen_write_formatted_text("%x", 7, ALIGN_CENTER, verify_crc8_cdma2000(((uint64_t)SensorData.Elevation << 44) | ((uint64_t)SensorData.Azimuth << 28) | ((uint64_t)SensorData.PVU << 16) | ((uint32_t)SensorData.PVI << 4) | EndSwitchesValue, crc));
-	
+	else{
+		//uncomment if nedded
+		//screen_write_formatted_text("data is corupted!", 1, ALIGN_CENTER); // bad crc
+	}	
 }
 
 /**
@@ -69,11 +99,12 @@ void FOReceiver() {
 
         if (start) {
             if (c == '>') { // If received data end symbol
-                start = 0;
+               start = 0;
+			   command[index] = '\0';
+               index = 0;
                FODataSplitter(command); // Execute the received command //comment when testing lines below
 				//screen_write_formatted_text("FO data:", 0, ALIGN_LEFT); //uncomment to testing purposes only
 				//screen_write_formatted_text("%s", 3, ALIGN_RIGHT, command);
-                index = 0;
                 break;
             } else if (index < MESSAGE_LENGTH) {
                 command[index++] = c; // Store received character in command array

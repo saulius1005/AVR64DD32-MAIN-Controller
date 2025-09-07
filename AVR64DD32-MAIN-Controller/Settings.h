@@ -417,7 +417,7 @@ void windows();
 
 void RS485_Led(RS485_LED_t LED);
 uint8_t crc8_cdma2000(uint64_t data);
-uint64_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
+uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
 void FOReceiver();
 
 #endif /* SETTINGS_H_ */

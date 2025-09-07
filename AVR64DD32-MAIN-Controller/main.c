@@ -31,10 +31,11 @@ int main(void)
 		_delay_ms(100);
 
 		FOReceiver(); // Received Fiber optic test
-		screen_write_formatted_text("%d", 0, ALIGN_CENTER, SensorData.Elevation/100);
-		screen_write_formatted_text("%d", 1, ALIGN_CENTER, SensorData.Azimuth/100);
-		screen_write_formatted_text("%d", 2, ALIGN_LEFT, SensorData.PVU/10);
-		screen_write_formatted_text("%d", 2, ALIGN_RIGHT, SensorData.PVI/10);
+
+		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation/100);
+		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth/100);
+		screen_write_formatted_text("%3d", 2, ALIGN_LEFT, SensorData.PVU/10);
+		screen_write_formatted_text("%3d", 2, ALIGN_RIGHT, SensorData.PVI/10);
 		screen_write_formatted_text("%d", 3, ALIGN_LEFT, SensorData.ElMin);
 		screen_write_formatted_text("%d", 3, ALIGN_RIGHT, SensorData.ElMax);
 		screen_write_formatted_text("%d", 4, ALIGN_LEFT, SensorData.AzMin);
