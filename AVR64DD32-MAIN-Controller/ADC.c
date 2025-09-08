@@ -22,39 +22,11 @@ void ADC0_init() {
     ADC0.CTRLA = ADC_ENABLE_bm | ADC_RESSEL_12BIT_gc; // 12-bit resolution
 }
 
-/**
- * @brief Sets up ADC0 to read WS (PC1) input.
- *
- * Configures the ADC0 reference voltage to VDD and sets the positive input
- * channel to AIN29 (PC1).
- */
-void ADC0_SetupWS() {
+
+void ADC0_SetupJoystick(uint8_t axis) {
     VREF.ADC0REF = VREF_REFSEL_VDD_gc;
-    ADC0.MUXPOS = ADC_MUXPOS_AIN29_gc; // PC1 as input for WS
+    ADC0.MUXPOS = axis;
 }
-
-/**
- * @brief Sets up ADC0 to read WD (PC0) input.
- *
- * Configures the ADC0 reference voltage to VDD and sets the positive input
- * channel to AIN28 (PC0).
- */
-void ADC0_SetupWD() {
-    VREF.ADC0REF = VREF_REFSEL_VDD_gc;
-    ADC0.MUXPOS = ADC_MUXPOS_AIN28_gc; // PC0 as input for WD
-}
-
-/**
- * @brief Sets up ADC0 to read Sun Level Sensor (SLS) on PC2.
- *
- * Configures the ADC0 with a reference voltage of 1.024V and sets the positive
- * input channel to AIN30 (PC2).
- */
-void ADC0_SetupSLS(uint8_t level) {
-    VREF.ADC0REF = level/*VREF_REFSEL_1V024_gc*/; // 1.024V as reference voltage for SLS //0-1.024V, 1-2.048V, 2-4.096V
-    ADC0.MUXPOS = ADC_MUXPOS_AIN30_gc; // PC2 as input for SLS
-}
-
 /**
  * @brief Reads a value from ADC0.
  *

@@ -25,7 +25,7 @@ FOUSART.d FOUSART.o: .././FOUSART.c .././Settings.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  .././TLE9201SG.h .././i2c.h .././SSD1306.h .././windows.h \
- .././RS485LED.h .././FOUSART.h .././FOUSARTVar.h
+ .././RS485LED.h .././FOUSART.h .././Joystick.h .././FOUSARTVar.h
 
 .././Settings.h:
 
@@ -90,5 +90,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././RS485LED.h:
 
 .././FOUSART.h:
+
+.././Joystick.h:
 
 .././FOUSARTVar.h:

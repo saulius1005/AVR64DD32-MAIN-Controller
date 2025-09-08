@@ -14,6 +14,8 @@ GPIO.c
 
 i2c.c
 
+Joystick.c
+
 main.c
 
 RS485LED.c

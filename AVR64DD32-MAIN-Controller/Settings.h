@@ -55,6 +55,7 @@
 #include "windows.h"
 #include "RS485LED.h"
 #include "FOUSART.h"
+#include "Joystick.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function Prototypes
@@ -253,20 +254,7 @@ void USART_printf(uint8_t usart_number, const char *format, ...);
  */
 void ADC0_init();
 
-/**
- * @brief Configures ADC0 for the wind sensor.
- */
-void ADC0_SetupWS();
-
-/**
- * @brief Configures ADC0 for watchdog functionality.
- */
-void ADC0_SetupWD();
-
-/**
- * @brief Configures ADC0 for sensor signal setup.
- */
-void ADC0_SetupSLS(uint8_t level);
+void ADC0_SetupJoystick(uint8_t axis);
 
 /**
  * @brief Reads data from ADC0.
@@ -275,26 +263,6 @@ void ADC0_SetupSLS(uint8_t level);
  */
 uint16_t ADC0_read();
 
-/**
- * @brief Computes CRC-8 checksum for MAXIM/Dallas devices.
- * 
- * This function computes the 8-bit CRC checksum for the provided data, typically used for validating communication
- * with MAXIM or Dallas sensors.
- * 
- * @param data The 32-bit data for which CRC-8 is calculated.
- * @return The 8-bit CRC value.
- */
-uint16_t CRC8MAXIM(uint32_t data);
-
-/**
- * @brief Separates a 32-bit data value into individual components.
- * 
- * This function processes a 32-bit value, possibly splitting it into different parts or performing some form of separation.
- * 
- * @param data The 32-bit data to separate.
- * @return A processed 8-bit result based on the separation logic.
- */
-uint8_t Separator(uint32_t data);
 
 /**
  * @brief Initializes the screen.
@@ -419,5 +387,6 @@ void RS485_Led(RS485_LED_t LED);
 uint8_t crc8_cdma2000(uint64_t data);
 uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
 void FOReceiver();
+void ReadJoystickValues();
 
 #endif /* SETTINGS_H_ */

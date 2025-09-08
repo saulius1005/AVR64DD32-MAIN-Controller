@@ -169,6 +169,15 @@
     <Compile Include="i2cVar.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Joystick.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Joystick.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="JoystickVar.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>

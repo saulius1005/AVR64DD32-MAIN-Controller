@@ -43,6 +43,7 @@ C_SRCS +=  \
 ../FOUSART.c \
 ../GPIO.c \
 ../i2c.c \
+../Joystick.c \
 ../main.c \
 ../RS485LED.c \
 ../RS485USART.c \
@@ -64,6 +65,7 @@ CRC.o \
 FOUSART.o \
 GPIO.o \
 i2c.o \
+Joystick.o \
 main.o \
 RS485LED.o \
 RS485USART.o \
@@ -78,6 +80,7 @@ CRC.o \
 FOUSART.o \
 GPIO.o \
 i2c.o \
+Joystick.o \
 main.o \
 RS485LED.o \
 RS485USART.o \
@@ -92,6 +95,7 @@ CRC.d \
 FOUSART.d \
 GPIO.d \
 i2c.d \
+Joystick.d \
 main.d \
 RS485LED.d \
 RS485USART.d \
@@ -106,6 +110,7 @@ CRC.d \
 FOUSART.d \
 GPIO.d \
 i2c.d \
+Joystick.d \
 main.d \
 RS485LED.d \
 RS485USART.d \
@@ -163,6 +168,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./i2c.o: .././i2c.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./Joystick.o: .././Joystick.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
