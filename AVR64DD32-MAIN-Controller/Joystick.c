@@ -14,8 +14,8 @@ uint8_t ReadButton(){
 
 void ReadJoystickValues(){
 	ADC0_SetupJoystick(Joystick_X_axis_CH);
-	Joystick.X_Axis = ADC0_read();
+	Joystick.X_Axis = ((int16_t)ADC0_read()-2048)/Joystick_steps; // 5 steps total: -2,-1,0,1,2 (4096/1000 = 4,096)
 	ADC0_SetupJoystick(Joystick_Y_axis_CH);
-	Joystick.Y_Axis = ADC0_read();
+	Joystick.Y_Axis = ((int16_t)ADC0_read()-2048)/Joystick_steps;
 	Joystick.Button = ReadButton();
 }

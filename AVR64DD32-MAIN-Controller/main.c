@@ -41,8 +41,8 @@ int main(void)
 		screen_write_formatted_text("%d", 4, ALIGN_RIGHT, SensorData.AzMax);*/
 
 		ReadJoystickValues(); //Joystick test
-		screen_write_formatted_text("%4d", 0, ALIGN_CENTER, Joystick.X_Axis);
-		screen_write_formatted_text("%4d", 1, ALIGN_CENTER, Joystick.Y_Axis);
+		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, Joystick.X_Axis);
+		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, Joystick.Y_Axis);
 		screen_write_formatted_text("%d", 2, ALIGN_CENTER, Joystick.Button);
 
 

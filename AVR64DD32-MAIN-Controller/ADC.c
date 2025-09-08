@@ -26,6 +26,7 @@ void ADC0_init() {
 void ADC0_SetupJoystick(uint8_t axis) {
     VREF.ADC0REF = VREF_REFSEL_VDD_gc;
     ADC0.MUXPOS = axis;
+
 }
 /**
  * @brief Reads a value from ADC0.
