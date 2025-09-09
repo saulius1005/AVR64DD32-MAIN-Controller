@@ -388,5 +388,6 @@ uint8_t crc8_cdma2000(uint64_t data);
 uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
 void FOReceiver();
 void ReadJoystickValues();
+void RS485Receiver();
 
 #endif /* SETTINGS_H_ */

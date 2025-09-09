@@ -21,14 +21,14 @@ int main(void)
 
     while (1) 
     {
-		RS485_Led(RX_LED_ON); //RS485 RX TX LED test
+		/*RS485_Led(RX_LED_ON); //RS485 RX TX LED test
 		_delay_ms(100);
 		RS485_Led(TX_LED_ON);
 		_delay_ms(100);
 		RS485_Led(RX_LED_OFF);
 		_delay_ms(100);
 		RS485_Led(TX_LED_OFF);
-		_delay_ms(100);
+		_delay_ms(100);*/
 
 		/*FOReceiver(); // Received Fiber optic test
 		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation/100);
@@ -40,11 +40,11 @@ int main(void)
 		screen_write_formatted_text("%d", 4, ALIGN_LEFT, SensorData.AzMin);
 		screen_write_formatted_text("%d", 4, ALIGN_RIGHT, SensorData.AzMax);*/
 
-		ReadJoystickValues(); //Joystick test
+		/*ReadJoystickValues(); //Joystick test
 		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, Joystick.X_Axis);
 		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, Joystick.Y_Axis);
-		screen_write_formatted_text("%d", 2, ALIGN_CENTER, Joystick.Button);
+		screen_write_formatted_text("%d", 2, ALIGN_CENTER, Joystick.Button);*/
 
-
+		RS485Receiver();
     }
 }
