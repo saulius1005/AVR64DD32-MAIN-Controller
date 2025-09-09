@@ -43,17 +43,12 @@ void TCA0_init_WO3_PWM(uint16_t freq_hz, uint8_t duty_percent) //Auto TCA presca
 
 	// konfigûracija
 	PORTMUX.TCAROUTEA = PORTMUX_TCA0_PORTD_gc;  // WOx ant PORTD
-	PORTD.DIRSET = PIN3_bm;                     // PD3 kaip iðëjimas
 
-/*
-	TCA0.SINGLE.CTRLA &= ~TCA_SINGLE_ENABLE_bm; // stop
-	TCA0.SINGLE.CTRLESET = TCA_SINGLE_CMD_RESET_gc;*/
-
-	TCA0.SINGLE.CTRLD = TCA_SINGLE_SPLITM_bm;   // Split mode
+	TCA0.SPLIT.CTRLD = TCA_SPLIT_SPLITM_bm;   // Split mode
 	TCA0.SPLIT.CTRLB = TCA_SPLIT_HCMP0EN_bm;    // enable WO3 (HCMP0 ? PD3)
 
 	TCA0.SPLIT.HPER  = period;
 	TCA0.SPLIT.HCMP0 = duty;
 
-	TCA0.SINGLE.CTRLA = chosen_clk | TCA_SINGLE_ENABLE_bm; // paleidþiam su pasirinktu prescaler
+	TCA0.SPLIT.CTRLA = chosen_clk | TCA_SPLIT_ENABLE_bm; // paleidþiam su pasirinktu prescaler
 }

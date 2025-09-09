@@ -18,7 +18,7 @@ int main(void)
     screen_clear(); // Clear the screen
 
 	//screen_write_formatted_text("Screen test:", 0, ALIGN_LEFT); //simple  screen test
-	TCA0_init_WO3_PWM(10000, 50);
+	TCA0_init_WO3_PWM(20000, 50);
 
 
     while (1) 
