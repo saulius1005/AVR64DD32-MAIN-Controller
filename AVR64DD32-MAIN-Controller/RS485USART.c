@@ -5,23 +5,37 @@
  *  Author: Saulius
  */ 
 #include "Settings.h"
+#include "RS485USARTVar.h"
 
 void RS485DataSplitter(char *command) {
-	screen_write_formatted_text("%s", 0, ALIGN_CENTER, command);
+	uint16_t *fields[] = {
+		&WSData.azimuth,
+		&WSData.elevation,
+		&WSData.topelevation,
+		(uint16_t*)&WSData.windspeed,
+		(uint16_t*)&WSData.winddirection,
+		&WSData.lightlevel
+	};
+
+	char *token = strtok(command, "|");
+	for (uint8_t i = 0; token != NULL && i < 6; i++) {
+		*fields[i] = (uint16_t)strtoul(token, NULL, 10);
+		token = strtok(NULL, "|");
+	}
+
 }
 
 void RS485Receiver() {
 	uint8_t index = 0;
-	char command[MESSAGE_LENGTH] = {0}; // Empty command array
+	char command[MESSAGE_LENGTH_RS485] = {0}; // Empty command array
 	uint8_t start = 0;
 
 	while (1) {
 		char c = USART0_readChar(); // Reading a character from USART
 
-		if (Status.error) { // If an error is active
-			//FODataSplitter("0"); // Execute command 0 for error handling
-			Status.error = 0; // Reset error value
-			Status.errorCounter = 0;
+		if (Status_RS485.error) { // If an error is active
+			Status_RS485.error = 0; // Reset error value
+			Status_RS485.errorCounter = 0;
 			break;
 		}
 
@@ -33,7 +47,7 @@ void RS485Receiver() {
 				index = 0;
 				RS485DataSplitter(command); // Execute the received command //comment when testing lines below
 				break;
-				} else if (index < MESSAGE_LENGTH) {
+				} else if (index < MESSAGE_LENGTH_RS485) {
 				command[index++] = c; // Store received character in command array
 			}
 		}
@@ -41,17 +55,17 @@ void RS485Receiver() {
 		if (c == '{') { // If received data start symbol
 			start = 1;
 			index = 0;
-			Status.error = 0; // Reset error state
-			Status.errorCounter = 0; // Reset error counter
+			Status_RS485.error = 0; // Reset error state
+			Status_RS485.errorCounter = 0; // Reset error counter
 			RS485_Led(RX_LED_ON);
 		}
 
-		if (Status.warning) {
-			Status.warning = 0;
-			if (Status.errorCounter < CountForError) {
-				Status.errorCounter++;
+		if (Status_RS485.warning) {
+			Status_RS485.warning = 0;
+			if (Status_RS485.errorCounter < CountForError_FO) {
+				Status_RS485.errorCounter++;
 				} else {
-				Status.error = 1; // Set error flag if too many warnings
+				Status_RS485.error = 1; // Set error flag if too many warnings
 			}
 		}
 	}

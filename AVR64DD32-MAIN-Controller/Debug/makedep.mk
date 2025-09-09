@@ -16,6 +16,8 @@ i2c.c
 
 Joystick.c
 
+LinearMotor.c
+
 main.c
 
 RS485LED.c
@@ -23,6 +25,10 @@ RS485LED.c
 RS485USART.c
 
 SSD1306.c
+
+TCA.c
+
+TCD.c
 
 USART.c
 

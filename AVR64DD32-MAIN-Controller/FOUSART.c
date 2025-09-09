@@ -84,16 +84,16 @@ void FODataSplitter(char *command) {
  */
 void FOReceiver() {
     uint8_t index = 0;
-    char command[MESSAGE_LENGTH] = {0}; // Empty command array
+    char command[MESSAGE_LENGTH_FO] = {0}; // Empty command array
     uint8_t start = 0;
 
     while (1) {
         char c = USART1_readChar(); // Reading a character from USART
 
-        if (Status.error) { // If an error is active
+        if (Status_FO.error) { // If an error is active
             //FODataSplitter("0"); // Execute command 0 for error handling
-            Status.error = 0; // Reset error value
-            Status.errorCounter = 0;
+            Status_FO.error = 0; // Reset error value
+            Status_FO.errorCounter = 0;
             break;
         }
 
@@ -106,7 +106,7 @@ void FOReceiver() {
 				//screen_write_formatted_text("FO data:", 0, ALIGN_LEFT); //uncomment to testing purposes only
 				//screen_write_formatted_text("%s", 3, ALIGN_RIGHT, command);
                 break;
-            } else if (index < MESSAGE_LENGTH) {
+            } else if (index < MESSAGE_LENGTH_FO) {
                 command[index++] = c; // Store received character in command array
             }
         }
@@ -114,16 +114,16 @@ void FOReceiver() {
         if (c == '<') { // If received data start symbol
             start = 1;
             index = 0;
-            Status.error = 0; // Reset error state
-            Status.errorCounter = 0; // Reset error counter
+            Status_FO.error = 0; // Reset error state
+            Status_FO.errorCounter = 0; // Reset error counter
         }
 
-        if (Status.warning) {
-            Status.warning = 0;
-            if (Status.errorCounter < CountForError) {
-                Status.errorCounter++;
+        if (Status_FO.warning) {
+            Status_FO.warning = 0;
+            if (Status_FO.errorCounter < CountForError_FO) {
+                Status_FO.errorCounter++;
             } else {
-                Status.error = 1; // Set error flag if too many warnings
+                Status_FO.error = 1; // Set error flag if too many warnings
             }
         }
     }

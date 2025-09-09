@@ -1,4 +1,4 @@
-Windows.d Windows.o: .././Windows.c .././Settings.h \
+LinearMotor.d LinearMotor.o: .././LinearMotor.c .././Settings.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -25,7 +25,8 @@ Windows.d Windows.o: .././Windows.c .././Settings.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  .././i2c.h .././SSD1306.h .././windows.h .././RS485LED.h .././FOUSART.h \
- .././Joystick.h .././RS485USART.h .././LinearMotor.h .././windowsVar.h
+ .././Joystick.h .././RS485USART.h .././LinearMotor.h \
+ .././LinearMotorVar.h
 
 .././Settings.h:
 
@@ -95,4 +96,4 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 .././LinearMotor.h:
 
-.././windowsVar.h:
+.././LinearMotorVar.h:

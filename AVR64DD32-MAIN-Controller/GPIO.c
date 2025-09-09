@@ -12,6 +12,7 @@ void GPIO_init(){
     // Configure USART0 and USART1 pin routing
     PORTMUX.USARTROUTEA = PORTMUX_USART0_ALT1_gc | PORTMUX_USART1_ALT2_gc; // Set USART0 to alternative pins set 1, USART1 to alternative pins set 2
     PORTMUX.TWIROUTEA = PORTMUX_TWI0_DEFAULT_gc; // Set TWI0 to default pins
+	PORTMUX.TCAROUTEA = PORTMUX_TCA0_PORTD_gc;
 
     // Configure Port A (PA) for RX LED, I2C SDA, SCL, USART0 TX, TX LED and XDIR
     PORTA.DIRSET = PIN2_bm | PIN3_bm | PIN4_bm | PIN6_bm | PIN7_bm; // Set PA2, PA3, PA4, PA7 as output (RX LED, I2C SDA, SCL, USART0 TX, TX LED, XDIR)
@@ -32,15 +33,8 @@ void GPIO_init(){
 	PORTC.DIRSET = PIN0_bm; //Set PC0 as RX LED
 
     // Configure Port D (PD) for USART1 TX and RX
-    PORTD.DIRSET = PIN5_bm | PIN6_bm; //Set PD5 as output (Clock change command) and PD6 as output (USART1 TX)
-	PORTD.OUTSET = PIN5_bm; // Set PD5 high (No action, to be controlled by software)
-    PORTD.OUTCLR = PIN7_bm; // Set PD7 as input (USART1 RX)
-    //PORTD.PIN6CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD6 (USART1 TX)
-    //PORTD.PIN7CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PD7 (USART1 RX)
-
-    // Configure Port F (PF) for Keypad row and column control
-    PORTF.DIRSET = PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm; // Set PF0, PF1, PF2, PF3 as output (Keypad rows)
-    PORTF.OUTSET = PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm; // Set Keypad rows to high
-
+    PORTD.DIRSET = PIN2_bm | PIN3_bm | PIN5_bm; //Set PD2 as linear motor disable pin, PD3 as PWM, PD5 as direction
+	PORTD.DIRCLR = PIN4_bm; //Linear motor driver TLE9201SG error flag pin
+	PORTD.OUTSET = PIN2_bm; //set output disabled for TLE9201SG
 
 }

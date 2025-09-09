@@ -44,10 +44,13 @@ C_SRCS +=  \
 ../GPIO.c \
 ../i2c.c \
 ../Joystick.c \
+../LinearMotor.c \
 ../main.c \
 ../RS485LED.c \
 ../RS485USART.c \
 ../SSD1306.c \
+../TCA.c \
+../TCD.c \
 ../USART.c \
 ../Windows.c
 
@@ -66,10 +69,13 @@ FOUSART.o \
 GPIO.o \
 i2c.o \
 Joystick.o \
+LinearMotor.o \
 main.o \
 RS485LED.o \
 RS485USART.o \
 SSD1306.o \
+TCA.o \
+TCD.o \
 USART.o \
 Windows.o
 
@@ -81,10 +87,13 @@ FOUSART.o \
 GPIO.o \
 i2c.o \
 Joystick.o \
+LinearMotor.o \
 main.o \
 RS485LED.o \
 RS485USART.o \
 SSD1306.o \
+TCA.o \
+TCD.o \
 USART.o \
 Windows.o
 
@@ -96,10 +105,13 @@ FOUSART.d \
 GPIO.d \
 i2c.d \
 Joystick.d \
+LinearMotor.d \
 main.d \
 RS485LED.d \
 RS485USART.d \
 SSD1306.d \
+TCA.d \
+TCD.d \
 USART.d \
 Windows.d
 
@@ -111,10 +123,13 @@ FOUSART.d \
 GPIO.d \
 i2c.d \
 Joystick.d \
+LinearMotor.d \
 main.d \
 RS485LED.d \
 RS485USART.d \
 SSD1306.d \
+TCA.d \
+TCD.d \
 USART.d \
 Windows.d
 
@@ -181,6 +196,13 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
+./LinearMotor.o: .././LinearMotor.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 ./main.o: .././main.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
@@ -203,6 +225,20 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./SSD1306.o: .././SSD1306.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./TCA.o: .././TCA.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./TCD.o: .././TCD.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

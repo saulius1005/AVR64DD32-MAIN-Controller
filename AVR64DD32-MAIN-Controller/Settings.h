@@ -49,13 +49,14 @@
 #include <float.h>       /**< Include float.h for floating point constants like FLT_MAX */
 #include <stdbool.h>     /**< Include stdbool.h for boolean type support (true/false) */
 #include <avr/pgmspace.h>
-#include "TLE9201SG.h"
 #include "i2c.h"
 #include "SSD1306.h"
 #include "windows.h"
 #include "RS485LED.h"
 #include "FOUSART.h"
 #include "Joystick.h"
+#include "RS485USART.h"
+#include "LinearMotor.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function Prototypes
@@ -389,5 +390,7 @@ uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
 void FOReceiver();
 void ReadJoystickValues();
 void RS485Receiver();
+void TCA0_init_WO3_PWM(uint16_t freq_hz, uint8_t duty_percent);
+void Motor_SetDirection();
 
 #endif /* SETTINGS_H_ */

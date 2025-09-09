@@ -24,3 +24,19 @@ void CLOCK_XOSCHF_clock_init()
 	{};
 	/* Configuration complete;*/
 }
+
+/**
+ * @brief Initializes the Phase-Locked Loop (PLL) for frequency multiplication.
+ * 
+ * @details Configures the PLL to multiply the input frequency by a factor of 2. 
+ *          The maximum output frequency is limited to 48 MHz.
+ * 
+ * @note Ensure the input frequency does not exceed the PLL's maximum limit.
+ */
+void PLL_init() {
+    /* Configure PLL with a multiplication factor of 2 */
+    ccp_write_io((uint8_t *) &CLKCTRL.PLLCTRLA, CLKCTRL_MULFAC_2x_gc); 
+
+    /* Wait for PLL configuration to complete */
+    while (CLKCTRL.MCLKSTATUS & CLKCTRL_PLLS_bm) {};
+}

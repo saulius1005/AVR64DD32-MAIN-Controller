@@ -24,7 +24,7 @@
  * 
  * Defines the timeout value for I2C operations.
  */
-#define TIMEOUT_COUNTER 500000 ///< Timeout counter value for operations
+#define TIMEOUT_COUNTER 5000 ///< Timeout counter value for operations
 
 /**
  * @brief Baud Rate Calculation

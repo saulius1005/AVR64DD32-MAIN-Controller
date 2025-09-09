@@ -12,9 +12,9 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
-#define CountForError 10
+#define CountForError_FO 10
 
-#define MESSAGE_LENGTH 17
+#define MESSAGE_LENGTH_FO 17
 
 /**
  * @brief Structure to hold communication status.
@@ -26,7 +26,7 @@ typedef struct {
     uint8_t error;         /**< Error flag (1 if an error occurs, 0 otherwise) */
     uint8_t errorCounter;  /**< Counter for error occurrences */
     uint8_t warning;       /**< Warning flag (1 if a warning occurs) */
-} Communication;
+} CommunicationFO;
 
 /**
  * @brief Global variable for tracking communication status.
@@ -34,7 +34,7 @@ typedef struct {
  * This external variable is used to store the current communication status, 
  * including error and warning states.
  */
-extern Communication Status;
+extern CommunicationFO Status_FO;
 
 typedef struct {
 	uint16_t Elevation;

@@ -19,7 +19,7 @@
  * - `.errorCounter`: A counter that increments when warnings occur.
  * - `.warning`: A flag indicating if there is a warning.
  */
-Communication Status = {
+CommunicationFO Status_FO = {
     .error = 0,           ///< Error flag, initialized to 0 (no error).
     .errorCounter = 0,    ///< Error counter, initialized to 0.
     .warning = 0          ///< Warning flag, initialized to 0 (no warning).
