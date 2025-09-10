@@ -52,15 +52,16 @@ void FODataSplitter(char *command) {
 			token[lengths[i]] = '\0';
 
 			switch (i) {
-				case 0: SensorData.Elevation   = (uint16_t)strtol(token, NULL, 16); break;
-				case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16); break;
-				case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16); break;
-				case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16); break;
+				case 0: SensorData.HPElevation   = (uint16_t)strtol(token, NULL, 16); break;
+				case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16)/ Angle_Precizion; break;
+				case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
+				case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
 				case 4: EndSwitchesValue       = (uint8_t)strtol(token, NULL, 16); break; //common end switches value
 			}
 
 			p += lengths[i];
 		}
+		SensorData.Elevation = SensorData.HPElevation / Angle_Precizion;
 		//spliting end switch value to separate end switch value according to axis
 		SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
 		SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;

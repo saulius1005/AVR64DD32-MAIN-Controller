@@ -28,6 +28,7 @@ CommunicationFO Status_FO = {
 FOdata SensorData = {
 	.Azimuth = 0,	//Azimuth sensor angle
 	.Elevation = 0, //Elevation sensor angle
+	.HPElevation = 0, //Elevation sensor angle high precizion value for sensor fault detection
 	.PVU = 0, //Sun Panel Voltage
 	.PVI = 0, //Sun Panel Current
 	.ElMin = 0,	//Separeted Elevation min End Switch value

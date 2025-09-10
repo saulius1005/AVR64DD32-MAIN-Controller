@@ -13,6 +13,8 @@
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
 #define CountForError_FO 10
+#define Angle_Precizion 100 // 100 meaning exp. 360 degree 10 3600 (360,0), 1 36000 (360,00)
+#define U_I_Precizion 10 // 10 meaning 24, 1 240 (24.0)
 
 #define MESSAGE_LENGTH_FO 17
 
@@ -38,6 +40,7 @@ extern CommunicationFO Status_FO;
 
 typedef struct {
 	uint16_t Elevation;
+	uint16_t HPElevation;
 	uint16_t Azimuth;
 	uint16_t PVU;
 	uint16_t PVI;

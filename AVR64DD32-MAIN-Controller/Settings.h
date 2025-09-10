@@ -392,5 +392,7 @@ void ReadJoystickValues();
 void RS485Receiver();
 void TCA0_init_WO3_PWM(uint16_t freq_hz, uint8_t duty_percent);
 void Motor_SetDirection();
+void Motor_SetTarget(uint8_t angle);
+void Motor_SetTarget_NB(uint8_t angle);
 
 #endif /* SETTINGS_H_ */
