@@ -12,11 +12,11 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
+#define FO_TIMEOUT_COUNTER 5000 ///< Timeout counter value for operations
 #define CountForError_FO 10
 #define Angle_Precizion 100 // 100 meaning exp. 360 degree 10 3600 (360,0), 1 36000 (360,00)
-#define U_I_Precizion 10 // 10 meaning 24, 1 240 (24.0)
-
-#define MESSAGE_LENGTH_FO 17
+#define U_I_Precizion 1 // 10 meaning 24, 1 240 (24.0)
+#define MESSAGE_LENGTH_FO 20
 
 /**
  * @brief Structure to hold communication status.
@@ -28,6 +28,7 @@ typedef struct {
     uint8_t error;         /**< Error flag (1 if an error occurs, 0 otherwise) */
     uint8_t errorCounter;  /**< Counter for error occurrences */
     uint8_t warning;       /**< Warning flag (1 if a warning occurs) */
+	bool communicationError;
 } CommunicationFO;
 
 /**

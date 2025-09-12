@@ -16,13 +16,12 @@ void Stepper_enable() {
 		PORTF.OUTCLR = PIN1_bm; // aktyvus LOW
 		StepperMotor.alreadyEnabled = true;
 		StepperMotor.alreadyDisabled = false;
-		_delay_ms(10);
 	}
 }
 
 void Stepper_disable() {
+	_delay_ms(10);
 	if(StepperMotor.alreadyDisabled == false){
-		_delay_ms(10);
 		PORTF.OUTSET = PIN1_bm; // HIGH = inactive
 		StepperMotor.alreadyDisabled = true;
 		StepperMotor.alreadyEnabled = false;

@@ -12,8 +12,8 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
+#define RS485_TIMEOUT_COUNTER 1000 ///< Timeout counter value for operations
 #define CountForError_RS485 10
-
 #define MESSAGE_LENGTH_RS485 27
 
 /**
@@ -26,6 +26,7 @@ typedef struct {
     uint8_t error;         /**< Error flag (1 if an error occurs, 0 otherwise) */
     uint8_t errorCounter;  /**< Counter for error occurrences */
     uint8_t warning;       /**< Warning flag (1 if a warning occurs) */
+	bool communicationError;
 } CommunicationRS485;
 
 extern CommunicationRS485 Status_RS485;

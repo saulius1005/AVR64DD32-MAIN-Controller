@@ -13,7 +13,8 @@
 CommunicationRS485 Status_RS485 = {
 	.error = 0,           ///< Error flag, initialized to 0 (no error).
 	.errorCounter = 0,    ///< Error counter, initialized to 0.
-	.warning = 0          ///< Warning flag, initialized to 0 (no warning).
+	.warning = 0,          ///< Warning flag, initialized to 0 (no warning).
+	.communicationError = false
 };
 
 Wearther_Station WSData = {

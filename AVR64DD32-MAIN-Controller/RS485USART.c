@@ -29,10 +29,14 @@ void RS485Receiver() {
 	uint8_t index = 0;
 	char command[MESSAGE_LENGTH_RS485] = {0}; // Empty command array
 	uint8_t start = 0;
+	uint16_t timeout = RS485_TIMEOUT_COUNTER;
 
 	while (1) {
 		char c = USART0_readChar(); // Reading a character from USART
-
+		
+		if (--timeout == 0) { // Timeout condition
+			break;
+		}
 		if (Status_RS485.error) { // If an error is active
 			Status_RS485.error = 0; // Reset error value
 			Status_RS485.errorCounter = 0;
@@ -62,7 +66,7 @@ void RS485Receiver() {
 
 		if (Status_RS485.warning) {
 			Status_RS485.warning = 0;
-			if (Status_RS485.errorCounter < CountForError_FO) {
+			if (Status_RS485.errorCounter < CountForError_RS485) {
 				Status_RS485.errorCounter++;
 				} else {
 				Status_RS485.error = 1; // Set error flag if too many warnings

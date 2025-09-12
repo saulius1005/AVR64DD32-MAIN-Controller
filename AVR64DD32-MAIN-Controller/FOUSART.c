@@ -30,7 +30,6 @@ uint64_t hexToUint64(const char *str) {
 
 void FODataSplitter(char *command) {
 	const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
-	const uint8_t count = sizeof(lengths) / sizeof(lengths[0]);
 	char temp[16];
 
 	strncpy(temp, command, 15);
@@ -45,7 +44,7 @@ void FODataSplitter(char *command) {
 		const char *p = command;
 		uint8_t EndSwitchesValue = 0;
 
-		for (uint8_t i = 0; i < count; i++) {
+		for (uint8_t i = 0; i < 6; i++) {
 			char token[10] = {0};
 
 			memcpy(token, p, lengths[i]);
@@ -87,12 +86,15 @@ void FOReceiver() {
     uint8_t index = 0;
     char command[MESSAGE_LENGTH_FO] = {0}; // Empty command array
     uint8_t start = 0;
+	uint16_t timeout = FO_TIMEOUT_COUNTER;
 
     while (1) {
         char c = USART1_readChar(); // Reading a character from USART
 
-        if (Status_FO.error) { // If an error is active
-            //FODataSplitter("0"); // Execute command 0 for error handling
+		if (--timeout == 0) { // Timeout condition
+			break;
+		}
+        if (Status_FO.error == 1) { // If an error is active
             Status_FO.error = 0; // Reset error value
             Status_FO.errorCounter = 0;
             break;
@@ -104,8 +106,6 @@ void FOReceiver() {
 			   command[index] = '\0';
                index = 0;
                FODataSplitter(command); // Execute the received command //comment when testing lines below
-				//screen_write_formatted_text("FO data:", 0, ALIGN_LEFT); //uncomment to testing purposes only
-				//screen_write_formatted_text("%s", 3, ALIGN_RIGHT, command);
                 break;
             } else if (index < MESSAGE_LENGTH_FO) {
                 command[index++] = c; // Store received character in command array

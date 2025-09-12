@@ -48,7 +48,7 @@ uint8_t TransmitAdd(uint8_t addr, uint8_t read) {
 
     // Set the address and read/write flag
     TWI0.MADDR = (addr << 1) | read;
-    uint32_t timeout_counter = TIMEOUT_COUNTER;
+    uint32_t timeout_counter = TWI_TIMEOUT_COUNTER;
 
     // Wait for the write interrupt flag or read interrupt flag
     while (!(TWI0.MSTATUS & (TWI_WIF_bm | TWI_RIF_bm))) {
@@ -92,7 +92,7 @@ uint8_t TransmitByte(uint8_t data) {
     // Transmit data if no errors
     if (error == 0) {
         TWI0.MDATA = data;
-        uint32_t timeout_counter = TIMEOUT_COUNTER;
+        uint32_t timeout_counter = TWI_TIMEOUT_COUNTER;
 
         // Wait for the write interrupt flag to signal transmission completion
         while (!(TWI0.MSTATUS & TWI_WIF_bm)) {
@@ -118,7 +118,7 @@ uint8_t TransmitByte(uint8_t data) {
  * It sets the ACK or NACK based on the provided flag and handles timeout errors.
  */
 void ReadByteInf(uint8_t ack, uint8_t* data) {
-    uint32_t timeout_counter = TIMEOUT_COUNTER;
+    uint32_t timeout_counter = TWI_TIMEOUT_COUNTER;
 
     // Wait for the read interrupt flag or clock hold flag
     while (!(TWI0.MSTATUS & (TWI_CLKHOLD_bm | TWI_RIF_bm))) {

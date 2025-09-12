@@ -26,12 +26,15 @@ void USART0_init() {
 
 char USART0_readChar() {
 	USART0.STATUS = USART_RXCIF_bm; // Clear buffer before reading
-	uint32_t timeout_counter = TIMEOUT_COUNTER; // Set a timeout counter
+	uint32_t timeout_counter = RS485_TIMEOUT_COUNTER; // Set a timeout counter
 	while (!(USART0.STATUS & USART_RXCIF_bm)) { // Wait for data to be received
 		if (--timeout_counter == 0) { // Timeout condition
-			//Date_Clock.warning = 3; // Set warning if timeout occurs
+			//Status_RS485.communicationError = true;
 			break;
 		}
+/*
+		else
+			Status_RS485.communicationError = false;*/
 	}
 	return USART0.RXDATAL; // Return received character
 }
@@ -137,12 +140,14 @@ int USART1_printChar(char c, FILE *stream) {
  */
 char USART1_readChar() {
 	USART1.STATUS = USART_RXCIF_bm; // Clear buffer before reading
-	uint32_t timeout_counter = TIMEOUT_COUNTER; // Set a timeout counter
+	uint32_t timeout_counter = FO_TIMEOUT_COUNTER; // Set a timeout counter
 	while (!(USART1.STATUS & USART_RXCIF_bm)) { // Wait for data to be received
 		if (--timeout_counter == 0) { // Timeout condition
-			//Date_Clock.warning = 3; // Set warning if timeout occurs
+			//Status_FO.communicationError = true;
 			break;
 		}
+		//else
+		//Status_FO.communicationError = false;
 	}
 	return USART1.RXDATAL; // Return received character
 }
