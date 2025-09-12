@@ -10,7 +10,13 @@
 #define STEPPERMOTORVAR_H_
 
 
-
+HBS86 StepperMotor = {
+	.lastDirection = false,
+	.alreadyStarted = false,
+	.alreadyStoped = false,
+	.alreadyEnabled = false,
+	.alreadyDisabled = false
+};
 
 
 #endif /* STEPPERMOTORVAR_H_ */

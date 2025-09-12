@@ -16,12 +16,12 @@ int main(void)
     USART1_init();
     screen_init();
     screen_clear(); // Clear the screen
-	//PORTD.OUTCLR = PIN2_bm;
-	//TCA0_init_WO3_PWM(20000, 50);
+	LinearMotor_init();
 	Stepper_init();
 	//screen_write_formatted_text("Screen test:", 0, ALIGN_LEFT); //simple  screen test
 
 	Stepper_enable();
+	LinearMotor_enable();
 	
     while (1) 
     {
@@ -39,7 +39,7 @@ int main(void)
 		_delay_ms(100);*/
 
 		FOReceiver(); // Received Fiber optic test
-		//screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
+		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
 		//screen_write_formatted_text("%d", 1, ALIGN_CENTER, LinearMotor.angleError);
 		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth);
 		_delay_ms(100);
@@ -79,6 +79,17 @@ int main(void)
 			} 
 			else{
 				Stepper_set_direction(0);
+			}
+		}
+		if (SensorData.Elevation == 0) {
+			LinearMotor_stop();
+			} else {
+			LinearMotor_start();
+			if (SensorData.Elevation <= 180){
+				LinearMotor_set_direction(1);
+			}
+			else{
+				LinearMotor_set_direction(0);
 			}
 		}
     }

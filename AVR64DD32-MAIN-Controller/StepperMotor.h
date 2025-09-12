@@ -10,7 +10,15 @@
 #define STEPPERMOTOR_H_
 
 
+typedef struct {
+	bool lastDirection;
+	bool alreadyStarted;
+	bool alreadyStoped;
+	bool alreadyEnabled;
+	bool alreadyDisabled;
+} HBS86;
 
+extern HBS86 StepperMotor;
 
 
 #endif /* STEPPERMOTOR_H_ */

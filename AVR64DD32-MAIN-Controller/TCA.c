@@ -6,7 +6,7 @@
  */ 
 #include "Settings.h"
 
-void TCA0_init_WO3_PWM(uint16_t freq_hz, uint8_t duty_percent) //Auto TCA prescaler selection, that give us Frequency range: ~366Hz - ~93kHz. TLE9201SG max 20kHz
+void TCA0_init_linear_PWM(uint16_t freq_hz, uint8_t duty_percent) //Auto TCA prescaler selection, that give us Frequency range: ~366Hz - ~93kHz. TLE9201SG max 20kHz
 {
 	const uint16_t prescalers[] = {1, 2, 4, 8, 16, 64, 256, 1024};
 	const uint8_t clk_select[] = {

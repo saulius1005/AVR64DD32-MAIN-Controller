@@ -5,64 +5,63 @@
  *  Author: Saulius
  */ 
 #include "Settings.h"
+#include "StepperMotorVar.h"
 
 
 // -------------------------
 // Stepper Enable / Disable
 // -------------------------
 void Stepper_enable() {
-	PORTF.OUTCLR = PIN1_bm; // aktyvus LOW
+	if(StepperMotor.alreadyEnabled == false){
+		PORTF.OUTCLR = PIN1_bm; // aktyvus LOW
+		StepperMotor.alreadyEnabled = true;
+		StepperMotor.alreadyDisabled = false;
+	}
 }
 
 void Stepper_disable() {
-	PORTF.OUTSET = PIN1_bm; // HIGH = inactive
-}
-
-// -------------------------
-// Stepper Direction
-// -------------------------
-void Stepper_set_direction(uint8_t dir) {
-	if (dir)
-	PORTF.OUTSET = PIN3_bm;
-	else
-	PORTF.OUTCLR = PIN3_bm;
+	if(StepperMotor.alreadyDisabled == false){
+		PORTF.OUTSET = PIN1_bm; // HIGH = inactive
+		StepperMotor.alreadyDisabled = true;
+		StepperMotor.alreadyEnabled = false;
+	}
 }
 
 // -------------------------
 // Stepper Start / Stop
 // -------------------------
 void Stepper_start() {
-	// Ájungti WOC PF2
-	TCD0.FAULTCTRL |= (TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm);
-
-	// Ájungti TCD counter
-	TCD0.CTRLA |= TCD_ENABLE_bm;
-
-	// PF2 dabar generuoja STEP signalus
+	if(StepperMotor.alreadyStarted == false){
+		TCD0.FAULTCTRL |= (TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm);
+		TCD0.CTRLA |= TCD_ENABLE_bm;
+		StepperMotor.alreadyStarted = true;
+		StepperMotor.alreadyStoped = false;
+	}
 }
+
 
 void Stepper_stop() {
-	// Sustabdyti TCD counter
+	if(StepperMotor.alreadyStoped == false){
 	TCD0.CTRLA &= ~TCD_ENABLE_bm;
-
-	// Atjungti WOC PF2
-	TCD0.FAULTCTRL &= ~(TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm);
-
-	// Uþtikrinti, kad PF2 LOW (driver idle)
+	TCD0.FAULTCTRL &= ~(TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm); //disconnecting PF2 from TCD counter
 	PORTF.OUTCLR = PIN2_bm;
+		StepperMotor.alreadyStoped = true;
+		StepperMotor.alreadyStarted = false;
+	}
 }
 
 // -------------------------
-// PWM Update (Frequency / Duty Cycle)
+// Stepper Direction
 // -------------------------
-void Stepper_set_frequency(uint32_t target_freq, uint8_t duty_cycle) {
-	uint16_t cmpbclr = (F_CPU / (4 * target_freq * 2)) - 1;
-	uint16_t cmpaset = (uint16_t)(cmpbclr * (duty_cycle / 100.0));
-	uint16_t cmpbset = cmpbclr - cmpaset;
-
-	TCD0.CMPBCLR = cmpbclr;
-	TCD0.CMPBSET = cmpbset;
-	TCD0.CMPASET = cmpaset;
+void Stepper_set_direction(bool dir) {
+	if (dir != StepperMotor.lastDirection)  // if direction change (single time per cycle)
+	{
+		if (dir)
+			PORTF.OUTSET = PIN3_bm;
+		else
+			PORTF.OUTCLR = PIN3_bm;
+		StepperMotor.lastDirection = dir;
+	}
 }
 
 // -------------------------
@@ -70,13 +69,13 @@ void Stepper_set_frequency(uint32_t target_freq, uint8_t duty_cycle) {
 // -------------------------
 void Stepper_init() {
 	// Ájungiam WOC PF2
-	TCD0_init();
+	//TCD0_init();
 
 	// Default PWM
-	Stepper_set_frequency(40000, 50); // 40kHz, 50% duty
+	TCD0_init_stepper_PWM(40000, 50); // 40kHz, 50% duty
 
 	// Set idle states
-	PORTF.OUTCLR = PIN2_bm;
+	PORTF.OUTCLR = PIN2_bm; // pulse low
 	PORTF.OUTSET = PIN1_bm; // disable
 	PORTF.OUTCLR = PIN3_bm; // default direction
 }

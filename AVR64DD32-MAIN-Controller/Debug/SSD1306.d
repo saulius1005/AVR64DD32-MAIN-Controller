@@ -25,8 +25,8 @@ SSD1306.d SSD1306.o: .././SSD1306.c .././Settings.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  .././i2c.h .././SSD1306.h .././windows.h .././RS485LED.h .././FOUSART.h \
- .././Joystick.h .././RS485USART.h .././LinearMotor.h .././SSD1306Var.h \
- .././font.h
+ .././Joystick.h .././RS485USART.h .././LinearMotor.h .././StepperMotor.h \
+ .././SSD1306Var.h .././font.h
 
 .././Settings.h:
 
@@ -95,6 +95,8 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././RS485USART.h:
 
 .././LinearMotor.h:
+
+.././StepperMotor.h:
 
 .././SSD1306Var.h:
 

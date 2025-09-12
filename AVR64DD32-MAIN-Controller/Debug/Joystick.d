@@ -25,7 +25,8 @@ Joystick.d Joystick.o: .././Joystick.c .././Settings.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  .././i2c.h .././SSD1306.h .././windows.h .././RS485LED.h .././FOUSART.h \
- .././Joystick.h .././RS485USART.h .././LinearMotor.h .././JoystickVar.h
+ .././Joystick.h .././RS485USART.h .././LinearMotor.h .././StepperMotor.h \
+ .././JoystickVar.h
 
 .././Settings.h:
 
@@ -94,5 +95,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././RS485USART.h:
 
 .././LinearMotor.h:
+
+.././StepperMotor.h:
 
 .././JoystickVar.h:

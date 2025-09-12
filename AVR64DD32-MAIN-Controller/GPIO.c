@@ -37,7 +37,6 @@ void GPIO_init(){
     // Configure Port D (PD) for USART1 TX and RX
     PORTD.DIRSET = PIN2_bm | PIN3_bm | PIN5_bm; //Set PD2 as linear motor disable pin, PD3 as PWM, PD5 as direction
 	PORTD.DIRCLR = PIN4_bm; //Linear motor driver TLE9201SG error flag pin
-	PORTD.OUTSET = PIN2_bm; //set output disabled for TLE9201SG
 
 	PORTF.DIRSET = PIN1_bm | PIN2_bm | PIN3_bm; //Set PF1 as enable, PF2 as pulse, PIN3 as direction signals output for HBS86 driver
 	PORTF.DIRCLR = PIN4_bm | PIN5_bm; //Set PF4 as alarm and PF5 as Pend signals inputs from HBS86 driver

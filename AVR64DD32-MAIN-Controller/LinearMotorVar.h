@@ -11,11 +11,10 @@
 
 TLE9201SG LinearMotor = {
 	.lastDirection = false,
-	.newDirection = false,
-	.angleError = false,
-	.targetReached = false,
-	.noChangeCount = 0,
-	.lastElevation = 0
+	.alreadyStarted = false,
+	.alreadyStoped = false,
+	.alreadyEnabled = false,
+	.alreadyDisabled = false
 };
 
 #endif /* LINEARMOTORVAR_H_ */
