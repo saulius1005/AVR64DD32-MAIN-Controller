@@ -399,6 +399,7 @@ void LinearMotor_disable();
 void LinearMotor_start();
 void LinearMotor_stop();
 void LinearMotor_set_direction(bool dir);
+bool Read_LinearMotor_EF();
 
 /*void TCD0_init();*/
 void TCD0_init_stepper_PWM(uint32_t freq_hz, uint8_t duty_percent);
@@ -408,6 +409,9 @@ void Stepper_disable();
 void Stepper_start();
 void Stepper_stop();
 void Stepper_set_direction(bool dir);
+bool Read_Stepper_PEND();
+bool Read_Stepper_ALM();
+
 
 
 #endif /* SETTINGS_H_ */

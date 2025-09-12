@@ -79,3 +79,11 @@ void Stepper_init() {
 	PORTF.OUTSET = PIN1_bm; // disable
 	PORTF.OUTCLR = PIN3_bm; // default direction
 }
+
+bool Read_Stepper_PEND(){ // true if position reached
+	return !(PORTF.IN & PIN5_bm);
+}
+
+bool Read_Stepper_ALM(){ // true if driver has a error (overheat, stepepr stuck and so on)
+	return !(PORTF.IN & PIN4_bm);
+}

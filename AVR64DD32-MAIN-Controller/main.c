@@ -39,9 +39,9 @@ int main(void)
 		_delay_ms(100);*/
 
 		FOReceiver(); // Received Fiber optic test
-		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
+		screen_write_formatted_text("el.: %3d EF: %d", 0, ALIGN_CENTER, SensorData.Elevation, Read_LinearMotor_EF());
 		//screen_write_formatted_text("%d", 1, ALIGN_CENTER, LinearMotor.angleError);
-		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth);
+		screen_write_formatted_text("az:%3d PEND:%d ALM:%d", 1, ALIGN_CENTER, SensorData.Azimuth, Read_Stepper_PEND(), Read_Stepper_ALM());
 		_delay_ms(100);
 		/*screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
 		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth);

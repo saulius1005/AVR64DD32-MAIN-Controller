@@ -41,7 +41,6 @@ void LinearMotor_stop(){
 		TCA0.SPLIT.CTRLA &= ~TCA_SPLIT_ENABLE_bm;  // turn off TCA
 		PORTD.OUTCLR = PIN3_bm; //ensure PWM low level
 		_delay_ms(500); //preventing from error flag- 500mS of free spinning
-
 		LinearMotor.alreadyStoped = true;
 		LinearMotor.alreadyStarted = false;
 	}
@@ -69,4 +68,6 @@ void LinearMotor_init(){
 	PORTD.OUTSET = PIN2_bm; //set output disabled for TLE9201SG
 };
 
-
+bool Read_LinearMotor_EF(){ // false if driver has a error (overheat, linear motor stuck and so on)
+	return PORTD.IN & PIN4_bm;
+}
