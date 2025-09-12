@@ -18,9 +18,6 @@ int main(void)
     screen_clear(); // Clear the screen
 	LinearMotor_init();
 	Stepper_init();
-	//screen_write_formatted_text("Screen test:", 0, ALIGN_LEFT); //simple  screen test
-
-	Stepper_enable();
 	LinearMotor_enable();
 	
     while (1) 
@@ -42,6 +39,9 @@ int main(void)
 		screen_write_formatted_text("el.: %3d EF: %d", 0, ALIGN_CENTER, SensorData.Elevation, Read_LinearMotor_EF());
 		//screen_write_formatted_text("%d", 1, ALIGN_CENTER, LinearMotor.angleError);
 		screen_write_formatted_text("az:%3d PEND:%d ALM:%d", 1, ALIGN_CENTER, SensorData.Azimuth, Read_Stepper_PEND(), Read_Stepper_ALM());
+		screen_write_formatted_text("MCU U:%4d", 2, ALIGN_CENTER, Read_MCU_Voltge());
+		screen_write_formatted_text("LV U:%4d I:%4d", 3, ALIGN_CENTER, Read_LinearMotor_Voltage(), Read_LinearMotor_Current());
+		screen_write_formatted_text("ÞV U:%4d I:%4d", 4, ALIGN_CENTER, Read_Stepper_Voltage(), Read_Stepper_Current());
 		_delay_ms(100);
 		/*screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
 		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth);
@@ -72,7 +72,9 @@ int main(void)
 
 		if (SensorData.Azimuth == 0) {
 			Stepper_stop();	
+			Stepper_disable();
 			} else {
+			Stepper_enable();
 			Stepper_start();
 			if (SensorData.Azimuth <= 180){
 				Stepper_set_direction(1);
@@ -83,7 +85,9 @@ int main(void)
 		}
 		if (SensorData.Elevation == 0) {
 			LinearMotor_stop();
+			LinearMotor_disable();
 			} else {
+			LinearMotor_enable();
 			LinearMotor_start();
 			if (SensorData.Elevation <= 180){
 				LinearMotor_set_direction(1);

@@ -400,6 +400,8 @@ void LinearMotor_start();
 void LinearMotor_stop();
 void LinearMotor_set_direction(bool dir);
 bool Read_LinearMotor_EF();
+uint16_t Read_LinearMotor_Voltage();
+int16_t Read_LinearMotor_Current();
 
 /*void TCD0_init();*/
 void TCD0_init_stepper_PWM(uint32_t freq_hz, uint8_t duty_percent);
@@ -411,6 +413,12 @@ void Stepper_stop();
 void Stepper_set_direction(bool dir);
 bool Read_Stepper_PEND();
 bool Read_Stepper_ALM();
+uint16_t Read_Stepper_Voltage();
+int16_t Read_Stepper_Current();
+
+uint16_t Read_MCU_Voltge();
+void ADC0_SetupLinearMotor(uint8_t parameter);
+void ADC0_SetupStepper(uint8_t parameter);
 
 
 

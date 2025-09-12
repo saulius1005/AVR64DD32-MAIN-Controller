@@ -16,11 +16,13 @@ void Stepper_enable() {
 		PORTF.OUTCLR = PIN1_bm; // aktyvus LOW
 		StepperMotor.alreadyEnabled = true;
 		StepperMotor.alreadyDisabled = false;
+		_delay_ms(10);
 	}
 }
 
 void Stepper_disable() {
 	if(StepperMotor.alreadyDisabled == false){
+		_delay_ms(10);
 		PORTF.OUTSET = PIN1_bm; // HIGH = inactive
 		StepperMotor.alreadyDisabled = true;
 		StepperMotor.alreadyEnabled = false;
@@ -42,9 +44,9 @@ void Stepper_start() {
 
 void Stepper_stop() {
 	if(StepperMotor.alreadyStoped == false){
-	TCD0.CTRLA &= ~TCD_ENABLE_bm;
-	TCD0.FAULTCTRL &= ~(TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm); //disconnecting PF2 from TCD counter
-	PORTF.OUTCLR = PIN2_bm;
+		TCD0.CTRLA &= ~TCD_ENABLE_bm;
+		TCD0.FAULTCTRL &= ~(TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm); //disconnecting PF2 from TCD counter
+		PORTF.OUTCLR = PIN2_bm;
 		StepperMotor.alreadyStoped = true;
 		StepperMotor.alreadyStarted = false;
 	}
@@ -86,4 +88,14 @@ bool Read_Stepper_PEND(){ // true if position reached
 
 bool Read_Stepper_ALM(){ // true if driver has a error (overheat, stepepr stuck and so on)
 	return !(PORTF.IN & PIN4_bm);
+}
+
+uint16_t Read_Stepper_Voltage(){
+	ADC0_SetupStepper(0);
+	return (ADC0_read() * 0.1775) * Stepper_Voltage_Compensation_koef;
+}
+
+int16_t Read_Stepper_Current(){
+	ADC0_SetupStepper(1);
+	return ((int16_t)ADC0_read() - (int16_t)Read_MCU_Voltge())/4;
 }

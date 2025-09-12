@@ -71,3 +71,13 @@ void LinearMotor_init(){
 bool Read_LinearMotor_EF(){ // false if driver has a error (overheat, linear motor stuck and so on)
 	return PORTD.IN & PIN4_bm;
 }
+
+uint16_t Read_LinearMotor_Voltage(){
+	ADC0_SetupLinearMotor(0);
+	return (ADC0_read() * 0.075) * LinearMotor_Voltage_Compensation_koef; // same as ADC read/2000 * 30V (300k) / 2V(AMC1131 full range) )
+}
+
+int16_t Read_LinearMotor_Current(){
+	ADC0_SetupLinearMotor(1);
+	return ((int16_t)ADC0_read() - (int16_t)Read_MCU_Voltge())/4;
+}

@@ -8,7 +8,7 @@
 #include "JoystickVar.h"
 
 uint8_t ReadButton(){
-	return (PORTA.IN & PIN1_bm) == 0 ? 1 : 0;
+	return !(PORTA.IN & PIN1_bm);
 }
 
 

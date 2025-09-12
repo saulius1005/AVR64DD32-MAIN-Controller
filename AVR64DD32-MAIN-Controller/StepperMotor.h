@@ -9,6 +9,7 @@
 #ifndef STEPPERMOTOR_H_
 #define STEPPERMOTOR_H_
 
+#define Stepper_Voltage_Compensation_koef 1.05 //59,62V Actual measured voltage and calculated 56,7V
 
 typedef struct {
 	bool lastDirection;
