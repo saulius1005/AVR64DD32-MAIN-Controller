@@ -85,55 +85,85 @@ void Motor_SetTarget(uint8_t angle) {
 	}
 }
 
-void Motor_SetTarget_NB(uint8_t angle) {
-    static uint8_t noChangeCount = 0;
-    static uint16_t lastElevation = 0;
-    static bool targetReached = false; // ar pasiektas tikslus kampas
+bool Motor_IsStuck(void) {
+	if (SensorData.HPElevation == LinearMotor.lastElevation) {
+		if (++LinearMotor.noChangeCount >= MAX_NO_CHANGE) {
+			return true;
+		}
+		} else {
+		LinearMotor.noChangeCount = 0;
+	}
+	return false;
+}
 
-    // Resetinam targetReached, jei kampas iðeina uþ ±backlash ribos
-    if (SensorData.Elevation < (angle - Angle_Backlash) || 
-        SensorData.Elevation > (angle + Angle_Backlash)) 
-    {
-        targetReached = false;
+void Motor_SetTarget_NB(uint8_t angle) {
+    // Jei esame uþ backlash ribø ? laikom, kad tikslas nepasiektas
+    if (abs(SensorData.Elevation - angle) > Angle_Backlash) {
+        LinearMotor.targetReached = false;
     }
 
-    if (!targetReached) {
-        // Nustatom kryptá visada link tikslo
-        if (SensorData.Elevation < angle) {
-            LinearMotor.newDirection = true;   // á prieká
-        } else if (SensorData.Elevation > angle) {
-            LinearMotor.newDirection = false;  // atgal
-        }
-
+    if (!LinearMotor.targetReached) {
+        // Nustatom kryptá link tikslo
+        LinearMotor.newDirection = (SensorData.Elevation < angle);
         Motor_SetDirection();
         Motor_Start();
 
-        // stuck detection tik jei motoras turi judëti
-        if (SensorData.HPElevation == lastElevation) {
-            noChangeCount++;
-            if (noChangeCount >= MAX_NO_CHANGE) {
-                Motor_Stop();
-                LinearMotor.angleError = true;
-                return;
-            }
-        } else {
-            noChangeCount = 0; // judëjimas ávyko ? resetinam
+        // Tikrinam uþstrigimà
+        if (Motor_IsStuck()) {
+            Motor_Stop();
+            LinearMotor.angleError = true;
+            return;
         }
 
-        // jei pasiekta ±1 laipsnio tikslumo ribos (ar ±0)
+        // Tikslumo patikra su tolerancija
         if (SensorData.Elevation == angle) {
             Motor_Stop();
-            targetReached = true; // tikslas pasiektas
+            LinearMotor.targetReached = true;
             LinearMotor.angleError = false;
         }
     } else {
-        // jei targetReached ir esame ±backlash intervale ? sustojam
         Motor_Stop();
         LinearMotor.angleError = false;
     }
 
-    lastElevation = SensorData.HPElevation;
+    LinearMotor.lastElevation = SensorData.HPElevation;
 }
+
+/*
+void Motor_SetTarget_NB(uint8_t angle) {
+	uint16_t targetHP = angle * 100;  // konvertuojam kampà á HPElevation mastelá
+
+	// Jei esame uþ backlash ribø ? laikom, kad tikslas nepasiektas
+	if (abs((int16_t)SensorData.Elevation - (int16_t)angle) > Angle_Backlash) {
+		LinearMotor.targetReached = false;
+	}
+
+	if (!LinearMotor.targetReached) {
+		// Nustatom kryptá link tikslo pagal sveikà kampà
+		LinearMotor.newDirection = (SensorData.Elevation < angle);
+		Motor_SetDirection();
+		Motor_Start();
+
+		// Tikrinam ar motoras neuþstrigo
+		if (Motor_IsStuck()) {
+			Motor_Stop();
+			LinearMotor.angleError = true;
+			return;
+		}
+
+		// Tikslumo patikra pagal HPElevation (pvz. ±0.5° ? ±50)
+		if (abs((int32_t)SensorData.HPElevation - (int32_t)targetHP) <= ANGLE_TOLERANCE) {
+			Motor_Stop();
+			LinearMotor.targetReached = true;
+			LinearMotor.angleError = false;
+		}
+		} else {
+		Motor_Stop();
+		LinearMotor.angleError = false;
+	}
+
+	LinearMotor.lastElevation = SensorData.HPElevation;
+}*/
 
 
 

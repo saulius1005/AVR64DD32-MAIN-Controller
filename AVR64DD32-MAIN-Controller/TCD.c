@@ -10,3 +10,33 @@
  */
 
 #include "Settings.h"
+
+void TCD0_init() {
+	ccp_write_io((uint8_t *) &TCD0.FAULTCTRL, TCD_CMPCEN_bm); ///< Enable WOC on PF2
+
+	TCD0.CTRLB = TCD_WGMODE_DS_gc; ///< Set waveform mode to double slope
+
+	while (!(TCD0.STATUS & TCD_ENRDY_bm)); ///< Wait until TCD is ready for configuration
+}
+
+void PWM_init(uint32_t target_freq, uint8_t duty_cycle) {
+
+	// Calculate compare registers
+	uint16_t cmpbclr = (F_CPU / (4 * target_freq * 2)) - 1;
+	uint16_t cmpaset = (uint16_t)(cmpbclr * (duty_cycle / 100.0)) + 1;
+	uint16_t cmpbset = cmpbclr - cmpaset - 1;
+
+	// Set TCD compare registers
+	TCD0.CMPBCLR = cmpbclr;
+	TCD0.CMPBSET = cmpbset;
+	TCD0.CMPASET = cmpaset;
+
+	// Ájungiam WOC iðëjimà
+	TCD0.FAULTCTRL = TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm;
+
+	// Paleidþiam su prescaler = 4
+	TCD0.CTRLA = TCD_CLKSEL_CLKPER_gc | TCD_CNTPRES_DIV4_gc | TCD_ENABLE_bm;
+
+	// Palaukti, kol sinchronizuosis
+	while (!(TCD0.STATUS & TCD_ENRDY_bm));
+}

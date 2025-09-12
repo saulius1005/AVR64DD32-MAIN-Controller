@@ -16,14 +16,19 @@ int main(void)
     USART1_init();
     screen_init();
     screen_clear(); // Clear the screen
-	PORTD.OUTCLR =PIN2_bm;
-	TCA0_init_WO3_PWM(20000, 50);
+	//PORTD.OUTCLR = PIN2_bm;
+	//TCA0_init_WO3_PWM(20000, 50);
+	Stepper_init();
 	//screen_write_formatted_text("Screen test:", 0, ALIGN_LEFT); //simple  screen test
+
+	Stepper_enable();
 	
-
-
     while (1) 
     {
+		/*PORTF.OUTSET = PIN2_bm;
+		_delay_ms(1);
+		PORTF.OUTCLR = PIN2_bm;
+		_delay_ms(1);*/
 		/*RS485_Led(RX_LED_ON); //RS485 RX TX LED test
 		_delay_ms(100);
 		RS485_Led(TX_LED_ON);
@@ -34,8 +39,10 @@ int main(void)
 		_delay_ms(100);*/
 
 		FOReceiver(); // Received Fiber optic test
-		screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
-		screen_write_formatted_text("%d", 1, ALIGN_CENTER, LinearMotor.angleError);
+		//screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
+		//screen_write_formatted_text("%d", 1, ALIGN_CENTER, LinearMotor.angleError);
+		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth);
+		_delay_ms(100);
 		/*screen_write_formatted_text("%3d", 0, ALIGN_CENTER, SensorData.Elevation);
 		screen_write_formatted_text("%3d", 1, ALIGN_CENTER, SensorData.Azimuth);
 		screen_write_formatted_text("%3d", 2, ALIGN_LEFT, SensorData.PVU);
@@ -60,7 +67,19 @@ int main(void)
 		}
 
 		Motor_SetDirection();*/
-		Motor_SetTarget_NB(90);
+		//Motor_SetTarget_NB(90);
 		//_delay_ms(100);
+
+		if (SensorData.Azimuth == 0) {
+			Stepper_stop();	
+			} else {
+			Stepper_start();
+			if (SensorData.Azimuth <= 180){
+				Stepper_set_direction(1);
+			} 
+			else{
+				Stepper_set_direction(0);
+			}
+		}
     }
 }

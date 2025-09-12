@@ -13,6 +13,8 @@ void GPIO_init(){
     PORTMUX.USARTROUTEA = PORTMUX_USART0_ALT1_gc | PORTMUX_USART1_ALT2_gc; // Set USART0 to alternative pins set 1, USART1 to alternative pins set 2
     PORTMUX.TWIROUTEA = PORTMUX_TWI0_DEFAULT_gc; // Set TWI0 to default pins
 	PORTMUX.TCAROUTEA = PORTMUX_TCA0_PORTD_gc;
+	PORTMUX.TCDROUTEA = PORTMUX_TCD0_ALT2_gc; ///< Select alternative WOC pin variant 2
+
 
     // Configure Port A (PA) for RX LED, I2C SDA, SCL, USART0 TX, TX LED and XDIR
     PORTA.DIRSET = PIN2_bm | PIN3_bm | PIN4_bm | PIN6_bm | PIN7_bm; // Set PA2, PA3, PA4, PA7 as output (RX LED, I2C SDA, SCL, USART0 TX, TX LED, XDIR)
@@ -36,5 +38,10 @@ void GPIO_init(){
     PORTD.DIRSET = PIN2_bm | PIN3_bm | PIN5_bm; //Set PD2 as linear motor disable pin, PD3 as PWM, PD5 as direction
 	PORTD.DIRCLR = PIN4_bm; //Linear motor driver TLE9201SG error flag pin
 	PORTD.OUTSET = PIN2_bm; //set output disabled for TLE9201SG
+
+	PORTF.DIRSET = PIN1_bm | PIN2_bm | PIN3_bm; //Set PF1 as enable, PF2 as pulse, PIN3 as direction signals output for HBS86 driver
+	PORTF.DIRCLR = PIN4_bm | PIN5_bm; //Set PF4 as alarm and PF5 as Pend signals inputs from HBS86 driver
+	PORTF.PIN4CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF4
+	PORTF.PIN5CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PF5
 
 }

@@ -394,5 +394,12 @@ void TCA0_init_WO3_PWM(uint16_t freq_hz, uint8_t duty_percent);
 void Motor_SetDirection();
 void Motor_SetTarget(uint8_t angle);
 void Motor_SetTarget_NB(uint8_t angle);
+void TCD0_init();
+void Stepper_init();
+void Stepper_start();
+void Stepper_stop();
+void Stepper_set_direction(uint8_t dir);
+void Stepper_enable();
+void Stepper_disable();
 
 #endif /* SETTINGS_H_ */

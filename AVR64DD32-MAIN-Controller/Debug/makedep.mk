@@ -26,6 +26,8 @@ RS485USART.c
 
 SSD1306.c
 
+StepperMotor.c
+
 TCA.c
 
 TCD.c
