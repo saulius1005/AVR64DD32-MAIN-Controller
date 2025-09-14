@@ -29,49 +29,57 @@ uint64_t hexToUint64(const char *str) {
 }
 
 void FODataSplitter(char *command) {
-	const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
-	char temp[16];
+	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage an current = 0 meaning it is FO optic fault
 
-	strncpy(temp, command, 15);
-	temp[15] = '\0';
-	uint64_t datatocheck = hexToUint64(temp);
-	strncpy(temp, command + 15, 2); 
-	temp[2] = '\0';
-	uint8_t crctocheck = (uint8_t)strtol(temp, NULL, 16);
-
-	if(verify_crc8_cdma2000(datatocheck, crctocheck)){ //if data valid update it
-		//screen_write_formatted_text("data is correct", 1, ALIGN_CENTER);//uncomment if nedded// crc ok
-		const char *p = command;
-		uint8_t EndSwitchesValue = 0;
-
-		for (uint8_t i = 0; i < 6; i++) {
-			char token[10] = {0};
-
-			memcpy(token, p, lengths[i]);
-			token[lengths[i]] = '\0';
-
-			switch (i) {
-				case 0: SensorData.HPElevation   = (uint16_t)strtol(token, NULL, 16); break;
-				case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16)/ Angle_Precizion; break;
-				case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
-				case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
-				case 4: EndSwitchesValue       = (uint8_t)strtol(token, NULL, 16); break; //common end switches value
-			}
-
-			p += lengths[i];
-		}
-		SensorData.Elevation = SensorData.HPElevation / Angle_Precizion;
-		//spliting end switch value to separate end switch value according to axis
-		SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
-		SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
-		SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
-		SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
-
+		
 	}
 	else{
-		//uncomment if nedded
-		//screen_write_formatted_text("data is corupted!", 1, ALIGN_CENTER); // bad crc
-	}	
+		const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
+		char temp[16];
+
+		strncpy(temp, command, 15);
+		temp[15] = '\0';
+		uint64_t datatocheck = hexToUint64(temp);
+		strncpy(temp, command + 15, 2); 
+		temp[2] = '\0';
+		uint8_t crctocheck = (uint8_t)strtol(temp, NULL, 16);
+
+		if(verify_crc8_cdma2000(datatocheck, crctocheck)){ //if data valid update it
+			//screen_write_formatted_text("data is correct", 1, ALIGN_CENTER);//uncomment if nedded// crc ok
+			const char *p = command;
+			uint8_t EndSwitchesValue = 0;
+
+			for (uint8_t i = 0; i < 6; i++) {
+				char token[10] = {0};
+
+				memcpy(token, p, lengths[i]);
+				token[lengths[i]] = '\0';
+
+				switch (i) {
+					case 0: SensorData.HPElevation   = (uint16_t)strtol(token, NULL, 16); break;
+					case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16)/ Angle_Precizion; break;
+					case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
+					case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
+					case 4: EndSwitchesValue       = (uint8_t)strtol(token, NULL, 16); break; //common end switches value
+				}
+
+				p += lengths[i];
+			}
+			SensorData.Elevation = SensorData.HPElevation / Angle_Precizion;
+			//spliting end switch value to separate end switch value according to axis
+			SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
+			SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
+			SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
+			SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
+
+		}
+		else{
+			//uncomment if nedded
+			//screen_write_formatted_text("data is corupted!", 1, ALIGN_CENTER); // bad crc
+		}	
+	}
+
+
 }
 
 /**

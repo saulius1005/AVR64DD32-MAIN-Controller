@@ -19,7 +19,7 @@ void RS485DataSplitter(char *command) {
 
 	char *token = strtok(command, "|");
 	for (uint8_t i = 0; token != NULL && i < 6; i++) {
-		*fields[i] = (uint16_t)strtoul(token, NULL, 10);
+		*fields[i] = (uint16_t)strtol(token, NULL, 10);
 		token = strtok(NULL, "|");
 	}
 
