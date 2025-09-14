@@ -136,6 +136,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Actions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ActionsVar.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ADC.c">
       <SubType>compile</SubType>
     </Compile>

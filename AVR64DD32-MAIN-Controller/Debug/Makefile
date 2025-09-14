@@ -37,6 +37,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Actions.c \
 ../ADC.c \
 ../CLK.c \
 ../CRC.c \
@@ -63,6 +64,7 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Actions.o \
 ADC.o \
 CLK.o \
 CRC.o \
@@ -82,6 +84,7 @@ USART.o \
 Windows.o
 
 OBJS_AS_ARGS +=  \
+Actions.o \
 ADC.o \
 CLK.o \
 CRC.o \
@@ -101,6 +104,7 @@ USART.o \
 Windows.o
 
 C_DEPS +=  \
+Actions.d \
 ADC.d \
 CLK.d \
 CRC.d \
@@ -120,6 +124,7 @@ USART.d \
 Windows.d
 
 C_DEPS_AS_ARGS +=  \
+Actions.d \
 ADC.d \
 CLK.d \
 CRC.d \
@@ -152,6 +157,13 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+./Actions.o: .././Actions.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 ./ADC.o: .././ADC.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0

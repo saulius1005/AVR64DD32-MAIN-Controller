@@ -11,16 +11,6 @@
 
 #include "Settings.h"
 
-/*
-void TCD0_init() {
-	ccp_write_io((uint8_t *) &TCD0.FAULTCTRL, TCD_CMPCEN_bm); ///< Enable WOC on PF2
-
-	TCD0.CTRLB = TCD_WGMODE_DS_gc; ///< Set waveform mode to double slope
-
-	while (!(TCD0.STATUS & TCD_ENRDY_bm)); ///< Wait until TCD is ready for configuration
-}
-*/
-
 void TCD0_init_stepper_PWM(uint32_t freq_hz, uint8_t duty_percent) {
 
 	// Calculate compare registers

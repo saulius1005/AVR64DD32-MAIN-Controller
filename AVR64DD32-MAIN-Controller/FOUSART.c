@@ -94,38 +94,20 @@ void FOReceiver() {
 		if (--timeout == 0) { // Timeout condition
 			break;
 		}
-        if (Status_FO.error == 1) { // If an error is active
-            Status_FO.error = 0; // Reset error value
-            Status_FO.errorCounter = 0;
-            break;
-        }
-
         if (start) {
             if (c == '>') { // If received data end symbol
                start = 0;
 			   command[index] = '\0';
                index = 0;
                FODataSplitter(command); // Execute the received command //comment when testing lines below
-                break;
+               break;
             } else if (index < MESSAGE_LENGTH_FO) {
                 command[index++] = c; // Store received character in command array
             }
         }
-
         if (c == '<') { // If received data start symbol
             start = 1;
             index = 0;
-            Status_FO.error = 0; // Reset error state
-            Status_FO.errorCounter = 0; // Reset error counter
-        }
-
-        if (Status_FO.warning) {
-            Status_FO.warning = 0;
-            if (Status_FO.errorCounter < CountForError_FO) {
-                Status_FO.errorCounter++;
-            } else {
-                Status_FO.error = 1; // Set error flag if too many warnings
-            }
         }
     }
 }

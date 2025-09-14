@@ -29,12 +29,8 @@ char USART0_readChar() {
 	uint32_t timeout_counter = RS485_TIMEOUT_COUNTER; // Set a timeout counter
 	while (!(USART0.STATUS & USART_RXCIF_bm)) { // Wait for data to be received
 		if (--timeout_counter == 0) { // Timeout condition
-			//Status_RS485.communicationError = true;
 			break;
 		}
-/*
-		else
-			Status_RS485.communicationError = false;*/
 	}
 	return USART0.RXDATAL; // Return received character
 }
@@ -143,11 +139,8 @@ char USART1_readChar() {
 	uint32_t timeout_counter = FO_TIMEOUT_COUNTER; // Set a timeout counter
 	while (!(USART1.STATUS & USART_RXCIF_bm)) { // Wait for data to be received
 		if (--timeout_counter == 0) { // Timeout condition
-			//Status_FO.communicationError = true;
 			break;
 		}
-		//else
-		//Status_FO.communicationError = false;
 	}
 	return USART1.RXDATAL; // Return received character
 }

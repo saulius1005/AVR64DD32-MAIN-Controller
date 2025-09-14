@@ -26,7 +26,7 @@ StepperMotor.d StepperMotor.o: .././StepperMotor.c .././Settings.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  .././i2c.h .././SSD1306.h .././windows.h .././RS485LED.h .././FOUSART.h \
  .././Joystick.h .././RS485USART.h .././LinearMotor.h .././StepperMotor.h \
- .././StepperMotorVar.h
+ .././Actions.h .././StepperMotorVar.h
 
 .././Settings.h:
 
@@ -97,5 +97,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././LinearMotor.h:
 
 .././StepperMotor.h:
+
+.././Actions.h:
 
 .././StepperMotorVar.h:

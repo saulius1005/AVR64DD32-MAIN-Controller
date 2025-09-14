@@ -14,15 +14,16 @@
 void Stepper_enable() {
 	if(StepperMotor.alreadyEnabled == false){
 		PORTF.OUTCLR = PIN1_bm; // aktyvus LOW
+		_delay_ms(10);
 		StepperMotor.alreadyEnabled = true;
 		StepperMotor.alreadyDisabled = false;
 	}
 }
 
 void Stepper_disable() {
-	_delay_ms(10);
 	if(StepperMotor.alreadyDisabled == false){
 		PORTF.OUTSET = PIN1_bm; // HIGH = inactive
+		_delay_ms(10);
 		StepperMotor.alreadyDisabled = true;
 		StepperMotor.alreadyEnabled = false;
 	}
@@ -69,11 +70,9 @@ void Stepper_set_direction(bool dir) {
 // Init function
 // -------------------------
 void Stepper_init() {
-	// Ájungiam WOC PF2
-	//TCD0_init();
 
 	// Default PWM
-	TCD0_init_stepper_PWM(40000, 50); // 40kHz, 50% duty
+	TCD0_init_stepper_PWM(51200, 50); // 51.2kHz, 50% duty
 
 	// Set idle states
 	PORTF.OUTCLR = PIN2_bm; // pulse low

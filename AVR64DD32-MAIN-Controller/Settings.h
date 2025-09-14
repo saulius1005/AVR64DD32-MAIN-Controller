@@ -58,6 +58,7 @@
 #include "RS485USART.h"
 #include "LinearMotor.h"
 #include "StepperMotor.h"
+#include "Actions.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Function Prototypes
@@ -420,6 +421,7 @@ uint16_t Read_MCU_Voltge();
 void ADC0_SetupLinearMotor(uint8_t parameter);
 void ADC0_SetupStepper(uint8_t parameter);
 
+void work();
 
 
 #endif /* SETTINGS_H_ */

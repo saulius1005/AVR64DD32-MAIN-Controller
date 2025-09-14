@@ -32,17 +32,10 @@ void RS485Receiver() {
 	uint16_t timeout = RS485_TIMEOUT_COUNTER;
 
 	while (1) {
-		char c = USART0_readChar(); // Reading a character from USART
-		
+		char c = USART0_readChar(); // Reading a character from USART	
 		if (--timeout == 0) { // Timeout condition
 			break;
 		}
-		if (Status_RS485.error) { // If an error is active
-			Status_RS485.error = 0; // Reset error value
-			Status_RS485.errorCounter = 0;
-			break;
-		}
-
 		if (start) {
 			if (c == '}') { // If received data end symbol
 				RS485_Led(RX_LED_OFF);
@@ -55,22 +48,10 @@ void RS485Receiver() {
 				command[index++] = c; // Store received character in command array
 			}
 		}
-
 		if (c == '{') { // If received data start symbol
 			start = 1;
 			index = 0;
-			Status_RS485.error = 0; // Reset error state
-			Status_RS485.errorCounter = 0; // Reset error counter
 			RS485_Led(RX_LED_ON);
-		}
-
-		if (Status_RS485.warning) {
-			Status_RS485.warning = 0;
-			if (Status_RS485.errorCounter < CountForError_RS485) {
-				Status_RS485.errorCounter++;
-				} else {
-				Status_RS485.error = 1; // Set error flag if too many warnings
-			}
 		}
 	}
 }

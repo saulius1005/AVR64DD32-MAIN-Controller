@@ -18,26 +18,6 @@
 #define U_I_Precizion 1 // 10 meaning 24, 1 240 (24.0)
 #define MESSAGE_LENGTH_FO 20
 
-/**
- * @brief Structure to hold communication status.
- *
- * This structure is used to track the state of communication for the transceiver. 
- * It includes flags and counters to handle errors and warnings.
- */
-typedef struct {
-    uint8_t error;         /**< Error flag (1 if an error occurs, 0 otherwise) */
-    uint8_t errorCounter;  /**< Counter for error occurrences */
-    uint8_t warning;       /**< Warning flag (1 if a warning occurs) */
-	bool communicationError;
-} CommunicationFO;
-
-/**
- * @brief Global variable for tracking communication status.
- *
- * This external variable is used to store the current communication status, 
- * including error and warning states.
- */
-extern CommunicationFO Status_FO;
 
 typedef struct {
 	uint16_t Elevation;
