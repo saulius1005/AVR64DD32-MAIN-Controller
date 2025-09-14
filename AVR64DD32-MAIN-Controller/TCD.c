@@ -26,15 +26,19 @@ void TCD0_init_stepper_PWM(uint32_t freq_hz, uint8_t duty_percent) {
 	ccp_write_io((uint8_t *) &TCD0.FAULTCTRL, TCD_CMPCEN_bm); ///< Enable WOC on PF2
 	TCD0.CTRLB = TCD_WGMODE_DS_gc; ///< Set waveform mode to double slope
 
-	while (!(TCD0.STATUS & TCD_ENRDY_bm));
+	//while (!(TCD0.STATUS & TCD_ENRDY_bm));
 
 	// Ájungiam WOC iðëjimà
-	TCD0.FAULTCTRL = TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm;
+	//TCD0.FAULTCTRL = TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm;
 
 	// Paleidþiam su prescaler = 4
-	TCD0.CTRLA = TCD_CLKSEL_CLKPER_gc | TCD_CNTPRES_DIV4_gc;
+	//TCD0.CTRLA = TCD_CLKSEL_CLKPER_gc | TCD_CNTPRES_DIV4_gc;
+	ccp_write_io((uint8_t *) &TCD0.CTRLA, TCD_CLKSEL_CLKPER_gc | TCD_CNTPRES_DIV4_gc);
 
 
 	// Palaukti, kol sinchronizuosis
-	while (!(TCD0.STATUS & TCD_ENRDY_bm));
+	//while (!(TCD0.STATUS & TCD_ENRDY_bm));
+/*
+			while (!(TCD0.STATUS & TCD_ENRDY_bm));
+			TCD0.CTRLA |= TCD_ENABLE_bm;*/
 }

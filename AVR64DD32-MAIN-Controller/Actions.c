@@ -71,19 +71,21 @@ void ReachTarget(){
 }
 
 void work(){
-	if(WSData.windspeed > MAX_WIND){
-		get_safe_azimuth();
-		Target.elevation = SAFE_ELEVATION;
-	}
-	else{
-		if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
-			Target.azimuth = WSData.azimuth;
-			Target.elevation = WSData.elevation;
+	if(!SensorData.FO_no_power_fault || !SensorData.FO_bad_signal_fault){ // only if Fbber optic works good
+		if(WSData.windspeed > MAX_WIND){
+			get_safe_azimuth();
+			Target.elevation = SAFE_ELEVATION;
 		}
-		else{ // if not go to best day position (early morning, late at evening, or just dark day)
-			Target.azimuth = 180; //South
-			Target.elevation = WSData.topelevation; //day top elevation
+		else{
+			if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
+				Target.azimuth = WSData.azimuth;
+				Target.elevation = WSData.elevation;
+			}
+			else{ // if not go to best day position (early morning, late at evening, or just dark day)
+				Target.azimuth = 180; //South
+				Target.elevation = WSData.topelevation; //day top elevation
+			}
+				ReachTarget();
 		}
-			ReachTarget();
 	}
 }

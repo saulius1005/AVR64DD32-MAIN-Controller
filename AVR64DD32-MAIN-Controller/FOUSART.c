@@ -29,8 +29,8 @@ uint64_t hexToUint64(const char *str) {
 }
 
 void FODataSplitter(char *command) {
-	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage and current = 0 meaning it is FO optic fault
-		SensorData.FO_fault = true;		
+	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage and current = 0 meaning it is FO optic fault: bad signal
+		SensorData.FO_bad_signal_fault = true;		
 	}
 	else{
 		const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
@@ -56,7 +56,7 @@ void FODataSplitter(char *command) {
 
 				switch (i) {
 					case 0: SensorData.HPElevation   = (uint16_t)strtol(token, NULL, 16); break;
-					case 1: SensorData.Azimuth     = (uint16_t)strtol(token, NULL, 16)/ Angle_Precizion; break;
+					case 1: SensorData.HPAzimuth     = (uint16_t)strtol(token, NULL, 16); break;
 					case 2: SensorData.PVU         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
 					case 3: SensorData.PVI         = (uint16_t)strtol(token, NULL, 16)/ U_I_Precizion; break;
 					case 4: EndSwitchesValue       = (uint8_t)strtol(token, NULL, 16); break; //common end switches value
@@ -65,13 +65,15 @@ void FODataSplitter(char *command) {
 				p += lengths[i];
 			}
 			SensorData.Elevation = SensorData.HPElevation / Angle_Precizion;
+			SensorData.Azimuth = SensorData.HPAzimuth / Angle_Precizion;
 			//spliting end switch value to separate end switch value according to axis
 			SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
 			SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
 			SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
 			SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
-			SensorData.FO_fault = false;
-			SensorData.FO_data_fault = false;
+			SensorData.FO_bad_signal_fault = false; //reset error
+			SensorData.FO_data_fault = false; //reset error
+			SensorData.FO_no_power_fault = false; //reset error
 
 		}
 		else{
@@ -102,6 +104,7 @@ void FOReceiver() {
         char c = USART1_readChar(); // Reading a character from USART
 
 		if (--timeout == 0) { // Timeout condition
+			SensorData.FO_no_power_fault = true;
 			break;
 		}
         if (start) {

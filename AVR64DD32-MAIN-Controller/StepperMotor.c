@@ -34,7 +34,7 @@ void Stepper_disable() {
 // -------------------------
 void Stepper_start() {
 	if(StepperMotor.alreadyStarted == false){
-		TCD0.FAULTCTRL |= (TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm);
+		while (!(TCD0.STATUS & TCD_ENRDY_bm));
 		TCD0.CTRLA |= TCD_ENABLE_bm;
 		StepperMotor.alreadyStarted = true;
 		StepperMotor.alreadyStoped = false;
@@ -44,9 +44,9 @@ void Stepper_start() {
 
 void Stepper_stop() {
 	if(StepperMotor.alreadyStoped == false){
-		TCD0.CTRLA &= ~TCD_ENABLE_bm;
-		TCD0.FAULTCTRL &= ~(TCD_CMPAEN_bm | TCD_CMPBEN_bm | TCD_CMPCEN_bm); //disconnecting PF2 from TCD counter
-		PORTF.OUTCLR = PIN2_bm;
+		TCD0.CTRLA &= ~TCD_ENABLE_bm;//disable counter
+		while (!(TCD0.STATUS & TCD_ENRDY_bm));//
+		PORTF.OUTCLR = PIN2_bm;//set pulse low
 		StepperMotor.alreadyStoped = true;
 		StepperMotor.alreadyStarted = false;
 	}
@@ -73,11 +73,12 @@ void Stepper_init() {
 
 	// Default PWM
 	TCD0_init_stepper_PWM(51200, 50); // 51.2kHz, 50% duty
+/*
 
 	// Set idle states
 	PORTF.OUTCLR = PIN2_bm; // pulse low
 	PORTF.OUTSET = PIN1_bm; // disable
-	PORTF.OUTCLR = PIN3_bm; // default direction
+	PORTF.OUTCLR = PIN3_bm; // default direction*/
 }
 
 bool Read_Stepper_PEND(){ // true if position reached
