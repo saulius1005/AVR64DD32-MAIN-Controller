@@ -29,9 +29,8 @@ uint64_t hexToUint64(const char *str) {
 }
 
 void FODataSplitter(char *command) {
-	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage an current = 0 meaning it is FO optic fault
-
-		
+	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage and current = 0 meaning it is FO optic fault
+		SensorData.FO_fault = true;		
 	}
 	else{
 		const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
@@ -71,11 +70,14 @@ void FODataSplitter(char *command) {
 			SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
 			SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
 			SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
+			SensorData.FO_fault = false;
+			SensorData.FO_data_fault = false;
 
 		}
 		else{
 			//uncomment if nedded
 			//screen_write_formatted_text("data is corupted!", 1, ALIGN_CENTER); // bad crc
+			SensorData.FO_data_fault = true;
 		}	
 	}
 

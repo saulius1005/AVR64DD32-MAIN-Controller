@@ -19,7 +19,9 @@ FOdata SensorData = {
 	.ElMin = 0,	//Separeted Elevation min End Switch value
 	.ElMax = 0,	//Separeted Elevation max End Switch value
 	.AzMin = 0,	//Separeted Azimuth min End Switch value
-	.AzMax = 0	//Separeted Azimuth max End Switch value
+	.AzMax = 0,	//Separeted Azimuth max End Switch value
+	.FO_fault = false, // no signal from PMMA cable
+	.FO_data_fault = false // bad crc
 };
 
 

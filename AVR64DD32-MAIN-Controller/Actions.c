@@ -76,8 +76,14 @@ void work(){
 		Target.elevation = SAFE_ELEVATION;
 	}
 	else{
-		Target.azimuth = WSData.azimuth;
-		Target.elevation = WSData.elevation;
-		ReachTarget();
+		if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
+			Target.azimuth = WSData.azimuth;
+			Target.elevation = WSData.elevation;
+		}
+		else{ // if not go to best day position (early morning, late at evening, or just dark day)
+			Target.azimuth = 180; //South
+			Target.elevation = WSData.topelevation; //day top elevation
+		}
+			ReachTarget();
 	}
 }

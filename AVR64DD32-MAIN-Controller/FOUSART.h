@@ -29,6 +29,8 @@ typedef struct {
 	uint8_t ElMax;
 	uint8_t AzMin;
 	uint8_t AzMax;
+	bool FO_fault;
+	bool FO_data_fault;
 } FOdata;
 
 extern FOdata SensorData;
