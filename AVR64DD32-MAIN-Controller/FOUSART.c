@@ -30,7 +30,7 @@ uint64_t hexToUint64(const char *str) {
 
 void FODataSplitter(char *command) {
 	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage and current = 0 meaning it is FO optic fault: bad signal
-		SensorData.FO_bad_signal_fault = true;		
+		SensorData.FO_bad_signal_fault = true; //exp. hard bended fo
 	}
 	else{
 		const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
@@ -82,8 +82,6 @@ void FODataSplitter(char *command) {
 			SensorData.FO_data_fault = true;
 		}	
 	}
-
-
 }
 
 /**
@@ -98,22 +96,29 @@ void FOReceiver() {
     uint8_t index = 0;
     char command[MESSAGE_LENGTH_FO] = {0}; // Empty command array
     uint8_t start = 0;
-	uint16_t timeout = FO_TIMEOUT_COUNTER;
+	uint8_t timeout = 0;
+	SensorData.FO_lost_connecton_fault = false;
 
     while (1) {
         char c = USART1_readChar(); // Reading a character from USART
 
-		if (--timeout == 0) { // Timeout condition
-			SensorData.FO_no_power_fault = true;
-			break;
+		if(SensorData.FO_lost_connecton_fault){
+			if (++timeout == CountForError_FO) { // Timeout condition if usart1 reading is halted
+				SensorData.FO_no_power_fault = true;
+				break;
+			}
 		}
         if (start) {
-            if (c == '>') { // If received data end symbol
-               start = 0;
-			   command[index] = '\0';
-               index = 0;
-               FODataSplitter(command); // Execute the received command //comment when testing lines below
-               break;
+			
+            if (c == '>') { // If received data end symbol			
+				start = 0;
+				command[index] = '\0';
+				index = 0;
+				if (strcmp(command, SensorData.FreshDataPack) != 0){ //only if message is different
+					FODataSplitter(command); // Execute the received command //comment when testing lines below
+				}
+				strcpy(SensorData.FreshDataPack, command); // prevents from same message data splitting
+				break;
             } else if (index < MESSAGE_LENGTH_FO) {
                 command[index++] = c; // Store received character in command array
             }
@@ -124,3 +129,4 @@ void FOReceiver() {
         }
     }
 }
+

@@ -139,7 +139,12 @@ char USART1_readChar() {
 	uint32_t timeout_counter = FO_TIMEOUT_COUNTER; // Set a timeout counter
 	while (!(USART1.STATUS & USART_RXCIF_bm)) { // Wait for data to be received
 		if (--timeout_counter == 0) { // Timeout condition
-			break;
+			//screen_write_formatted_text("USART1 timeout", 0, ALIGN_LEFT);// uncomment for timeout number finding, when timeout number is set corectly this line should not to be visible at all. if timeout is to small you will see this line 
+			//_delay_ms(100);
+			//screen_write_formatted_text("              ", 0, ALIGN_LEFT);
+			SensorData.FO_lost_connecton_fault = true;
+			break; //just exit from this while cycle
+
 		}
 	}
 	return USART1.RXDATAL; // Return received character

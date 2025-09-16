@@ -12,8 +12,8 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
-#define FO_TIMEOUT_COUNTER 500 ///< Timeout counter value for operations
-#define CountForError_FO 10
+#define FO_TIMEOUT_COUNTER 250000 ///< Timeout counter value for operations if baud 460.8k
+#define CountForError_FO 3
 #define Angle_Precizion 100 // 100 meaning exp. 360 degree 10 3600 (360,0), 1 36000 (360,00)
 #define U_I_Precizion 1 // 10 meaning 24, 1 240 (24.0)
 #define MESSAGE_LENGTH_FO 20
@@ -33,6 +33,10 @@ typedef struct {
 	bool FO_bad_signal_fault;
 	bool FO_no_power_fault;
 	bool FO_data_fault;
+	bool FO_lost_connecton_fault;
+	uint8_t FO_faultcount;
+	char FreshDataPack[MESSAGE_LENGTH_FO];
+	char OldDataPack[MESSAGE_LENGTH_FO];
 } FOdata;
 
 extern FOdata SensorData;

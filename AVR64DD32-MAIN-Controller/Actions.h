@@ -14,7 +14,7 @@
 #define MAX_WIND 15
 #define SAFE_ELEVATION 20
 #define ELEVATION_BACKLASH 2
-#define AZIMUTH_BACKLASH 5
+#define AZIMUTH_BACKLASH 4.0f
 #define MIN_LIGHT_LEVEL 300 // need to measure in real world, for now this.
 
 typedef struct {

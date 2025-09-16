@@ -423,5 +423,8 @@ void ADC0_SetupStepper(uint8_t parameter);
 
 void work();
 
+void TCB_init();
+bool TCB0_RUN();
+
 
 #endif /* SETTINGS_H_ */

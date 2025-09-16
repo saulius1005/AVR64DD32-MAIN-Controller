@@ -17,8 +17,7 @@ int main(void)
     USART1_init();
     screen_init();
     screen_clear();
-
-	
+	//TCB_init();
     while (1) 
     {
 		RS485Receiver(); //RS485 communication
@@ -28,8 +27,10 @@ int main(void)
 		screen_write_formatted_text("SE:%3d TE:%3d", 0, ALIGN_LEFT, SensorData.Elevation, Target.elevation);
 		screen_write_formatted_text("SA:%3d TA:%3d", 1, ALIGN_LEFT, SensorData.Azimuth, Target.azimuth);
 		screen_write_formatted_text("SCU:%4d SCI:%4d", 2, ALIGN_LEFT, SensorData.PVU, SensorData.PVI);
-		screen_write_formatted_text("%03d|%03d", 4, ALIGN_CENTER, WSData.azimuth, WSData.elevation);
-		screen_write_formatted_text("%03d|%d|%d|%d", 5, ALIGN_CENTER, WSData.topelevation, WSData.windspeed, WSData.winddirection, WSData.lightlevel);
+		screen_write_formatted_text("Error power: %d", 4, ALIGN_CENTER, SensorData.FO_no_power_fault);// dead attiny212 or its halted
+		screen_write_formatted_text("Bad signal: %d", 5, ALIGN_CENTER, SensorData.FO_bad_signal_fault);// receiving data from attiny212 only, Top controller dead or fiber optic damage or...
+		screen_write_formatted_text("data fault: %d", 6, ALIGN_CENTER, SensorData.FO_data_fault); // bad crc
+
 
 		_delay_ms(100);
     }
