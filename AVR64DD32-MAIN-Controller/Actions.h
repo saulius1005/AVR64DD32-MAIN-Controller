@@ -13,17 +13,59 @@
 #define MAX_AZIMUTH 330
 #define MAX_WIND 15
 #define SAFE_ELEVATION 20
-#define ELEVATION_BACKLASH 2
-#define AZIMUTH_BACKLASH 4.0f
 #define MIN_LIGHT_LEVEL 300 // need to measure in real world, for now this.
+
+#define ELEVATION_BACKLASH 2 //2.00 degree
+#define AZIMUTH_BACKLASH 4 // 4.00 degree
+#define SENSOR_DEADBAND 20   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
+#define STUCK_LIMIT 2      // ciklø skaièius prieð fault
 
 typedef struct {
 	uint16_t elevation;
+	bool elevation_reached;
+	uint16_t lastElevation;
 	uint16_t azimuth;
+	bool azimuth_reached;
+	uint16_t lastAzimuth;
 } actions;
 
 extern actions Target;
 
+// ---- MOTOR INTERFACE ----
+typedef struct {
+	void (*enable)(void);
+	void (*disable)(void);
+	void (*start)(void);
+	void (*stop)(void);
+	void (*set_direction)(bool dir);
+} MotorInterface;
 
+typedef struct {
+    uint16_t* position;          // pvz. SensorData.Elevation arba SensorData.Azimuth
+    uint16_t* positionFiltered;  // pvz. SensorData.HPElevation arba SensorData.HPAzimuth
+    bool*     faultFlag;         // pvz. SensorData.FO_elevation_sensor_fault
+    uint16_t* lastPosition;      // pvz. Target.lastElevation arba Target.lastAzimuth
+    uint16_t* target;            // pvz. Target.elevation arba Target.azimuth
+    bool*     targetReached;     // pvz. Target.elevation_reached arba Target.azimuth_reached
+} SensorInterface;
+
+// ---- MOTOR TYPE ENUM ----
+typedef enum {
+	MOTOR_LINEAR,
+	MOTOR_STEPPER
+} MotorType;
+
+// ---- MOTOR OBJECT ----
+typedef struct {
+	MotorType type;
+	MotorInterface iface;
+	SensorInterface sensor;
+	uint8_t stuckCount;
+	uint8_t noChangeCount;
+	int32_t backlash;
+} MotorControlObj;
+
+extern MotorControlObj LinearMotorCtrl;
+extern MotorControlObj StepperMotorCtrl;
 
 #endif /* ACTIONS_H_ */

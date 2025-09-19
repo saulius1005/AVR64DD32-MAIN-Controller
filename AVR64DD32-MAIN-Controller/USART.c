@@ -142,7 +142,7 @@ char USART1_readChar() {
 			//screen_write_formatted_text("USART1 timeout", 0, ALIGN_LEFT);// uncomment for timeout number finding, when timeout number is set corectly this line should not to be visible at all. if timeout is to small you will see this line 
 			//_delay_ms(100);
 			//screen_write_formatted_text("              ", 0, ALIGN_LEFT);
-			SensorData.FO_lost_connecton_fault = true;
+			SensorData.FO_lost_signal_fault = true;
 			break; //just exit from this while cycle
 
 		}

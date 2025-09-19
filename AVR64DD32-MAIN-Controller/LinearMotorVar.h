@@ -16,7 +16,9 @@ TLE9201SG LinearMotor = {
 	.alreadyEnabled = false,
 	.alreadyDisabled = false,
 	.measuredVoltage = 0,
-	.measuredCurrent = 0
+	.measuredCurrent = 0,
+	.stuckCount = 0,
+	.noChangeCount = 0
 };
 
 #endif /* LINEARMOTORVAR_H_ */

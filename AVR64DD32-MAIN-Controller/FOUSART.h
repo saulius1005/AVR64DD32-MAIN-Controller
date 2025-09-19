@@ -31,9 +31,11 @@ typedef struct {
 	uint8_t AzMin;
 	uint8_t AzMax;
 	bool FO_bad_signal_fault;
-	bool FO_no_power_fault;
+	bool FO_lost_signal_fault;
 	bool FO_data_fault;
 	bool FO_lost_connecton_fault;
+	bool FO_elevation_sensor_fault;
+	bool FO_azimuth_sensor_fault;
 	uint8_t FO_faultcount;
 	char FreshDataPack[MESSAGE_LENGTH_FO];
 	char OldDataPack[MESSAGE_LENGTH_FO];

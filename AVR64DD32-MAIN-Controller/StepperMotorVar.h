@@ -15,7 +15,11 @@ HBS86 StepperMotor = {
 	.alreadyStarted = false,
 	.alreadyStoped = false,
 	.alreadyEnabled = false,
-	.alreadyDisabled = false
+	.alreadyDisabled = false,
+	.measuredVoltage = 0,
+	.measuredCurrent = 0,
+	.stuckCount = 0,
+	.noChangeCount = 0
 };
 
 

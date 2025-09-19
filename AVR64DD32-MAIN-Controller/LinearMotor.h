@@ -19,6 +19,8 @@ typedef struct {
 	bool alreadyDisabled;
 	uint16_t measuredVoltage;
 	uint16_t measuredCurrent;
+	uint8_t stuckCount;
+	uint8_t noChangeCount;
 } TLE9201SG;
 
 extern TLE9201SG LinearMotor;

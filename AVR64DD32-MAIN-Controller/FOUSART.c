@@ -73,7 +73,7 @@ void FODataSplitter(char *command) {
 			SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
 			SensorData.FO_bad_signal_fault = false; //reset error
 			SensorData.FO_data_fault = false; //reset error
-			SensorData.FO_no_power_fault = false; //reset error
+			SensorData.FO_lost_signal_fault = false; //reset error
 
 		}
 		else{
@@ -97,14 +97,14 @@ void FOReceiver() {
     char command[MESSAGE_LENGTH_FO] = {0}; // Empty command array
     uint8_t start = 0;
 	uint8_t timeout = 0;
-	SensorData.FO_lost_connecton_fault = false;
+	SensorData.FO_lost_signal_fault = false;
 
     while (1) {
         char c = USART1_readChar(); // Reading a character from USART
 
-		if(SensorData.FO_lost_connecton_fault){
+		if(SensorData.FO_lost_signal_fault){
 			if (++timeout == CountForError_FO) { // Timeout condition if usart1 reading is halted
-				SensorData.FO_no_power_fault = true;
+				SensorData.FO_lost_connecton_fault = true;
 				break;
 			}
 		}

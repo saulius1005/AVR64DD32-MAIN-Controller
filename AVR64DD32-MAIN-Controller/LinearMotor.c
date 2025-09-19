@@ -10,7 +10,7 @@
 void LinearMotor_enable(){ //turn on TLE9201SG
 	if(LinearMotor.alreadyEnabled == false){
 		PORTD.OUTCLR = PIN2_bm;  // DIS=0
-		_delay_ms(10);
+		_delay_us(5);
 		LinearMotor.alreadyEnabled = true;
 		LinearMotor.alreadyDisabled = false;
 	}
@@ -19,7 +19,7 @@ void LinearMotor_enable(){ //turn on TLE9201SG
 void LinearMotor_disable(){ //turn off TLE9201SG
 	if(LinearMotor.alreadyDisabled == false){
 		PORTD.OUTSET = PIN2_bm;  // DIS=1
-		_delay_ms(10);
+		_delay_us(5);
 		LinearMotor.alreadyDisabled = true;
 		LinearMotor.alreadyEnabled = false;
 	}
@@ -56,6 +56,7 @@ void LinearMotor_set_direction(bool dir)
             PORTD.OUTSET = PIN5_bm;   // UP
 		else
             PORTD.OUTCLR = PIN5_bm;   // DOWN
+		_delay_us(5);
 		LinearMotor_start();
         LinearMotor.lastDirection = dir;
     }
@@ -63,8 +64,6 @@ void LinearMotor_set_direction(bool dir)
 
 void LinearMotor_init(){
 	TCA0_init_linear_PWM(20000, 50);
-
-	PORTD.OUTCLR = PIN3_bm; //set PWM signal low
 	PORTD.OUTSET = PIN2_bm; //set output disabled for TLE9201SG
 };
 

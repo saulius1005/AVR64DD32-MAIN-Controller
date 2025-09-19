@@ -426,5 +426,7 @@ void work();
 void TCB_init();
 bool TCB0_RUN();
 
+void MotorControl(MotorControlObj* m);
+
 
 #endif /* SETTINGS_H_ */

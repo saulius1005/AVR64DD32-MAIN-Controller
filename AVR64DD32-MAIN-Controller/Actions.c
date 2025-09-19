@@ -40,123 +40,10 @@ void get_safe_azimuth() {
 	}
 }
 
-void ReachTarget(){
-
-
-	static uint16_t lastazimuth = 65535;
-	static uint8_t stuckcount = 0;
-	static uint8_t stuckcount2 = 0;
-/*	if (SensorData.Elevation == Target.elevation) {
-		LinearMotor_stop();
-		LinearMotor_disable();
-	} 
-	else if(SensorData.Elevation < (Target.elevation - ELEVATION_BACKLASH) || SensorData.Elevation > (Target.elevation + ELEVATION_BACKLASH)){
-			LinearMotor_enable();
-			LinearMotor_start();
-			if (SensorData.Elevation < (Target.elevation - ELEVATION_BACKLASH)){
-				LinearMotor_set_direction(1);
-			}
-			else if(SensorData.Elevation > (Target.elevation + ELEVATION_BACKLASH)){
-				LinearMotor_set_direction(0);
-			}
-		}
-	
-	if (SensorData.Azimuth == Target.azimuth) {
-		Stepper_stop();
-		Stepper_disable();
-	} 
-	else  if(SensorData.Azimuth < (Target.azimuth - AZIMUTH_BACKLASH) || SensorData.Azimuth > (Target.azimuth + AZIMUTH_BACKLASH)){
-			Stepper_enable();
-			Stepper_start();
-
-			if (SensorData.Azimuth < (Target.azimuth - AZIMUTH_BACKLASH)){
-				
-				Stepper_set_direction(1);
-			}
-			else if(SensorData.Azimuth > (Target.azimuth + AZIMUTH_BACKLASH)){
-				Stepper_set_direction(0);
-			}	
-		}*/
-
-if(SensorData.FO_no_power_fault == false){
-	if (SensorData.Azimuth == Target.azimuth) {
-		// Pasiektas tikslas
-		Stepper_stop();
-		Stepper_disable();
-		SensorData.FO_lost_connecton_fault = false;
-		stuckcount = 0;
-	}
-	else {
 /*
-		if (SensorData.Azimuth < (Target.azimuth - AZIMUTH_BACKLASH) ||
-		SensorData.Azimuth > (Target.azimuth + AZIMUTH_BACKLASH)) {*/
-
-			if (lastazimuth != SensorData.HPAzimuth) {
-				SensorData.FO_lost_connecton_fault = false;
-				stuckcount = 0;
-				stuckcount2 = 0;
-				Stepper_enable();			
-
-				if (SensorData.Azimuth < (Target.azimuth - AZIMUTH_BACKLASH)) {
-					Stepper_set_direction(1); // pirmyn
-					Stepper_start();
-					// Patikrinam krypties atitikimà
-					if (SensorData.HPAzimuth <= lastazimuth) {
-						// jutiklis nesikeièia teisinga kryptimi
-						if(++stuckcount == 10){
-							SensorData.FO_lost_connecton_fault = true;
-							Stepper_stop();
-							Stepper_disable();
-						}
-					}
-				}
-				else if (SensorData.Azimuth > (Target.azimuth + AZIMUTH_BACKLASH)) {
-					Stepper_set_direction(0); // atgal
-					Stepper_start();
-
-					// Patikrinam krypties atitikimà
-					if (SensorData.HPAzimuth >= lastazimuth) {
-						// jutiklis nesikeièia teisinga kryptimi
-						if(++stuckcount == 10){
-						SensorData.FO_lost_connecton_fault = true;
-						Stepper_stop();
-						Stepper_disable();
-						}
-					}
-				}
-			}
-			else {
-				// Jutiklis nerodo pokyèio ? laikom, kad uþstrigo
-				if(++stuckcount2 == 10){
-				SensorData.FO_lost_connecton_fault = true;
-				Stepper_stop();
-				Stepper_disable();
-				}
-			}
-
-			// Atnaujinam paskutinæ reikðmæ
-			lastazimuth = SensorData.HPAzimuth;
-		//}
-	}
-}
-else{
-	Stepper_stop();
-	Stepper_disable();
-}
-
-}
-
-
-#define SENSOR_DEADBAND      0.2f   // maþiausias pokytis, kurá laikome tikru judesiu
-#define STUCK_LIMIT          3      // ciklø skaièius prieð fault
-
-static float lastAzimuth = 0.0f;
-static uint8_t stuckCount = 0;
-static uint8_t noChangeCount = 0;
-
 void StepperControl()
 {
-	if(SensorData.FO_no_power_fault) return; // jei nëra maitinimo, neveikia
+	if(SensorData.FO_lost_signal_fault) return; // jei nëra maitinimo, neveikia
 
 	float delta = SensorData.HPAzimuth - lastAzimuth;
 
@@ -236,6 +123,160 @@ void StepperControl()
 
 	// Atnaujinam paskutinæ reikðmæ
 	lastAzimuth = SensorData.HPAzimuth;
+}*/
+
+void LinearMotorControl(void)
+{
+	// 1. Tikrinam FO jungtá
+	if (SensorData.FO_lost_connecton_fault) {
+		LinearMotor_stop();
+		LinearMotor_disable();
+		return;
+	}
+
+	// 2. Tikslas pasiektas
+	if (SensorData.Elevation == Target.elevation) {
+		LinearMotor_stop();
+		LinearMotor_disable();
+		SensorData.FO_elevation_sensor_fault = false;
+		Target.elevation_reached = true;
+		LinearMotor.stuckCount = 0;
+		LinearMotor.noChangeCount = 0;
+		return;
+	}
+
+	// 3. Judëjimo paleidimas / palaikymas
+	bool inBacklash = (SensorData.Elevation >= (Target.elevation - ELEVATION_BACKLASH)) &&
+	(SensorData.Elevation <= (Target.elevation + ELEVATION_BACKLASH));
+
+	if (!inBacklash || !Target.elevation_reached) {
+		LinearMotor_start();
+		LinearMotor_enable();
+		Target.elevation_reached = false;
+	}
+
+	// 4. Apskaièiuojam pokytá
+	int32_t delta = (int32_t)SensorData.HPElevation - (int32_t)Target.lastElevation;
+	if (delta > -SENSOR_DEADBAND && delta < SENSOR_DEADBAND) {
+		delta = 0; // triukðmo zona
+	}
+
+	// 5. Nustatome kryptá
+	if (SensorData.Elevation < Target.elevation) {
+		LinearMotor_set_direction(1);
+		} else if (SensorData.Elevation > Target.elevation) {
+		LinearMotor_set_direction(0);
+	}
+
+	// 6. Uþstrigimo tikrinimas (neteisinga kryptis)
+	if (SensorData.Elevation < (Target.elevation - ELEVATION_BACKLASH)) {
+		if (delta < -SENSOR_DEADBAND && ++LinearMotor.stuckCount >= STUCK_LIMIT) {
+			SensorData.FO_elevation_sensor_fault = true;
+			LinearMotor_stop();
+			LinearMotor_disable();
+			} else if (delta > SENSOR_DEADBAND) {
+			LinearMotor.stuckCount = 0;
+		}
+		} else if (SensorData.Elevation > (Target.elevation + ELEVATION_BACKLASH)) {
+		if (delta > SENSOR_DEADBAND && ++LinearMotor.stuckCount >= STUCK_LIMIT) {
+			SensorData.FO_elevation_sensor_fault = true;
+			LinearMotor_stop();
+			LinearMotor_disable();
+			} else if (delta < -SENSOR_DEADBAND) {
+			LinearMotor.stuckCount = 0;
+		}
+	}
+
+	// 7. Tikrinam ar „uþstrigo“ vietoje (nëra jokio judesio)
+	if (delta == 0 && !Target.elevation_reached) {
+		if (++LinearMotor.noChangeCount >= STUCK_LIMIT) {
+			SensorData.FO_elevation_sensor_fault = true;
+			LinearMotor_stop();
+			LinearMotor_disable();
+		}
+		} else {
+		LinearMotor.noChangeCount = 0;
+	}
+
+	// 8. Iðsaugom paskutinæ reikðmæ
+	Target.lastElevation = SensorData.HPElevation;
+}
+
+void MotorControl(MotorControlObj* m)
+{
+	// 1. FO jungtis
+	if (SensorData.FO_lost_connecton_fault) {
+		m->iface.stop();
+		m->iface.disable();
+		return;
+	}
+
+	// 2. Tikslas pasiektas
+	if (*m->sensor.position == *m->sensor.target) {
+		m->iface.stop();
+		m->iface.disable();
+		*m->sensor.faultFlag = false;
+		*m->sensor.targetReached = true;
+		m->stuckCount = 0;
+		m->noChangeCount = 0;
+		return;
+	}
+
+	// 3. Backlash logika
+	bool inBacklash = (*m->sensor.position >= (*m->sensor.target - m->backlash)) &&
+	(*m->sensor.position <= (*m->sensor.target + m->backlash));
+
+	if (!inBacklash || !*m->sensor.targetReached) {
+		m->iface.start();
+		m->iface.enable();
+		*m->sensor.targetReached = false;
+	}
+
+	// 4. Pokytis
+	int32_t delta = (int32_t)(*m->sensor.positionFiltered) - (int32_t)(*m->sensor.lastPosition);
+	if (delta > -SENSOR_DEADBAND && delta < SENSOR_DEADBAND) {
+		delta = 0;
+	}
+
+	// 5. Kryptis
+	if (*m->sensor.position < *m->sensor.target) {
+		m->iface.set_direction(1);
+		} else if (*m->sensor.position > *m->sensor.target) {
+		m->iface.set_direction(0);
+	}
+
+	// 6. Uþstrigimo tikrinimas (neteisinga kryptis)
+	if (*m->sensor.position < (*m->sensor.target - m->backlash)) {
+		if (delta < -SENSOR_DEADBAND && ++m->stuckCount >= STUCK_LIMIT) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+			} else if (delta > SENSOR_DEADBAND) {
+			m->stuckCount = 0;
+		}
+		} else if (*m->sensor.position > (*m->sensor.target + m->backlash)) {
+		if (delta > SENSOR_DEADBAND && ++m->stuckCount >= STUCK_LIMIT) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+			} else if (delta < -SENSOR_DEADBAND) {
+			m->stuckCount = 0;
+		}
+	}
+
+	// 7. Uþstrigimas vietoje
+	if (delta == 0 && !*m->sensor.targetReached) {
+		if (++m->noChangeCount >= STUCK_LIMIT) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+		}
+		} else {
+		m->noChangeCount = 0;
+	}
+
+	// 8. Atnaujinam paskutinæ reikðmæ
+	*m->sensor.lastPosition = *m->sensor.positionFiltered;
 }
 
 
@@ -254,7 +295,10 @@ void work(){
 			Target.elevation = WSData.topelevation; //day top elevation
 		}
 				//ReachTarget();
-				StepperControl();
+				//StepperControl();
+				//LinearMotorControl();
+				MotorControl(&LinearMotorCtrl);
+				//MotorControl(&StepperMotorCtrl);
 	}
 
 
