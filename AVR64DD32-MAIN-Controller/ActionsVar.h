@@ -13,7 +13,10 @@
 actions Target = {
 	.elevation = 30,
 	.elevation_reached = true,
-	.azimuth = 180
+	.lastElevation = 0,
+	.azimuth = 180,
+	.azimuth_reached = true,
+	.lastAzimuth = 0
 };
 
 MotorControlObj LinearMotorCtrl = {

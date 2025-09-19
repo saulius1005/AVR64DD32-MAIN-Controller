@@ -24,15 +24,8 @@ int main(void)
 		FOReceiver(); // Received Fiber optic data
 		ReadJoystickValues(); //Joystick read
 		work();
-		screen_write_formatted_text("SE:%3d TE:%3d", 0, ALIGN_LEFT, SensorData.Elevation, Target.elevation);
-		screen_write_formatted_text("SA:%3d TA:%3d", 1, ALIGN_LEFT, SensorData.Azimuth, Target.azimuth);
-		screen_write_formatted_text("SCU:%4d SCI:%4d", 2, ALIGN_LEFT, SensorData.PVU, SensorData.PVI);
-		screen_write_formatted_text("Error power: %d", 4, ALIGN_CENTER, SensorData.FO_lost_connecton_fault);// dead attiny212 or its halted
-		screen_write_formatted_text("Bad signal: %d", 5, ALIGN_CENTER, SensorData.FO_bad_signal_fault);// receiving data from attiny212 only, Top controller dead or fiber optic damage or...
-		screen_write_formatted_text("crc fault: %d", 6, ALIGN_CENTER, SensorData.FO_data_fault); // bad crc
-		screen_write_formatted_text("el.sns. fault: %d", 7, ALIGN_CENTER, SensorData.FO_elevation_sensor_fault); // elevation senor fault
+		windows();
 
-
-		_delay_ms(100);
+		//_delay_ms(100);
     }
 }

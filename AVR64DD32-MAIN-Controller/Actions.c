@@ -40,92 +40,7 @@ void get_safe_azimuth() {
 	}
 }
 
-/*
-void StepperControl()
-{
-	if(SensorData.FO_lost_signal_fault) return; // jei nëra maitinimo, neveikia
-
-	float delta = SensorData.HPAzimuth - lastAzimuth;
-
-	// Triukðmo zona: smulkûs ðokinëjimai ignoruojami
-	if(fabs(delta) < SENSOR_DEADBAND) delta = 0.0f;
-
-	// Tikslinë pozicija pasiekta
-	if(fabs(SensorData.Azimuth - Target.azimuth) <= AZIMUTH_BACKLASH)
-	{
-		Stepper_stop();
-		Stepper_disable();
-		SensorData.FO_lost_connecton_fault = false;
-		stuckCount = 0;
-		noChangeCount = 0;
-		lastAzimuth = SensorData.HPAzimuth;
-		return;
-	}
-
-	// Ájungiam stepperá
-	Stepper_enable();
-	Stepper_start();
-
-	// Nustatom kryptá pagal Target
-	if(SensorData.Azimuth < Target.azimuth - AZIMUTH_BACKLASH)
-	{
-		Stepper_set_direction(1); // pirmyn
-
-		// Jeigu jutiklis rodo prieðinga kryptá
-		if(delta < -SENSOR_DEADBAND)
-		{
-			if(++stuckCount >= STUCK_LIMIT)
-			{
-				SensorData.FO_lost_connecton_fault = true;
-				Stepper_stop();
-				Stepper_disable();
-			}
-		}
-		else if(delta > SENSOR_DEADBAND)
-		{
-			stuckCount = 0; // teisinga kryptis, resetinam skaitliukà
-		}
-	}
-	else if(SensorData.Azimuth > Target.azimuth + AZIMUTH_BACKLASH)
-	{
-		Stepper_set_direction(0); // atgal
-
-		// Jeigu jutiklis rodo prieðinga kryptá
-		if(delta > SENSOR_DEADBAND)
-		{
-			if(++stuckCount >= STUCK_LIMIT)
-			{
-				SensorData.FO_lost_connecton_fault = true;
-				Stepper_stop();
-				Stepper_disable();
-			}
-		}
-		else if(delta < -SENSOR_DEADBAND)
-		{
-			stuckCount = 0; // teisinga kryptis
-		}
-	}
-
-	// Patikrinam ar jutiklis „uþstrigo“ (delta = 0)
-	if(delta == 0.0f)
-	{
-		if(++noChangeCount >= STUCK_LIMIT)
-		{
-			SensorData.FO_lost_connecton_fault = true;
-			Stepper_stop();
-			Stepper_disable();
-		}
-	}
-	else
-	{
-		noChangeCount = 0; // judëjimas ávyko
-	}
-
-	// Atnaujinam paskutinæ reikðmæ
-	lastAzimuth = SensorData.HPAzimuth;
-}*/
-
-void LinearMotorControl(void)
+void LinearMotorControl()
 {
 	// 1. Tikrinam FO jungtá
 	if (SensorData.FO_lost_connecton_fault) {
@@ -201,7 +116,7 @@ void LinearMotorControl(void)
 	// 8. Iðsaugom paskutinæ reikðmæ
 	Target.lastElevation = SensorData.HPElevation;
 }
-
+//Motor control function wrtited based on void LinearMotorControl()
 void MotorControl(MotorControlObj* m)
 {
 	// 1. FO jungtis
@@ -278,7 +193,6 @@ void MotorControl(MotorControlObj* m)
 	// 8. Atnaujinam paskutinæ reikðmæ
 	*m->sensor.lastPosition = *m->sensor.positionFiltered;
 }
-
 
 void work(){
 	if(WSData.windspeed > MAX_WIND){

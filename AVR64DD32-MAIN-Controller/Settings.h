@@ -383,9 +383,6 @@ void screen_write_formatted_text(const char *format, uint8_t line, alignment_t a
  * This function manages windowing tasks, such as opening, closing, or resizing windows, depending on
  * the application context.
  */
-void windows();
-
-
 void RS485_Led(RS485_LED_t LED);
 uint8_t crc8_cdma2000(uint64_t data);
 uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
@@ -427,6 +424,8 @@ void TCB_init();
 bool TCB0_RUN();
 
 void MotorControl(MotorControlObj* m);
+
+void windows();
 
 
 #endif /* SETTINGS_H_ */

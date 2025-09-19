@@ -9,6 +9,9 @@
 #ifndef WINDOWSVAR_H_
 #define WINDOWSVAR_H_
 
-
+screenShow show = {
+	.window = 0,
+	.lastWindow = 0
+};
 
 #endif /* WINDOWSVAR_H_ */
