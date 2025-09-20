@@ -26,7 +26,10 @@ MotorControlObj LinearMotorCtrl = {
 		.disable       = LinearMotor_disable,
 		.start         = LinearMotor_start,
 		.stop          = LinearMotor_stop,
-		.set_direction = LinearMotor_set_direction
+		.set_direction = LinearMotor_set_direction,
+		.read_voltage  = Read_LinearMotor_Voltage,
+		.read_current  = Read_LinearMotor_Current,
+
 	},
 	.sensor = {
 		.position        = &SensorData.Elevation,
@@ -38,7 +41,9 @@ MotorControlObj LinearMotorCtrl = {
 	},
 	.stuckCount   = 0,
 	.noChangeCount= 0,
-	.backlash     = ELEVATION_BACKLASH
+	.backlash     = ELEVATION_BACKLASH,
+	.voltage	  = &LinearMotor.measuredVoltage,
+	.current	  = &LinearMotor.measuredCurrent
 };
 
 MotorControlObj StepperMotorCtrl = {
@@ -48,7 +53,9 @@ MotorControlObj StepperMotorCtrl = {
 		.disable       = Stepper_disable,
 		.start         = Stepper_start,
 		.stop          = Stepper_stop,
-		.set_direction = Stepper_set_direction
+		.set_direction = Stepper_set_direction,
+		.read_voltage  = Read_Stepper_Voltage,
+		.read_current  = Read_Stepper_Current
 	},
 	.sensor = {
 		.position        = &SensorData.Azimuth,
@@ -56,11 +63,13 @@ MotorControlObj StepperMotorCtrl = {
 		.faultFlag       = &SensorData.FO_azimuth_sensor_fault,
 		.lastPosition    = &Target.lastAzimuth,
 		.target          = &Target.azimuth,
-		.targetReached   = &Target.azimuth_reached
+		.targetReached   = &Target.azimuth_reached,
 	},
 	.stuckCount   = 0,
 	.noChangeCount= 0,
-	.backlash     = AZIMUTH_BACKLASH
+	.backlash     = AZIMUTH_BACKLASH,
+	.voltage	  = &StepperMotor.measuredVoltage,
+	.current	  = &StepperMotor.measuredCurrent
 };
 
 

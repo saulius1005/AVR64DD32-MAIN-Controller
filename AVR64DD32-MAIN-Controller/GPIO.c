@@ -26,11 +26,11 @@ void GPIO_init(){
     // Configure ADC pins for Joystick x and y axis
     PORTC.PIN1CTRL &= ~PORT_ISC_gm; // Disable interrupt sense for PC1 (X axis)
     PORTC.PIN1CTRL |= PORT_ISC_INPUT_DISABLE_gc; // Disable input sense for PC1
-    //PORTC.PIN1CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC1
+    PORTC.PIN1CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC1
 
     PORTC.PIN2CTRL &= ~PORT_ISC_gm; // Disable interrupt sense for PC2 (Y axis)
     PORTC.PIN2CTRL |= PORT_ISC_INPUT_DISABLE_gc; // Disable input sense for PC2
-    //PORTC.PIN2CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC2
+    PORTC.PIN2CTRL &= ~PORT_PULLUPEN_bm; // Disable pull-up for PC2
 
 	PORTC.DIRSET = PIN0_bm; //Set PC0 as RX LED
 

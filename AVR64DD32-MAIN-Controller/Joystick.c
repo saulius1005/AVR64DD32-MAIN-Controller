@@ -19,3 +19,11 @@ void ReadJoystickValues(){
 	Joystick.Y_Axis = ((int16_t)ADC0_read()-2048)/Joystick_steps;
 	Joystick.Button = ReadButton();
 }
+
+
+void SelectWindow(){
+	if(Joystick.Y_Axis >= 1)
+		show.window = 1;
+	if(Joystick.Y_Axis <= -1)
+		show.window = 0;
+}

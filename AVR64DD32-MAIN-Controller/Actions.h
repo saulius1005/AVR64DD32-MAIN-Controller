@@ -31,13 +31,16 @@ typedef struct {
 
 extern actions Target;
 
-// ---- MOTOR INTERFACE ----
+// ---- MOTOR INTERFACE ---- //common for both motors only
 typedef struct {
 	void (*enable)(void);
 	void (*disable)(void);
 	void (*start)(void);
 	void (*stop)(void);
 	void (*set_direction)(bool dir);
+	uint16_t (*read_voltage)(void);
+	int16_t (*read_current)(void);
+
 } MotorInterface;
 
 typedef struct {
@@ -63,6 +66,8 @@ typedef struct {
 	uint8_t stuckCount;
 	uint8_t noChangeCount;
 	int32_t backlash;
+	uint16_t* voltage;
+	int16_t* current; 
 } MotorControlObj;
 
 extern MotorControlObj LinearMotorCtrl;

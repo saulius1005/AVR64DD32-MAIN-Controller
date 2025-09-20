@@ -387,7 +387,10 @@ void RS485_Led(RS485_LED_t LED);
 uint8_t crc8_cdma2000(uint64_t data);
 uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
 void FOReceiver();
+
 void ReadJoystickValues();
+void SelectWindow();
+
 void RS485Receiver();
 
 void TCA0_init_linear_PWM(uint16_t freq_hz, uint8_t duty_percent);

@@ -12,7 +12,8 @@
 ADCJoy Joystick = {
 	.X_Axis = 0,
 	.Y_Axis = 0,
-	.Button = 0
+	.Button = 0,
+	.window = 0
 };
 
 

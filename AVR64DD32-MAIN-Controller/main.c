@@ -17,15 +17,13 @@ int main(void)
     USART1_init();
     screen_init();
     screen_clear();
-	//TCB_init();
     while (1) 
     {
 		RS485Receiver(); //RS485 communication
 		FOReceiver(); // Received Fiber optic data
 		ReadJoystickValues(); //Joystick read
-		work();
+		work();//Actions with motors
+		SelectWindow();
 		windows();
-
-		//_delay_ms(100);
     }
 }

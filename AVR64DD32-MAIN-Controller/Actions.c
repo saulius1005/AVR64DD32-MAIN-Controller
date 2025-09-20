@@ -116,6 +116,8 @@ void LinearMotorControl()
 	// 8. Iðsaugom paskutinæ reikðmæ
 	Target.lastElevation = SensorData.HPElevation;
 }
+
+
 //Motor control function wrtited based on void LinearMotorControl()
 void MotorControl(MotorControlObj* m)
 {
@@ -136,6 +138,10 @@ void MotorControl(MotorControlObj* m)
 		m->noChangeCount = 0;
 		return;
 	}
+
+	// 2.1  Nuskaitomi elektriniai parametrai
+	*m->voltage = m->iface.read_voltage(); //read and save voltage
+	*m->current = m->iface.read_current(); //read and save current
 
 	// 3. Backlash logika
 	bool inBacklash = (*m->sensor.position >= (*m->sensor.target - m->backlash)) &&
@@ -212,7 +218,7 @@ void work(){
 				//StepperControl();
 				//LinearMotorControl();
 				MotorControl(&LinearMotorCtrl);
-				//MotorControl(&StepperMotorCtrl);
+				MotorControl(&StepperMotorCtrl);
 	}
 
 

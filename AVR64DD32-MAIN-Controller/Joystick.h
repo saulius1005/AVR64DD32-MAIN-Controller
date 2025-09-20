@@ -17,6 +17,7 @@ typedef struct {
 	int16_t X_Axis;
 	int16_t Y_Axis;
 	uint8_t Button;
+	uint8_t window;
 } ADCJoy;
 
 extern ADCJoy Joystick;

@@ -18,7 +18,7 @@ typedef struct {
 	bool alreadyEnabled;
 	bool alreadyDisabled;
 	uint16_t measuredVoltage;
-	uint16_t measuredCurrent;
+	int16_t measuredCurrent;
 	uint8_t stuckCount;
 	uint8_t noChangeCount;
 } HBS86;
