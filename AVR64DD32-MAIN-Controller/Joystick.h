@@ -17,6 +17,8 @@ typedef struct {
 	int16_t X_Axis;
 	int16_t Y_Axis;
 	uint8_t Button;
+	bool LastState;
+	uint8_t LatchSwitch;
 	uint8_t window;
 } ADCJoy;
 

@@ -40,84 +40,6 @@ void get_safe_azimuth() {
 	}
 }
 
-void LinearMotorControl()
-{
-	// 1. Tikrinam FO jungtá
-	if (SensorData.FO_lost_connecton_fault) {
-		LinearMotor_stop();
-		LinearMotor_disable();
-		return;
-	}
-
-	// 2. Tikslas pasiektas
-	if (SensorData.Elevation == Target.elevation) {
-		LinearMotor_stop();
-		LinearMotor_disable();
-		SensorData.FO_elevation_sensor_fault = false;
-		Target.elevation_reached = true;
-		LinearMotor.stuckCount = 0;
-		LinearMotor.noChangeCount = 0;
-		return;
-	}
-
-	// 3. Judëjimo paleidimas / palaikymas
-	bool inBacklash = (SensorData.Elevation >= (Target.elevation - ELEVATION_BACKLASH)) &&
-	(SensorData.Elevation <= (Target.elevation + ELEVATION_BACKLASH));
-
-	if (!inBacklash || !Target.elevation_reached) {
-		LinearMotor_start();
-		LinearMotor_enable();
-		Target.elevation_reached = false;
-	}
-
-	// 4. Apskaièiuojam pokytá
-	int32_t delta = (int32_t)SensorData.HPElevation - (int32_t)Target.lastElevation;
-	if (delta > -SENSOR_DEADBAND && delta < SENSOR_DEADBAND) {
-		delta = 0; // triukðmo zona
-	}
-
-	// 5. Nustatome kryptá
-	if (SensorData.Elevation < Target.elevation) {
-		LinearMotor_set_direction(1);
-		} else if (SensorData.Elevation > Target.elevation) {
-		LinearMotor_set_direction(0);
-	}
-
-	// 6. Uþstrigimo tikrinimas (neteisinga kryptis)
-	if (SensorData.Elevation < (Target.elevation - ELEVATION_BACKLASH)) {
-		if (delta < -SENSOR_DEADBAND && ++LinearMotor.stuckCount >= STUCK_LIMIT) {
-			SensorData.FO_elevation_sensor_fault = true;
-			LinearMotor_stop();
-			LinearMotor_disable();
-			} else if (delta > SENSOR_DEADBAND) {
-			LinearMotor.stuckCount = 0;
-		}
-		} else if (SensorData.Elevation > (Target.elevation + ELEVATION_BACKLASH)) {
-		if (delta > SENSOR_DEADBAND && ++LinearMotor.stuckCount >= STUCK_LIMIT) {
-			SensorData.FO_elevation_sensor_fault = true;
-			LinearMotor_stop();
-			LinearMotor_disable();
-			} else if (delta < -SENSOR_DEADBAND) {
-			LinearMotor.stuckCount = 0;
-		}
-	}
-
-	// 7. Tikrinam ar „uþstrigo“ vietoje (nëra jokio judesio)
-	if (delta == 0 && !Target.elevation_reached) {
-		if (++LinearMotor.noChangeCount >= STUCK_LIMIT) {
-			SensorData.FO_elevation_sensor_fault = true;
-			LinearMotor_stop();
-			LinearMotor_disable();
-		}
-		} else {
-		LinearMotor.noChangeCount = 0;
-	}
-
-	// 8. Iðsaugom paskutinæ reikðmæ
-	Target.lastElevation = SensorData.HPElevation;
-}
-
-
 //Motor control function wrtited based on void LinearMotorControl()
 void MotorControl(MotorControlObj* m)
 {
@@ -201,25 +123,35 @@ void MotorControl(MotorControlObj* m)
 }
 
 void work(){
-	if(WSData.windspeed > MAX_WIND){
-		get_safe_azimuth();
-		Target.elevation = SAFE_ELEVATION;
+	if(Joystick.LatchSwitch){ //Manual mode
+		if( (Target.azimuth + Joystick.X_Axis) >= MIN_AZIMUTH && (Target.azimuth + Joystick.X_Axis) <= MAX_AZIMUTH ) {
+			Target.azimuth += Joystick.X_Axis;
+		}
+		if( (Target.elevation - Joystick.Y_Axis) >= MIN_ELEVATION && (Target.elevation - Joystick.Y_Axis) <= MAX_ELEVATION ) {
+			Target.elevation -= Joystick.Y_Axis;
+		}
+		_delay_ms(200);
+		MotorControl(&LinearMotorCtrl);
+		MotorControl(&StepperMotorCtrl);
 	}
-	else{
-		if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
+	else{//Auto mode
+		if(WSData.windspeed > MAX_WIND){
+			get_safe_azimuth();
+		Target.elevation = SAFE_ELEVATION;
+		}
+		else{// normal work
+			if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
+				Target.azimuth = WSData.azimuth;
+				Target.elevation = WSData.elevation;
+			}
+			else{ // if not go to best day position (early morning, late at evening, or just dark day)
+				Target.azimuth = 180; //South
+				Target.elevation = WSData.topelevation; //day top elevation
+			}		 
 			Target.azimuth = WSData.azimuth;
 			Target.elevation = WSData.elevation;
+			MotorControl(&LinearMotorCtrl);
+			MotorControl(&StepperMotorCtrl);
 		}
-		else{ // if not go to best day position (early morning, late at evening, or just dark day)
-			Target.azimuth = 180; //South
-			Target.elevation = WSData.topelevation; //day top elevation
-		}
-				//ReachTarget();
-				//StepperControl();
-				//LinearMotorControl();
-				MotorControl(&LinearMotorCtrl);
-				MotorControl(&StepperMotorCtrl);
 	}
-
-
 }

@@ -83,7 +83,7 @@ int USART0_printChar(char c, FILE *stream) {
  */
 void USART1_init() {
 	USART1.BAUD = (uint16_t)USART1_BAUD_RATE(460800); // Set baud rate to 460.8 kbps for fiber optic
-	USART1.CTRLB = USART_RXEN_bm /*| USART_TXEN_bm*/ | USART_RXMODE_CLK2X_gc; // Enable RX, TX, double speed mode
+	USART1.CTRLB = USART_RXEN_bm  | USART_RXMODE_CLK2X_gc; // Enable RX, TX, double speed mode
 	USART1.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_CHSIZE_8BIT_gc | USART_PMODE_DISABLED_gc | USART_SBMODE_1BIT_gc; // Configure for 8-bit, no parity, 1 stop bit, asynchronous mode
 }
 

@@ -38,7 +38,6 @@ typedef struct {
 	bool FO_azimuth_sensor_fault;
 	uint8_t FO_faultcount;
 	char FreshDataPack[MESSAGE_LENGTH_FO];
-	char OldDataPack[MESSAGE_LENGTH_FO];
 } FOdata;
 
 extern FOdata SensorData;

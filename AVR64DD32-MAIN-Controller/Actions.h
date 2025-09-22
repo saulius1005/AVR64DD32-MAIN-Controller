@@ -11,6 +11,8 @@
 
 #define MIN_AZIMUTH 30
 #define MAX_AZIMUTH 330
+#define MIN_ELEVATION 0
+#define MAX_ELEVATION 90
 #define MAX_WIND 15
 #define SAFE_ELEVATION 20
 #define MIN_LIGHT_LEVEL 300 // need to measure in real world, for now this.

@@ -21,9 +21,7 @@ int main(void)
     {
 		RS485Receiver(); //RS485 communication
 		FOReceiver(); // Received Fiber optic data
-		ReadJoystickValues(); //Joystick read
 		work();//Actions with motors
-		SelectWindow();
 		windows();
     }
 }

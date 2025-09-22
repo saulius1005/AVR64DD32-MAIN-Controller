@@ -27,8 +27,7 @@ FOdata SensorData = {
 	.FO_lost_connecton_fault = false,// true if usart1 while loop spins without receiving data, after 3 times repeting same error in a row seting up FO_no_power_fault in FO data receiving function (both resets after data receiving goes back (autoreset))
 	.FO_elevation_sensor_fault = false, 
 	.FO_faultcount = 0,
-	.FreshDataPack = {"\0"},
-	.OldDataPack = {"\0"}
+	.FreshDataPack = {"\0"}
 };
 
 

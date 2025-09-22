@@ -389,6 +389,8 @@ uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
 void FOReceiver();
 
 void ReadJoystickValues();
+void LatchSwitcher();
+
 void SelectWindow();
 
 void RS485Receiver();
@@ -400,11 +402,10 @@ void LinearMotor_disable();
 void LinearMotor_start();
 void LinearMotor_stop();
 void LinearMotor_set_direction(bool dir);
-bool Read_LinearMotor_EF();
 uint16_t Read_LinearMotor_Voltage();
 int16_t Read_LinearMotor_Current();
+bool Read_LinearMotor_EF();
 
-/*void TCD0_init();*/
 void TCD0_init_stepper_PWM(uint32_t freq_hz, uint8_t duty_percent);
 void Stepper_init();
 void Stepper_enable();
@@ -412,19 +413,16 @@ void Stepper_disable();
 void Stepper_start();
 void Stepper_stop();
 void Stepper_set_direction(bool dir);
-bool Read_Stepper_PEND();
-bool Read_Stepper_ALM();
 uint16_t Read_Stepper_Voltage();
 int16_t Read_Stepper_Current();
+bool Read_Stepper_PEND();
+bool Read_Stepper_ALM();
 
 uint16_t Read_MCU_Voltge();
 void ADC0_SetupLinearMotor(uint8_t parameter);
 void ADC0_SetupStepper(uint8_t parameter);
 
 void work();
-
-void TCB_init();
-bool TCB0_RUN();
 
 void MotorControl(MotorControlObj* m);
 

@@ -11,6 +11,19 @@ uint8_t ReadButton(){
 	return !(PORTA.IN & PIN1_bm);
 }
 
+void LatchSwitcher(){
+	if (ReadButton()){
+		if(!Joystick.LastState){
+			Joystick.LatchSwitch ^= 1;
+			Joystick.LastState = true;
+		}
+	}
+	else{
+		if(Joystick.LastState){
+			Joystick.LastState = false;
+		}
+	}
+}
 
 void ReadJoystickValues(){
 	ADC0_SetupJoystick(Joystick_X_axis_CH);
