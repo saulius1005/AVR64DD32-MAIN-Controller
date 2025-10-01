@@ -15,7 +15,10 @@ Wearther_Station WSData = {
 	.topelevation = 0,
 	.windspeed = 0,
 	.winddirection = 0,
-	.lightlevel = 0
+	.lightlevel = 0,
+	.WS_lost_connecton_fault = false,
+	.WS_lost_signal_fault = false,
+	.WS_data_fault = false
 };
 
 #endif /* RS485USARTVAR_H_ */

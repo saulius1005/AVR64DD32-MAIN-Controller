@@ -7,6 +7,18 @@
 #include "Settings.h"
 #include "StepperMotorVar.h"
 
+// -------------------------
+// Notice
+// -------------------------
+// for CL86T need swap encoder pair lines 
+// -------------------------
+// 86HB250-156B MOTOR		CL86T 4.1
+// -------------------------
+// EA+						EB+			
+// EA-						EB-
+// EB+						EA+
+// EB-						EA-
+// -------------------------
 
 // -------------------------
 // Stepper Enable / Disable
@@ -14,7 +26,7 @@
 void Stepper_enable() {
 	if(StepperMotor.alreadyEnabled == false){
 		PORTF.OUTCLR = PIN1_bm; // aktyvus LOW
-		_delay_ms(400); //recomended min 200m
+		_delay_ms(300); //recomended min 200m
 		StepperMotor.alreadyEnabled = true;
 		StepperMotor.alreadyDisabled = false;
 	}
@@ -23,7 +35,6 @@ void Stepper_enable() {
 void Stepper_disable() {
 	if(StepperMotor.alreadyDisabled == false){
 		PORTF.OUTSET = PIN1_bm; // HIGH = inactive
-		//_delay_us(10); //recomended min 5us
 		StepperMotor.alreadyDisabled = true;
 		StepperMotor.alreadyEnabled = false;
 	}
@@ -36,7 +47,6 @@ void Stepper_start() {
 	if(StepperMotor.alreadyStarted == false){
 		while (!(TCD0.STATUS & TCD_ENRDY_bm));
 		TCD0.CTRLA |= TCD_ENABLE_bm;
-		//_delay_us(10);
 		StepperMotor.alreadyStarted = true;
 		StepperMotor.alreadyStoped = false;
 	}
@@ -47,9 +57,6 @@ void Stepper_stop() {
 	if(StepperMotor.alreadyStoped == false){
 		while (!(TCD0.STATUS & TCD_ENRDY_bm));//
 		TCD0.CTRLA &= ~TCD_ENABLE_bm;//disable counter
-		//_delay_us(10);
-		//PORTF.OUTCLR = PIN2_bm;//set pulse low
-		//_delay_us(10);
 		StepperMotor.alreadyStoped = true;
 		StepperMotor.alreadyStarted = false;
 	}
@@ -66,7 +73,7 @@ void Stepper_set_direction(bool dir) {
 			PORTF.OUTSET = PIN3_bm;
 		else
 			PORTF.OUTCLR = PIN3_bm;
-		_delay_us(4); //recomended min 2us
+		_delay_us(3); //recomended min 2us
 		Stepper_start();// start generating pulses
 		StepperMotor.lastDirection = dir;
 	}
@@ -78,9 +85,8 @@ void Stepper_set_direction(bool dir) {
 void Stepper_init() {
 
 	// Default PWM
-	TCD0_init_stepper_PWM(6400, 50); // 51.2kHz, 50% duty
+	TCD0_init_stepper_PWM(51200, 50); // 51.2kHz, 50% duty
 /*
-
 	// Set idle states
 	PORTF.OUTCLR = PIN2_bm; // pulse low
 	PORTF.OUTSET = PIN1_bm; // disable

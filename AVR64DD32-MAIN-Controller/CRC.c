@@ -77,3 +77,28 @@ uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc) {
 	return crc8_cdma2000(data_without_crc) == crc ?  data_without_crc : 0;
 
 }
+
+
+uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
+/*	uint8_t buf[9];
+
+
+	// MSB-first
+	buf[0] = (uint8_t)(data[0] >> 8); //azimuth (FFFF)
+	buf[1] = (uint8_t)(data[0] & 0xFF);
+	buf[2] = (uint8_t)(data[1] >> 8);
+	buf[3] = (uint8_t)(data[1] & 0xFF); //elevation (FFFF)
+	buf[4] = (uint8_t)(data[2] >> 8);
+	buf[5] = (uint8_t)(data[2] & 0xFF); //Topelevation (FFFF)
+	buf[6] = (uint8_t)data[3]; // uint8_t wind speed (FF)
+	uint16_t saveOneBit = ((data[4] & 0x07) << 12) | (data[5] & 0x0FFF); //wind direction (F)(values only 0- 7) + light level(FFF)(values only 0-4095) = (F+FFF)
+	buf[7] = (uint8_t)(saveOneBit >> 8); //split wind direction and part of light level data
+	buf[8] = (uint8_t)(saveOneBit & 0xFF); // left part of light level*/
+
+	uint8_t calculatedcrc = 0xFF;
+	for (size_t i = 0; i < 9; i++) { // length = 8 baitai
+		calculatedcrc = crc8_table[calculatedcrc ^ data[i]];
+	}
+	return calculatedcrc == crc ? calculatedcrc : 0 ;
+
+}

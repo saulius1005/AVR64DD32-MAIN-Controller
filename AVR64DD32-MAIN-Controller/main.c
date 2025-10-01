@@ -17,6 +17,9 @@ int main(void)
     USART1_init();
     screen_init();
     screen_clear();
+	_delay_ms(300); //Let to boot Top controller
+	FOReceiver(); // Received Fiber optic data
+	RS485Receiver(); //RS485 communication
     while (1) 
     {
 		RS485Receiver(); //RS485 communication

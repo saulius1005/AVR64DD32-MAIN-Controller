@@ -33,13 +33,13 @@ void FODataSplitter(char *command) {
 		SensorData.FO_bad_signal_fault = true; //exp. hard bended fo
 	}
 	else{
-		const uint8_t lengths[] = {4, 4, 3, 3, 1, 2};
-		char temp[16];
+		const uint8_t lengths[] = {4, 4, 3, 3, 1};
+		char temp[MESSAGE_LENGTH_FO-2];
 
-		strncpy(temp, command, 15);
-		temp[15] = '\0';
+		strncpy(temp, command, MESSAGE_LENGTH_FO-2);
+		temp[MESSAGE_LENGTH_FO-2] = '\0';
 		uint64_t datatocheck = hexToUint64(temp);
-		strncpy(temp, command + 15, 2); 
+		strncpy(temp, command + MESSAGE_LENGTH_FO-2, 2);
 		temp[2] = '\0';
 		uint8_t crctocheck = (uint8_t)strtol(temp, NULL, 16);
 
@@ -48,8 +48,8 @@ void FODataSplitter(char *command) {
 			const char *p = command;
 			uint8_t EndSwitchesValue = 0;
 
-			for (uint8_t i = 0; i < 6; i++) {
-				char token[10] = {0};
+			for (uint8_t i = 0; i < 5; i++) {
+				char token[5] = {0};
 
 				memcpy(token, p, lengths[i]);
 				token[lengths[i]] = '\0';

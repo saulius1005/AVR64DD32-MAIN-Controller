@@ -26,9 +26,13 @@ void USART0_init() {
 
 char USART0_readChar() {
 	USART0.STATUS = USART_RXCIF_bm; // Clear buffer before reading
-	uint32_t timeout_counter = RS485_TIMEOUT_COUNTER; // Set a timeout counter
+	uint64_t timeout_counter = RS485_TIMEOUT_COUNTER; // Set a timeout counter
 	while (!(USART0.STATUS & USART_RXCIF_bm)) { // Wait for data to be received
 		if (--timeout_counter == 0) { // Timeout condition
+			WSData.WS_lost_signal_fault = true;
+			//screen_write_formatted_text("USART0 timeout", 0, ALIGN_LEFT);// uncomment for timeout number finding, when timeout number is set corectly this line should not to be visible at all. if timeout is to small you will see this line
+			//_delay_ms(100);
+			//screen_write_formatted_text("              ", 0, ALIGN_LEFT);
 			break;
 		}
 	}

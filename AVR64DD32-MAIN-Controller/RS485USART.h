@@ -12,9 +12,9 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
-#define RS485_TIMEOUT_COUNTER 1000 ///< Timeout counter value for operations
-#define CountForError_RS485 10
-#define MESSAGE_LENGTH_RS485 27
+#define RS485_TIMEOUT_COUNTER 180000 ///< Timeout counter value for operations slower speed meaning more this
+#define CountForError_RS485 3 //times to receive signal error and after this number will be set up connection fault
+#define MESSAGE_LENGTH_RS485 20
 
 
 typedef struct {
@@ -24,6 +24,9 @@ typedef struct {
 	uint8_t windspeed;
 	uint8_t winddirection;
 	uint16_t lightlevel;
+	bool WS_lost_connecton_fault;
+	bool WS_lost_signal_fault;
+	bool WS_data_fault;
 } Wearther_Station;
 
 extern Wearther_Station WSData;
