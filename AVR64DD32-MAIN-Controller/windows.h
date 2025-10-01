@@ -9,7 +9,7 @@
 #ifndef WINDOWS_H_
 #define WINDOWS_H_
 
-#define MAX_VARS 11
+#define MAX_VARS 12
 
 typedef struct {
 	uint8_t window;

@@ -9,22 +9,6 @@
 
 
 void RS485DataSplitter(char *command) {
-/*
-	uint16_t *fields[] = {
-		&WSData.azimuth,
-		&WSData.elevation,
-		&WSData.topelevation,
-		(uint16_t*)&WSData.windspeed,
-		(uint16_t*)&WSData.winddirection,
-		&WSData.lightlevel
-	};
-
-	char *token = strtok(command, "|");
-	for (uint8_t i = 0; token != NULL && i < 6; i++) {
-		*fields[i] = (uint16_t)strtol(token, NULL, 10);
-		token = strtok(NULL, "|");
-	}*/
-
 	const uint8_t lengths[] = {4, 4, 4, 2, 1, 3}; //tokens length without crc
 	char temp[MESSAGE_LENGTH_RS485-2]; //data storage
 

@@ -12,7 +12,7 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
-#define FO_TIMEOUT_COUNTER 260000 ///< Timeout counter value for operations if baud 460.8k
+#define FO_TIMEOUT_COUNTER 270000 ///< Timeout counter value for operations if baud 460.8k
 #define CountForError_FO 3
 #define Angle_Precizion 100 // 100 meaning exp. 360 degree 10 3600 (360,0), 1 36000 (360,00)
 #define U_I_Precizion 1 // 10 meaning 24, 1 240 (24.0)

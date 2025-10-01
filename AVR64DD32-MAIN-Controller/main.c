@@ -18,13 +18,15 @@ int main(void)
     screen_init();
     screen_clear();
 	_delay_ms(300); //Let to boot Top controller
-	FOReceiver(); // Received Fiber optic data
-	RS485Receiver(); //RS485 communication
+	bool JustBoot = false;
     while (1) 
     {
+		
 		RS485Receiver(); //RS485 communication
 		FOReceiver(); // Received Fiber optic data
-		work();//Actions with motors
+		if(JustBoot)
+			work();//Actions with motors
 		windows();
+		JustBoot = true;
     }
 }

@@ -135,23 +135,25 @@ void work(){
 		MotorControl(&StepperMotorCtrl);
 	}
 	else{//Auto mode
-		if(WSData.windspeed > MAX_WIND){
-			get_safe_azimuth();
-		Target.elevation = SAFE_ELEVATION;
-		}
-		else{// normal work
-			if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
+		if(!WSData.WS_lost_connecton_fault){ // only receiving data from RS485 network (Weather Station)
+			if(WSData.windspeed > MAX_WIND){
+				get_safe_azimuth();
+			Target.elevation = SAFE_ELEVATION;
+			}
+			else{// normal work
+				if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
+					Target.azimuth = WSData.azimuth;
+					Target.elevation = WSData.elevation;
+				}
+				else{ // if not go to best day position (early morning, late at evening, or just dark day)
+					Target.azimuth = 180; //South
+					Target.elevation = WSData.topelevation; //day top elevation
+				}		 
 				Target.azimuth = WSData.azimuth;
 				Target.elevation = WSData.elevation;
+				MotorControl(&LinearMotorCtrl);
+				MotorControl(&StepperMotorCtrl);
 			}
-			else{ // if not go to best day position (early morning, late at evening, or just dark day)
-				Target.azimuth = 180; //South
-				Target.elevation = WSData.topelevation; //day top elevation
-			}		 
-			Target.azimuth = WSData.azimuth;
-			Target.elevation = WSData.elevation;
-			MotorControl(&LinearMotorCtrl);
-			MotorControl(&StepperMotorCtrl);
-		}
+		}		
 	}
 }

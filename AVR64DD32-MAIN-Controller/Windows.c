@@ -29,13 +29,15 @@ bool screenUpdater(uint8_t window){ //update window data if any changes only
 			values[7] = SensorData.FO_lost_connecton_fault;
 			values[8] = SensorData.FO_elevation_sensor_fault;
 			values[9] = SensorData.FO_azimuth_sensor_fault;
-			for (uint8_t i=0; i<10; i++){
+			values[10] = WSData.WS_lost_connecton_fault;
+			values[11] = WSData.WS_data_fault;
+			for (uint8_t i=0; i<11; i++){
 				if(show.lastValues[i] != values[i]){
 				update = true;
 				break;
 				}
 			}
-			for (uint8_t i=0; i<10; i++){
+			for (uint8_t i=0; i<11; i++){
 				show.lastValues[i] = values[i];
 			}
 		break;
@@ -74,18 +76,21 @@ void windows() {
 			if(screenUpdater(0)){
 				screen_write_formatted_text("%s", 0, ALIGN_CENTER, Joystick.LatchSwitch ? "Manual mode": " Auto mode ");			
 				screen_write_formatted_text("---------------------", 1, ALIGN_CENTER);
-				//1. Bad CRC returns FO_data_fault
-				//2. Bad signal fro FO coses FO_bad_signal_fault (receiving 000.. with good crc)
-				//3. USATR1 not receiving messages FO_lost_signal_fault meaning FO optic cut or Top controller fault, or onboard Attiny212 fault
-				//3a. FO_lost_signal_fault 3 times in row leads to lost connection fault FO_lost_connecton_fault
-				//4. Elevation sensor stuck or bad data returns FO_elevation_sensor_fault error
-				//5. Azimuth sensor fault FO_azimuth_sensor_fault
-				screen_write_formatted_text("%s %s %s %s %s", 2, ALIGN_LEFT, SensorData.FO_data_fault ? "CE": "  ", SensorData.FO_bad_signal_fault ? "FOE": "   ", SensorData.FO_lost_connecton_fault ? "LCE": "   ", SensorData.FO_elevation_sensor_fault ? "ESE": "   ", SensorData.FO_azimuth_sensor_fault ? "ASE": "   ");
-				screen_write_formatted_text("---------------------", 3, ALIGN_CENTER);
-				screen_write_formatted_text("Elevation:", 4, ALIGN_LEFT);
-				screen_write_formatted_text("%3d/ %3d", 4, ALIGN_RIGHT, Target.elevation, SensorData.Elevation);
-				screen_write_formatted_text("Azimuth:", 5, ALIGN_LEFT);
-				screen_write_formatted_text("%3d/ %3d", 5, ALIGN_RIGHT, Target.azimuth, SensorData.Azimuth);
+				//1. Lost connection error- No data from Weather station (broken line, corosion, hardware fail and so on)
+				//2. Bad CRC
+				screen_write_formatted_text("W.S: %s %s", 2, ALIGN_LEFT,  WSData.WS_lost_connecton_fault ? "LCE": "   ", WSData.WS_data_fault ? "CRC": "   ");
+				//1. USATR1 not receiving messages FO_lost_signal_fault meaning FO optic cut or Top controller fault, or onboard Attiny212 fault
+				//1a. FO_lost_signal_fault 3 times in row leads to lost connection fault FO_lost_connecton_fault
+				//2. Weak signal from FO coses FO_bad_signal_fault (receiving 000.. with good crc). Onboard Attiny212 works good
+				//3. Bad CRC returns FO_data_fault											
+				screen_write_formatted_text("T.C: %s %s %s", 3, ALIGN_LEFT, SensorData.FO_lost_connecton_fault ? "LCE": "   ", SensorData.FO_bad_signal_fault ? "FOE": "   ", SensorData.FO_data_fault ? "CRC": "   "  );
+				screen_write_formatted_text("---------------------", 4, ALIGN_CENTER);
+				screen_write_formatted_text("Elevation:", 5, ALIGN_LEFT);
+				//1. Elevation sensordata and fault FO_elevation_sensor_fault error
+				screen_write_formatted_text("%3d/ %3d%s", 5, ALIGN_RIGHT, Target.elevation, SensorData.Elevation, SensorData.FO_elevation_sensor_fault ? "!E": "  ");
+				screen_write_formatted_text("Azimuth:", 6, ALIGN_LEFT);
+				//1. Azimuth sensor data and fault FO_azimuth_sensor_fault
+				screen_write_formatted_text("%3d/ %3d%s", 6, ALIGN_RIGHT, Target.azimuth, SensorData.Azimuth, SensorData.FO_azimuth_sensor_fault ? "!E": "  ");
 			}
 		break;
 		case 1:

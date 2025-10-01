@@ -11,10 +11,10 @@
 
 
 actions Target = {
-	.elevation = 30,
+	.elevation = 37, //default elevation angle. This value are shown when no comunication from Weather station
 	.elevation_reached = true,
 	.lastElevation = 0,
-	.azimuth = 180,
+	.azimuth = 171, //default azimuth angle. This value are shown when no comunication from Weather station
 	.azimuth_reached = true,
 	.lastAzimuth = 0
 };
