@@ -148,6 +148,7 @@ void ReadMotorData(MotorType motor){
 void work(){
 	ReadMotorData(MOTOR_STEPPER); //Read stepper motor voltage and current
 	ReadMotorData(MOTOR_LINEAR); //REad linear motor voltage and current
+
 	if(Joystick.LatchSwitch){ //Manual mode: basic as possible- ignores all errors. Just pure motor control
 		ManualMotorControl(MOTOR_STEPPER);
 		ManualMotorControl(MOTOR_LINEAR);
