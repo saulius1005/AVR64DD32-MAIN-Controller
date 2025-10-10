@@ -62,10 +62,6 @@ void AutoMotorControl(MotorType motor)
 		return;
 	}
 
-	// 2.1  Nuskaitomi elektriniai parametrai
-	*m->voltage = m->iface.read_voltage(); //read and save voltage
-	*m->current = m->iface.read_current(); //read and save current
-
 	// 3. Backlash logika
 	bool inBacklash = (*m->sensor.position >= (*m->sensor.target - m->backlash)) &&
 	(*m->sensor.position <= (*m->sensor.target + m->backlash));
@@ -143,7 +139,15 @@ void ManualMotorControl(MotorType motor){
 	}
 }
 
+void ReadMotorData(MotorType motor){
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl; //choose motor control stepper or linear
+	*m->voltage = m->iface.read_voltage(); //read and save voltage
+	*m->current = m->iface.read_current(); //read and save current
+}
+
 void work(){
+	ReadMotorData(MOTOR_STEPPER); //Read stepper motor voltage and current
+	ReadMotorData(MOTOR_LINEAR); //REad linear motor voltage and current
 	if(Joystick.LatchSwitch){ //Manual mode: basic as possible- ignores all errors. Just pure motor control
 		ManualMotorControl(MOTOR_STEPPER);
 		ManualMotorControl(MOTOR_LINEAR);
