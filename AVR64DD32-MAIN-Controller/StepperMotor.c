@@ -35,6 +35,7 @@ void Stepper_enable() {
 void Stepper_disable() {
 	if(StepperMotor.alreadyDisabled == false){
 		PORTF.OUTSET = PIN1_bm; // HIGH = inactive
+		_delay_ms(300); //recomended min 200m
 		StepperMotor.alreadyDisabled = true;
 		StepperMotor.alreadyEnabled = false;
 	}
@@ -85,7 +86,7 @@ void Stepper_set_direction(bool dir) {
 void Stepper_init() {
 
 	// Default PWM
-	TCD0_init_stepper_PWM(51200, 50); // 51.2kHz, 50% duty
+	TCD0_init_stepper_PWM(12800, 50); // 51.2kHz, 50% duty for one motor shaft spin, so ~20s for gearbox
 /*
 	// Set idle states
 	PORTF.OUTCLR = PIN2_bm; // pulse low

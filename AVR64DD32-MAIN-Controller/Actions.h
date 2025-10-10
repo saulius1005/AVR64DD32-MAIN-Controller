@@ -19,8 +19,8 @@
 
 #define ELEVATION_BACKLASH 2 //2.00 degree
 #define AZIMUTH_BACKLASH 4 // 4.00 degree
-#define SENSOR_DEADBAND 200   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
-#define STUCK_LIMIT 2      // ciklø skaièius prieð fault
+#define SENSOR_DEADBAND 50   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
+#define STUCK_LIMIT 4      // ciklø skaièius prieð fault
 
 typedef struct {
 	uint16_t elevation;

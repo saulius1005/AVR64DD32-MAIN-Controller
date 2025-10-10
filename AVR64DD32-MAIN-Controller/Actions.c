@@ -41,8 +41,9 @@ void get_safe_azimuth() {
 }
 
 //Motor control function wrtited based on void LinearMotorControl()
-void MotorControl(MotorControlObj* m)
+void AutoMotorControl(MotorType motor)
 {
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl;
 	// 1. FO jungtis
 	if (SensorData.FO_lost_connecton_fault) {
 		m->iface.stop();
@@ -70,8 +71,8 @@ void MotorControl(MotorControlObj* m)
 	(*m->sensor.position <= (*m->sensor.target + m->backlash));
 
 	if (!inBacklash || !*m->sensor.targetReached) {
-		m->iface.start();
 		m->iface.enable();
+		m->iface.start();
 		*m->sensor.targetReached = false;
 	}
 
@@ -122,17 +123,30 @@ void MotorControl(MotorControlObj* m)
 	*m->sensor.lastPosition = *m->sensor.positionFiltered;
 }
 
+void ManualMotorControl(MotorType motor){
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl; //choose motor control stepper or linear
+
+	int16_t *joy_axis = (motor == MOTOR_STEPPER) ? &Joystick.X_Axis : &Joystick.Y_Axis; //choose joystick axis (for stepper - X axis, for linear Y axis)
+	bool SwapStepDir = (motor == MOTOR_STEPPER) ? true : false; //swaping directions for stepper, and keep as usual for linear
+
+	if(*joy_axis == 0){ 
+		m->iface.stop();
+		m->iface.disable();		
+	}
+	else{
+		m->iface.enable(); //enabling driver
+		if(*joy_axis > 0)
+			m->iface.set_direction(SwapStepDir); //set direction (stepper 1, linear 0)
+		else
+			m->iface.set_direction(!SwapStepDir); // (stepper 0, linear 1)
+		m->iface.start(); // start generating pulses
+	}
+}
+
 void work(){
-	if(Joystick.LatchSwitch){ //Manual mode
-		if( (Target.azimuth + Joystick.X_Axis) >= MIN_AZIMUTH && (Target.azimuth + Joystick.X_Axis) <= MAX_AZIMUTH ) {
-			Target.azimuth += Joystick.X_Axis;
-		}
-		if( (Target.elevation - Joystick.Y_Axis) >= MIN_ELEVATION && (Target.elevation - Joystick.Y_Axis) <= MAX_ELEVATION ) {
-			Target.elevation -= Joystick.Y_Axis;
-		}
-		_delay_ms(200);
-		MotorControl(&LinearMotorCtrl);
-		MotorControl(&StepperMotorCtrl);
+	if(Joystick.LatchSwitch){ //Manual mode: basic as possible- ignores all errors. Just pure motor control
+		ManualMotorControl(MOTOR_STEPPER);
+		ManualMotorControl(MOTOR_LINEAR);
 	}
 	else{//Auto mode
 		if(!WSData.WS_lost_connecton_fault){ // only receiving data from RS485 network (Weather Station)
@@ -151,8 +165,8 @@ void work(){
 				}		 
 				Target.azimuth = WSData.azimuth;
 				Target.elevation = WSData.elevation;
-				MotorControl(&LinearMotorCtrl);
-				MotorControl(&StepperMotorCtrl);
+				AutoMotorControl(MOTOR_LINEAR);
+				AutoMotorControl(MOTOR_STEPPER);
 			}
 		}		
 	}

@@ -426,7 +426,7 @@ void ADC0_SetupStepper(uint8_t parameter);
 
 void work();
 
-void MotorControl(MotorControlObj* m);
+void AutoMotorControl(MotorType motor);
 
 void windows();
 
