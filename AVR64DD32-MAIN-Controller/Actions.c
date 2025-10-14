@@ -168,8 +168,8 @@ void work(){
 					Target.azimuth = 180; //South
 					Target.elevation = WSData.topelevation; //day top elevation
 				}		 
-				Target.azimuth = WSData.azimuth;
-				Target.elevation = WSData.elevation;
+				//Target.azimuth = WSData.azimuth;
+				//Target.elevation = WSData.elevation;
 				AutoMotorControl(MOTOR_LINEAR);
 				AutoMotorControl(MOTOR_STEPPER);
 			}

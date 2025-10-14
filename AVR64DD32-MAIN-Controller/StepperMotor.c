@@ -86,7 +86,7 @@ void Stepper_set_direction(bool dir) {
 void Stepper_init() {
 
 	// Default PWM
-	TCD0_init_stepper_PWM(12800, 50); // 51.2kHz, 50% duty for one motor shaft spin, so ~20s for gearbox
+	TCD0_init_stepper_PWM(25600, 50); // 51.2kHz, 50% duty for one motor shaft spin, so ~20s for gearbox
 /*
 	// Set idle states
 	PORTF.OUTCLR = PIN2_bm; // pulse low
