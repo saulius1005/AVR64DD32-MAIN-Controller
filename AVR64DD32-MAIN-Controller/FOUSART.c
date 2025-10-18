@@ -28,25 +28,43 @@ uint64_t hexToUint64(const char *str) {
 	return result;
 }
 
+/*
 void FODataSplitter(char *command) {
+	SensorData.ElMin = false;
+	SensorData.ElMax = false;
+	SensorData.AzMin = false;
+	SensorData.AzMax = false;
+	const uint8_t lengths[] = {4, 4, 3, 3, 1};
+	char temp[MESSAGE_LENGTH_FO-2];
+
+	strncpy(temp, command, MESSAGE_LENGTH_FO-2);
+	temp[MESSAGE_LENGTH_FO-2] = '\0';
+	uint64_t datatocheck = hexToUint64(temp);
+	strncpy(temp, command + MESSAGE_LENGTH_FO-2, 2);
+	temp[2] = '\0';
+	uint8_t crctocheck = (uint8_t)strtol(temp, NULL, 16);
+	uint8_t EndSwitchesValue = 0;
 	if (strncmp(command, "00000000000000", 14) == 0) { //if elevation angle, azimuth angle, solar cells voltage and current = 0 meaning it is FO optic fault: bad signal
 		SensorData.FO_bad_signal_fault = true; //exp. hard bended fo
+		if(verify_crc8_cdma2000(datatocheck, crctocheck)){ //if receiving 0 meaning no data receiving from Top controller, but after all check crc and end switch values for X axis (azimuth) from Attiny212
+			const char *p = command;
+			char token[5] = {0};
+			memcpy(token, p+14, 1);
+			token[1] = '\0';
+			EndSwitchesValue = (uint8_t)strtol(token, NULL, 16); //common end switches value	
+			SensorData.ElMin = (EndSwitchesValue & 0x01) ? true : false;
+			SensorData.ElMax = (EndSwitchesValue & 0x02) ? true : false;
+			SensorData.AzMin = (EndSwitchesValue & 0x04) ? true : false;
+			SensorData.AzMax = (EndSwitchesValue & 0x08) ? true : false;		
+		}
+		else{
+			SensorData.FO_data_fault = true;
+		}
 	}
 	else{
-		const uint8_t lengths[] = {4, 4, 3, 3, 1};
-		char temp[MESSAGE_LENGTH_FO-2];
-
-		strncpy(temp, command, MESSAGE_LENGTH_FO-2);
-		temp[MESSAGE_LENGTH_FO-2] = '\0';
-		uint64_t datatocheck = hexToUint64(temp);
-		strncpy(temp, command + MESSAGE_LENGTH_FO-2, 2);
-		temp[2] = '\0';
-		uint8_t crctocheck = (uint8_t)strtol(temp, NULL, 16);
-
 		if(verify_crc8_cdma2000(datatocheck, crctocheck)){ //if data valid update it
 			//screen_write_formatted_text("data is correct", 1, ALIGN_CENTER);//uncomment if nedded// crc ok
 			const char *p = command;
-			uint8_t EndSwitchesValue = 0;
 
 			for (uint8_t i = 0; i < 5; i++) {
 				char token[5] = {0};
@@ -67,10 +85,10 @@ void FODataSplitter(char *command) {
 			SensorData.Elevation = SensorData.HPElevation / Angle_Precizion;
 			SensorData.Azimuth = SensorData.HPAzimuth / Angle_Precizion;
 			//spliting end switch value to separate end switch value according to axis
-			SensorData.ElMin = (EndSwitchesValue & 0x01) ? 1 : 0;
-			SensorData.ElMax = (EndSwitchesValue & 0x02) ? 1 : 0;
-			SensorData.AzMin = (EndSwitchesValue & 0x04) ? 1 : 0;
-			SensorData.AzMax = (EndSwitchesValue & 0x08) ? 1 : 0;
+			SensorData.ElMin = (EndSwitchesValue & 0x01) ? true : false;
+			SensorData.ElMax = (EndSwitchesValue & 0x02) ? true : false;
+			SensorData.AzMin = (EndSwitchesValue & 0x04) ? true : false;
+			SensorData.AzMax = (EndSwitchesValue & 0x08) ? true : false;
 			SensorData.FO_bad_signal_fault = false; //reset error
 			SensorData.FO_data_fault = false; //reset error
 			SensorData.FO_lost_signal_fault = false; //reset error
@@ -82,7 +100,74 @@ void FODataSplitter(char *command) {
 			SensorData.FO_data_fault = true;
 		}	
 	}
+}*/
+
+void FODataSplitter(char *command) {
+	SensorData.ElMin = SensorData.ElMax = false;
+	SensorData.AzMin = SensorData.AzMax = false;
+	SensorData.FO_data_fault = false;
+	SensorData.FO_bad_signal_fault = false;
+	SensorData.FO_lost_signal_fault = false;
+
+	const uint8_t lengths[] = {4, 4, 3, 3, 1};
+	char temp[MESSAGE_LENGTH_FO - 2];
+
+	// Split data and CRC
+	strncpy(temp, command, MESSAGE_LENGTH_FO - 2);
+	temp[MESSAGE_LENGTH_FO - 2] = '\0';
+	uint64_t dataToCheck = hexToUint64(temp);
+
+	uint8_t crcToCheck = (uint8_t)strtol(command + MESSAGE_LENGTH_FO - 2, NULL, 16);
+
+	bool crc_ok = crc8_cdma2000(dataToCheck) == crcToCheck ?  true : false;
+	uint8_t endSwitches = 0;
+
+	// Detect “bad signal”
+	if (strncmp(command, "00000000000000", 14) == 0) {
+		SensorData.FO_bad_signal_fault = true;
+
+		if (crc_ok) {
+			char token[2];
+			token[0] = command[14];
+			token[1] = '\0';
+			endSwitches = (uint8_t)strtol(token, NULL, 16);
+			} else {
+			SensorData.FO_data_fault = true;
+			return;
+		}
+	} else if (crc_ok) {
+		// Parse all numeric tokens
+		const char *p = command;
+		char token[6]; // Enough for up to 5 hex chars + null terminator
+
+		for (uint8_t i = 0; i < 5; i++) {
+			memcpy(token, p, lengths[i]);
+			token[lengths[i]] = '\0';
+			p += lengths[i];
+
+			switch (i) {
+				case 0: SensorData.HPElevation = (uint16_t)strtol(token, NULL, 16); break;
+				case 1: SensorData.HPAzimuth   = (uint16_t)strtol(token, NULL, 16); break;
+				case 2: SensorData.PVU = (uint16_t)strtol(token, NULL, 16) / U_I_Precizion; break;
+				case 3: SensorData.PVI = (uint16_t)strtol(token, NULL, 16) / U_I_Precizion; break;
+				case 4: endSwitches = (uint8_t)strtol(token, NULL, 16); break;
+			}
+		}
+
+		SensorData.Elevation = SensorData.HPElevation / Angle_Precizion;
+		SensorData.Azimuth   = SensorData.HPAzimuth   / Angle_Precizion;
+		} else {
+		SensorData.FO_data_fault = true;
+		return;
+	}
+
+	// Common: update switch flags (executed for both valid and “bad signal” cases)
+	SensorData.ElMin = (endSwitches & 0x01);
+	SensorData.ElMax = (endSwitches & 0x02);
+	SensorData.AzMin = (endSwitches & 0x04);
+	SensorData.AzMax = (endSwitches & 0x08);
 }
+
 
 /**
  * @brief Main transceiver function.

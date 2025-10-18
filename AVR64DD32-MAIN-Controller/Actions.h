@@ -52,6 +52,8 @@ typedef struct {
     uint16_t* lastPosition;      // pvz. Target.lastElevation arba Target.lastAzimuth
     uint16_t* target;            // pvz. Target.elevation arba Target.azimuth
     bool*     targetReached;     // pvz. Target.elevation_reached arba Target.azimuth_reached
+	bool* endswitchMin;
+	bool* endswitchMax;
 } SensorInterface;
 
 // ---- MOTOR TYPE ENUM ----

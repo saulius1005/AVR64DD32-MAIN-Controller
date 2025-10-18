@@ -35,13 +35,17 @@ bool screenUpdater(uint8_t window){ //update window data if any changes only
 			values[13] = StepperMotor.measuredCurrent;
 			values[14] = LinearMotor.measuredVoltage;
 			values[15] = LinearMotor.measuredCurrent;
-			for (uint8_t i=0; i<15; i++){
+			values[16] = SensorData.AzMin;
+			values[17] = SensorData.AzMax;
+			values[18] = SensorData.ElMin; 
+			values[19] = SensorData.ElMax;
+			for (uint8_t i=0; i<20; i++){
 				if(show.lastValues[i] != values[i]){
 				update = true;
 				break;
 				}
 			}
-			for (uint8_t i=0; i<15; i++){
+			for (uint8_t i=0; i<20; i++){
 				show.lastValues[i] = values[i];
 			}
 		break;
@@ -92,17 +96,20 @@ void windows() {
 					screen_write_formatted_text("W.S: %s %s       ", 2, ALIGN_LEFT,  WSData.WS_lost_connecton_fault ? "LCE": "   ", WSData.WS_data_fault ? "CRC": "   ");
 					//1. USATR1 not receiving messages FO_lost_signal_fault meaning FO optic cut or Top controller fault, or onboard Attiny212 fault
 					//1a. FO_lost_signal_fault 3 times in row leads to lost connection fault FO_lost_connecton_fault
-					//2. Weak signal from FO coses FO_bad_signal_fault (receiving 000.. with good crc). Onboard Attiny212 works good
+					//2. Weak signal from FO or wired uartcoses FO_bad_signal_fault "TCE" Top controller error (receiving 000.. with good crc). Onboard Attiny212 works good
 					//3. Bad CRC returns FO_data_fault											
-					screen_write_formatted_text("T.C: %s %s %s    ", 3, ALIGN_LEFT, SensorData.FO_lost_connecton_fault ? "LCE": "   ", SensorData.FO_bad_signal_fault ? "FOE": "   ", SensorData.FO_data_fault ? "CRC": "   "  );
-					screen_write_formatted_text("---------------------", 4, ALIGN_CENTER);
-					screen_write_formatted_text("Elevation:", 5, ALIGN_LEFT);
-					//1. Elevation sensordata and fault FO_elevation_sensor_fault error
-					screen_write_formatted_text("%3d/ %3d%s", 5, ALIGN_RIGHT, Target.elevation, SensorData.Elevation, SensorData.FO_elevation_sensor_fault ? "!E": "  ");
-					screen_write_formatted_text("Azimuth:", 6, ALIGN_LEFT);
-					//1. Azimuth sensor data and fault FO_azimuth_sensor_fault
-					screen_write_formatted_text("%3d/ %3d%s", 6, ALIGN_RIGHT, Target.azimuth, SensorData.Azimuth, SensorData.FO_azimuth_sensor_fault ? "!E": "  ");
+					screen_write_formatted_text("T.C: %s %s %s    ", 3, ALIGN_LEFT, SensorData.FO_lost_connecton_fault ? "LCE": "   ", SensorData.FO_bad_signal_fault ? "TCE": "   ", SensorData.FO_data_fault ? "CRC": "   "  );
 				}
+				//same part for both modes
+				screen_write_formatted_text("---------------------", 4, ALIGN_CENTER);
+				screen_write_formatted_text("Elevation:", 5, ALIGN_LEFT);
+				//1. Elevation sensordata and fault FO_elevation_sensor_fault error
+				screen_write_formatted_text("%3d/ %3d%s", 5, ALIGN_RIGHT, Target.elevation, SensorData.Elevation, SensorData.FO_elevation_sensor_fault ? "!E": "  ");
+				screen_write_formatted_text("Azimuth:", 6, ALIGN_LEFT);
+				//1. Azimuth sensor data and fault FO_azimuth_sensor_fault
+				screen_write_formatted_text("%3d/ %3d%s", 6, ALIGN_RIGHT, Target.azimuth, SensorData.Azimuth, SensorData.FO_azimuth_sensor_fault ? "!E": "  ");
+				screen_write_formatted_text("%s %s", 7, ALIGN_LEFT, SensorData.AzMin ? "AzMin" : "     ", SensorData.AzMax ? "AzMax" : "     ");
+				screen_write_formatted_text("%s %s", 7, ALIGN_RIGHT, SensorData.ElMin ? "ElMin" : "     ", SensorData.ElMax ? "ElMax" : "     ");
 			}
 		break;
 		case 1:

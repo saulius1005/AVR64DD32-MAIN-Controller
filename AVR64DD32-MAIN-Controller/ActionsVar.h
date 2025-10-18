@@ -37,7 +37,9 @@ MotorControlObj LinearMotorCtrl = {
 		.faultFlag       = &SensorData.FO_elevation_sensor_fault,
 		.lastPosition    = &Target.lastElevation,
 		.target          = &Target.elevation,
-		.targetReached   = &Target.elevation_reached
+		.targetReached   = &Target.elevation_reached,
+		.endswitchMin	 = &SensorData.ElMin,
+		.endswitchMax	 = &SensorData.ElMax
 	},
 	.stuckCount   = 0,
 	.noChangeCount= 0,
@@ -64,6 +66,8 @@ MotorControlObj StepperMotorCtrl = {
 		.lastPosition    = &Target.lastAzimuth,
 		.target          = &Target.azimuth,
 		.targetReached   = &Target.azimuth_reached,
+		.endswitchMin	 = &SensorData.AzMin,
+		.endswitchMax	 = &SensorData.AzMax
 	},
 	.stuckCount   = 0,
 	.noChangeCount= 0,

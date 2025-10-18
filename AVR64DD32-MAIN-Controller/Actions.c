@@ -41,6 +41,7 @@ void get_safe_azimuth() {
 }
 
 //Motor control function wrtited based on void LinearMotorControl()
+/*
 void AutoMotorControl(MotorType motor)
 {
 	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl;
@@ -117,7 +118,99 @@ void AutoMotorControl(MotorType motor)
 
 	// 8. Atnaujinam paskutinæ reikðmæ
 	*m->sensor.lastPosition = *m->sensor.positionFiltered;
+}*/
+void AutoMotorControl(MotorType motor)
+{
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl;
+
+	// 1. FO jungtis
+	if (SensorData.FO_lost_connecton_fault) {
+		m->iface.stop();
+		m->iface.disable();
+		return;
+	}
+
+	// 2. Kryptis pagal tikslà
+	bool direction = (*m->sensor.position < *m->sensor.target); // 1 = forward, 0 = backward
+	m->iface.set_direction(direction);
+
+	// 3. Kraðtiniø jungikliø logika:
+	//  - jei pasiektas end switch ir bandoma vaþiuoti toliau á ribà ? stabdom
+	//  - jei pasiektas, bet bandoma vaþiuoti nuo ribos ? leidþiam
+	bool atMin = *m->sensor.endswitchMin;
+	bool atMax = *m->sensor.endswitchMax;
+
+	if ((direction && atMax) || (!direction && atMin)) {
+		// Bandom vaþiuoti á ribà ? stabdom
+		m->iface.stop();
+		m->iface.disable();
+
+		// Laikom, kad pasiektas tikslas (jei tai tinkama kryptis)
+		*m->sensor.targetReached = true;
+		return;
+	}
+
+	// 4. Tikslas pasiektas
+	if (*m->sensor.position == *m->sensor.target) {
+		m->iface.stop();
+		m->iface.disable();
+		*m->sensor.faultFlag = false;
+		*m->sensor.targetReached = true;
+		m->stuckCount = 0;
+		m->noChangeCount = 0;
+		return;
+	}
+
+	// 5. Backlash logika
+	bool inBacklash = (*m->sensor.position >= (*m->sensor.target - m->backlash)) &&
+	(*m->sensor.position <= (*m->sensor.target + m->backlash));
+
+	if (!inBacklash || !*m->sensor.targetReached) {
+		m->iface.enable();
+		m->iface.start();
+		*m->sensor.targetReached = false;
+	}
+
+	// 6. Pokytis (delta)
+	int32_t delta = (int32_t)(*m->sensor.positionFiltered) - (int32_t)(*m->sensor.lastPosition);
+	if (delta > -SENSOR_DEADBAND && delta < SENSOR_DEADBAND) {
+		delta = 0;
+	}
+
+	// 7. Uþstrigimo tikrinimas (neteisinga kryptis)
+	if (*m->sensor.position < (*m->sensor.target - m->backlash)) {
+		if (delta < -SENSOR_DEADBAND && ++m->stuckCount >= STUCK_LIMIT) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+			} else if (delta > SENSOR_DEADBAND) {
+			m->stuckCount = 0;
+		}
+		} else if (*m->sensor.position > (*m->sensor.target + m->backlash)) {
+		if (delta > SENSOR_DEADBAND && ++m->stuckCount >= STUCK_LIMIT) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+			} else if (delta < -SENSOR_DEADBAND) {
+			m->stuckCount = 0;
+		}
+	}
+
+	// 8. Uþstrigimas vietoje
+	if (delta == 0 && !*m->sensor.targetReached) {
+		if (++m->noChangeCount >= STUCK_LIMIT) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+		}
+		} else {
+		m->noChangeCount = 0;
+	}
+
+	// 9. Atnaujinam paskutinæ reikðmæ
+	*m->sensor.lastPosition = *m->sensor.positionFiltered;
 }
+
 
 void ManualMotorControl(MotorType motor){
 	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl; //choose motor control stepper or linear
@@ -125,18 +218,59 @@ void ManualMotorControl(MotorType motor){
 	int16_t *joy_axis = (motor == MOTOR_STEPPER) ? &Joystick.X_Axis : &Joystick.Y_Axis; //choose joystick axis (for stepper - X axis, for linear Y axis)
 	bool SwapStepDir = (motor == MOTOR_STEPPER) ? true : false; //swaping directions for stepper, and keep as usual for linear
 
+/*
 	if(*joy_axis == 0){ 
 		m->iface.stop();
 		m->iface.disable();		
 	}
-	else{
-		m->iface.enable(); //enabling driver
-		if(*joy_axis > 0)
-			m->iface.set_direction(SwapStepDir); //set direction (stepper 1, linear 0)
-		else
-			m->iface.set_direction(!SwapStepDir); // (stepper 0, linear 1)
-		m->iface.start(); // start generating pulses
+	else{	
+		if(*joy_axis > ){
+			if(*m->sensor.endswitchMax){ // if max end switch reached turn off motor
+				m->iface.stop();
+				m->iface.disable();
+			}
+			else{
+				m->iface.enable(); //enabling driver
+				m->iface.set_direction(SwapStepDir); //set direction (stepper 1, linear 0)
+				m->iface.start(); // start generating pulses
+			}
+
+		}
+		else{
+		if(*m->sensor.endswitchMin){ // if max end switch reached turn off motor
+			m->iface.stop();
+			m->iface.disable();
+		}
+		else{
+				m->iface.enable(); //enabling driver
+				m->iface.set_direction(!SwapStepDir); // (stepper 0, linear 1)
+				m->iface.start(); // start generating pulses
+			}
+		}
+		
+	}*/
+
+	// Jei joystick'as centre — sustabdyti
+	if (*joy_axis == 0) {
+		m->iface.stop();
+		m->iface.disable();
+		return;
 	}
+
+	bool forward = (*joy_axis > 0);
+	bool at_limit = forward ? *m->sensor.endswitchMax : *m->sensor.endswitchMin;
+
+	// Jei pasiektas kraðtinis jungiklis — sustabdyti
+	if (at_limit) {
+		m->iface.stop();
+		m->iface.disable();
+		return;
+	}
+
+	// Kitu atveju — judëti atitinkama kryptimi
+	m->iface.enable();
+	m->iface.set_direction(forward ? SwapStepDir : !SwapStepDir);
+	m->iface.start();
 }
 
 void ReadMotorData(MotorType motor){
@@ -168,8 +302,6 @@ void work(){
 					Target.azimuth = 180; //South
 					Target.elevation = WSData.topelevation; //day top elevation
 				}		 
-				//Target.azimuth = WSData.azimuth;
-				//Target.elevation = WSData.elevation;
 				AutoMotorControl(MOTOR_LINEAR);
 				AutoMotorControl(MOTOR_STEPPER);
 			}

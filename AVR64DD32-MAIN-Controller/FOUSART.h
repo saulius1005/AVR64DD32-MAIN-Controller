@@ -12,7 +12,7 @@
 /**
  * @brief Maximum count for consecutive errors before marking the system as faulty.
  */
-#define FO_TIMEOUT_COUNTER 270000 ///< Timeout counter value for operations if baud 460.8k
+#define FO_TIMEOUT_COUNTER 400000 ///< Timeout counter value for operations if baud 460.8k
 #define CountForError_FO 3
 #define Angle_Precizion 100 // 100 meaning exp. 360 degree 10 3600 (360,0), 1 36000 (360,00)
 #define U_I_Precizion 1 // 10 meaning 24, 1 240 (24.0)
@@ -26,10 +26,10 @@ typedef struct {
 	uint16_t HPAzimuth;
 	uint16_t PVU;
 	uint16_t PVI;
-	uint8_t ElMin;
-	uint8_t ElMax;
-	uint8_t AzMin;
-	uint8_t AzMax;
+	bool ElMin;
+	bool ElMax;
+	bool AzMin;
+	bool AzMax;
 	bool FO_bad_signal_fault;
 	bool FO_lost_signal_fault;
 	bool FO_data_fault;
