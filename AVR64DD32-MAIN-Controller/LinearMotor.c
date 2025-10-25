@@ -63,7 +63,7 @@ void LinearMotor_set_direction(bool dir)
 }
 
 void LinearMotor_init(){
-	TCA0_init_linear_PWM(20000, 80);
+	TCA0_init_linear_PWM(20000, 99);
 	PORTD.OUTSET = PIN2_bm; //set output disabled for TLE9201SG
 };
 
