@@ -46,41 +46,6 @@ void screen_init() {
 }
 
 /**
- * @brief Draws an image on the ST7567S display.
- * 
- * This function draws an image on the LCD screen by sending image data for each 
- * page and column. It supports both PGM (flash memory) and direct SRAM images.
- * 
- * @param mode The mode for reading image data (0 for PGM, 1 for SRAM).
- * @param image_data A pointer to the image data.
- */
-void screen_draw_image(uint8_t mode, const uint8_t *image_data) {
-    uint8_t cmd[4] = {0x00, 0xb0, 0x10, 0x00};
-
-    for (uint8_t page = 0; page < SSD1306_PAGE_COUNT; page++) {
-        cmd[1] = 0xb0 + page;
-        TransmitAdd(SSD1306_ADD, WRITE);
-        for (uint8_t i = 0; i < 4; i++) {
-            TransmitByte(cmd[i]);  ///< Send page and column commands
-        }
-        uint8_t page_offset = 7 - page;
-        for (uint8_t col = 0; col < SSD1306_SCREEN_WIDTH; col++) {
-            uint16_t index = col * 8 + page_offset;
-            uint8_t dat[2] = {0x40, 0x00};
-            if (mode == 0) {
-                dat[1] = pgm_read_byte(&image_data[index]);  ///< Read from program memory
-            } else {
-                dat[1] = image_data[index];  ///< Read directly from SRAM
-            }
-            TransmitAdd(SSD1306_ADD, WRITE);
-            for (uint8_t i = 0; i < 2; i++) {
-                TransmitByte(dat[i]);  ///< Send image data byte
-            }
-        }
-    }
-}
-
-/**
  * @brief Draws a character on the ST7567S display.
  * 
  * This function draws a single character on the display using the font array. If the 

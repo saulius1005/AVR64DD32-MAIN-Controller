@@ -25,7 +25,8 @@ FOdata SensorData = {
 	.FO_lost_signal_fault = false, //if module not showing life (no power or MCU dead) 
 	.FO_data_fault = false, // bad crc
 	.FO_lost_connecton_fault = false,// true if usart1 while loop spins without receiving data, after 3 times repeting same error in a row seting up FO_no_power_fault in FO data receiving function (both resets after data receiving goes back (autoreset))
-	.FO_elevation_sensor_fault = false, 
+	.FO_elevation_sensor_fault = 0, 
+	.FO_azimuth_sensor_fault = 0,
 	.FO_faultcount = 0,
 	.FreshDataPack = {"\0"}
 };

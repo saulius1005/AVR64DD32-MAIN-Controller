@@ -119,9 +119,218 @@ void AutoMotorControl(MotorType motor)
 	// 8. Atnaujinam paskutinæ reikðmæ
 	*m->sensor.lastPosition = *m->sensor.positionFiltered;
 }*/
-void AutoMotorControl(MotorType motor)
+
+/*
+void AutoMotorControl(MotorType motor) //v3
 {
 	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl;
+
+	uint8_t stuck_limit = STUCK_LIMIT;
+	int16_t deadband = SENSOR_DEADBAND;
+
+	int32_t pos = *m->sensor.position;
+	int32_t target = *m->sensor.target;
+	int32_t filtered = *m->sensor.positionFiltered;
+	int32_t last = *m->sensor.lastPosition;
+	int32_t delta = filtered - last;
+
+	// 1. FO jungties klaida
+	if (SensorData.FO_lost_connecton_fault) {
+		m->iface.stop();
+		m->iface.disable();
+		return;
+	}
+
+	// 2. Kryptis
+	bool dir = (pos < target);
+	m->iface.set_direction(dir);
+
+	// 3. End switch logika
+	bool atMin = *m->sensor.endswitchMin;
+	bool atMax = *m->sensor.endswitchMax;
+	if ((dir && atMax) || (!dir && atMin)) {
+		m->iface.stop();
+		m->iface.disable();
+		*m->sensor.targetReached = true;
+		return;
+	}
+
+	// 4. Tikslas pasiektas
+	if (abs(pos - target) <= deadband) {
+		m->iface.stop();
+		m->iface.disable();
+		*m->sensor.faultFlag = false;
+		*m->sensor.targetReached = true;
+		m->stuckCount = 0;
+		m->noChangeCount = 0;
+		m->motionDelayCount = 0;
+		return;
+	}
+
+	// 5. Backlash logika + „delay“ inicijavimas
+	if ((pos < target - m->backlash || pos > target + m->backlash) || !*m->sensor.targetReached) {
+		m->iface.enable();
+		m->iface.start();
+		*m->sensor.targetReached = false;
+
+		if (m->motionDelayCount == 0)
+		m->motionDelayCount = MOTION_DELAY_CYCLES;  // pvz. 25 ciklai ignoruoti "stuck" patikrà
+	}
+
+	// Soft delay
+	if (m->motionDelayCount > 0) {
+		m->motionDelayCount--;
+		*m->sensor.lastPosition = filtered;
+		return;
+	}
+	// -------------------------------------------
+
+	// 6. Delta filtras
+	if (delta > -deadband && delta < deadband)
+	delta = 0;
+
+	// 7. Uþstrigimo tikrinimas (leidþiamas tik kai delayCounter==0)
+	if (pos < target - m->backlash) {
+		if (delta < -deadband) {
+			if (++m->stuckCount >= stuck_limit) {
+				*m->sensor.faultFlag = true;
+				m->iface.stop();
+				m->iface.disable();
+			}
+			} else if (delta > deadband) {
+			m->stuckCount = 0;
+		}
+	}
+	else if (pos > target + m->backlash) {
+		if (delta > deadband) {
+			if (++m->stuckCount >= stuck_limit) {
+				*m->sensor.faultFlag = true;
+				m->iface.stop();
+				m->iface.disable();
+			}
+			} else if (delta < -deadband) {
+			m->stuckCount = 0;
+		}
+	}
+
+	// 8. Uþstrigimas vietoje
+	if (delta == 0 && !*m->sensor.targetReached) {
+		if (++m->noChangeCount >= stuck_limit) {
+			*m->sensor.faultFlag = true;
+			m->iface.stop();
+			m->iface.disable();
+		}
+		} else {
+		m->noChangeCount = 0;
+	}
+
+	// 9. Atnaujinimas
+	*m->sensor.lastPosition = filtered;
+}*/
+
+
+void AutoMotorControl(MotorType motor)// v2
+{
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl;
+
+	uint8_t stuck_limit = STUCK_LIMIT;
+	int16_t deadband = SENSOR_DEADBAND;
+
+	int32_t pos = *m->sensor.position;
+	int32_t target = *m->sensor.target;
+	int32_t filtered = *m->sensor.positionFiltered;
+	int32_t last = *m->sensor.lastPosition;
+	int32_t delta = filtered - last;
+
+	// 1. FO jungties klaida
+	if (SensorData.FO_lost_connecton_fault) {
+		m->iface.stop();
+		m->iface.disable();
+		return;
+	}
+
+	// 2. Kryptis
+	bool dir = (pos < target);
+	m->iface.set_direction(dir);
+
+	// 3. End switch logika
+	bool atMin = *m->sensor.endswitchMin;
+	bool atMax = *m->sensor.endswitchMax;
+	if ((dir && atMax) || (!dir && atMin)) {
+		m->iface.stop();
+		m->iface.disable();
+		*m->sensor.targetReached = true;
+		return;
+	}
+
+	// 4. Tikslas pasiektas
+	if (pos == target) {
+		m->iface.stop();
+		m->iface.disable();
+		*m->sensor.faultFlag = 0; //no fault
+		*m->sensor.targetReached = true;
+		m->stuckCount = 0;
+		m->noChangeCount = 0;
+		return;
+	}
+
+	// 5. Backlash logika
+	if ((pos < target - m->backlash || pos > target + m->backlash) || !*m->sensor.targetReached) {
+		m->iface.enable();
+		m->iface.start();
+		*m->sensor.targetReached = false;
+	}
+
+	// 6. Delta filtras
+	if (delta > -deadband && delta < deadband) delta = 0;
+
+	// 7. Uþstrigimo tikrinimas
+	if (pos < target - m->backlash) {
+		if (delta < -deadband) {
+			if (++m->stuckCount >= stuck_limit) {
+				*m->sensor.faultFlag = 1; //stuck at moving forward
+				m->iface.stop();
+				m->iface.disable();
+			}
+			} else if (delta > deadband) {
+			m->stuckCount = 0;
+		}
+	}
+	else if (pos > target + m->backlash) {
+		if (delta > deadband) {
+			if (++m->stuckCount >= stuck_limit) {
+				*m->sensor.faultFlag = 2; //stuck at moving backward
+				m->iface.stop();
+				m->iface.disable();
+			}
+			} else if (delta < -deadband) {
+			m->stuckCount = 0;
+		}
+	}
+
+	// 8. Uþstrigimas vietoje
+	if (delta == 0 && !*m->sensor.targetReached) {
+		if (++m->noChangeCount >= stuck_limit) {
+			*m->sensor.faultFlag = 3; //stuck (motor or sensor not spinning)
+			m->iface.stop();
+			m->iface.disable();
+		}
+		} else {
+		m->noChangeCount = 0;
+	}
+
+	// 9. Atnaujinimas
+	*m->sensor.lastPosition = filtered;
+}
+
+/*
+void AutoMotorControl(MotorType motor)// v1
+{
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl;
+
+	uint8_t stuck_limit = motor ? STUCK_LIMIT * 3 : STUCK_LIMIT * 2;
+
+	int16_t sensor_deadband = motor ? SENSOR_DEADBAND * 4 : SENSOR_DEADBAND;
 
 	// 1. FO jungtis
 	if (SensorData.FO_lost_connecton_fault) {
@@ -173,32 +382,32 @@ void AutoMotorControl(MotorType motor)
 
 	// 6. Pokytis (delta)
 	int32_t delta = (int32_t)(*m->sensor.positionFiltered) - (int32_t)(*m->sensor.lastPosition);
-	if (delta > -SENSOR_DEADBAND && delta < SENSOR_DEADBAND) {
+	if (delta > -sensor_deadband && delta < sensor_deadband) {
 		delta = 0;
 	}
 
 	// 7. Uþstrigimo tikrinimas (neteisinga kryptis)
 	if (*m->sensor.position < (*m->sensor.target - m->backlash)) {
-		if (delta < -SENSOR_DEADBAND && ++m->stuckCount >= STUCK_LIMIT) {
+		if (delta < -sensor_deadband && ++m->stuckCount >= stuck_limit) {
 			*m->sensor.faultFlag = true;
 			m->iface.stop();
 			m->iface.disable();
-			} else if (delta > SENSOR_DEADBAND) {
+			} else if (delta > sensor_deadband) {
 			m->stuckCount = 0;
 		}
 		} else if (*m->sensor.position > (*m->sensor.target + m->backlash)) {
-		if (delta > SENSOR_DEADBAND && ++m->stuckCount >= STUCK_LIMIT) {
+		if (delta > sensor_deadband && ++m->stuckCount >= stuck_limit) {
 			*m->sensor.faultFlag = true;
 			m->iface.stop();
 			m->iface.disable();
-			} else if (delta < -SENSOR_DEADBAND) {
+			} else if (delta < -sensor_deadband) {
 			m->stuckCount = 0;
 		}
 	}
 
 	// 8. Uþstrigimas vietoje
 	if (delta == 0 && !*m->sensor.targetReached) {
-		if (++m->noChangeCount >= STUCK_LIMIT) {
+		if (++m->noChangeCount >= stuck_limit) {
 			*m->sensor.faultFlag = true;
 			m->iface.stop();
 			m->iface.disable();
@@ -209,7 +418,7 @@ void AutoMotorControl(MotorType motor)
 
 	// 9. Atnaujinam paskutinæ reikðmæ
 	*m->sensor.lastPosition = *m->sensor.positionFiltered;
-}
+}*/
 
 
 void ManualMotorControl(MotorType motor){

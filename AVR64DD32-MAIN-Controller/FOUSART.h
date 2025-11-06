@@ -34,8 +34,8 @@ typedef struct {
 	bool FO_lost_signal_fault;
 	bool FO_data_fault;
 	bool FO_lost_connecton_fault;
-	bool FO_elevation_sensor_fault;
-	bool FO_azimuth_sensor_fault;
+	uint8_t FO_elevation_sensor_fault;
+	uint8_t FO_azimuth_sensor_fault;
 	uint8_t FO_faultcount;
 	char FreshDataPack[MESSAGE_LENGTH_FO];
 } FOdata;

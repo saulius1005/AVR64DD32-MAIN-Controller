@@ -9,18 +9,19 @@
 #ifndef ACTIONS_H_
 #define ACTIONS_H_
 
-#define MIN_AZIMUTH 30
-#define MAX_AZIMUTH 330
-#define MIN_ELEVATION 0
-#define MAX_ELEVATION 90
+#define MIN_AZIMUTH 45
+#define MAX_AZIMUTH 315
+#define MIN_ELEVATION 10
+#define MAX_ELEVATION 60
 #define MAX_WIND 15
-#define SAFE_ELEVATION 20
-#define MIN_LIGHT_LEVEL 300 // need to measure in real world, for now this.
+#define SAFE_ELEVATION 45
+#define MIN_LIGHT_LEVEL 400 // need to measure in real world, for now this.
 
 #define ELEVATION_BACKLASH 2 //2.00 degree
 #define AZIMUTH_BACKLASH 4 // 4.00 degree
 #define SENSOR_DEADBAND 50   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
 #define STUCK_LIMIT 4      // ciklø skaièius prieð fault
+#define MOTION_DELAY_CYCLES  25
 
 typedef struct {
 	uint16_t elevation;
@@ -48,7 +49,7 @@ typedef struct {
 typedef struct {
     uint16_t* position;          // pvz. SensorData.Elevation arba SensorData.Azimuth
     uint16_t* positionFiltered;  // pvz. SensorData.HPElevation arba SensorData.HPAzimuth
-    bool*     faultFlag;         // pvz. SensorData.FO_elevation_sensor_fault
+    uint8_t*     faultFlag;         // pvz. SensorData.FO_elevation_sensor_fault
     uint16_t* lastPosition;      // pvz. Target.lastElevation arba Target.lastAzimuth
     uint16_t* target;            // pvz. Target.elevation arba Target.azimuth
     bool*     targetReached;     // pvz. Target.elevation_reached arba Target.azimuth_reached
@@ -72,6 +73,7 @@ typedef struct {
 	int32_t backlash;
 	uint16_t* voltage;
 	int16_t* current; 
+	uint8_t motionDelayCount;
 } MotorControlObj;
 
 extern MotorControlObj LinearMotorCtrl;

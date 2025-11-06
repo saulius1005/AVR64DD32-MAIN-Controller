@@ -45,7 +45,8 @@ MotorControlObj LinearMotorCtrl = {
 	.noChangeCount= 0,
 	.backlash     = ELEVATION_BACKLASH,
 	.voltage	  = &LinearMotor.measuredVoltage,
-	.current	  = &LinearMotor.measuredCurrent
+	.current	  = &LinearMotor.measuredCurrent,
+	.motionDelayCount = 0
 };
 
 MotorControlObj StepperMotorCtrl = {
@@ -73,7 +74,8 @@ MotorControlObj StepperMotorCtrl = {
 	.noChangeCount= 0,
 	.backlash     = AZIMUTH_BACKLASH,
 	.voltage	  = &StepperMotor.measuredVoltage,
-	.current	  = &StepperMotor.measuredCurrent
+	.current	  = &StepperMotor.measuredCurrent,
+	.motionDelayCount = 0
 };
 
 

@@ -104,10 +104,28 @@ void windows() {
 				screen_write_formatted_text("---------------------", 4, ALIGN_CENTER);
 				screen_write_formatted_text("Elevation:", 5, ALIGN_LEFT);
 				//1. Elevation sensordata and fault FO_elevation_sensor_fault error
-				screen_write_formatted_text("%3d/ %3d%s", 5, ALIGN_RIGHT, Target.elevation, SensorData.Elevation, SensorData.FO_elevation_sensor_fault ? "!E": "  ");
+				if (SensorData.FO_elevation_sensor_fault != 0) {
+					screen_write_formatted_text("%3d/ %3d !E%d", 5, ALIGN_RIGHT,
+					Target.elevation,
+					SensorData.Elevation,
+					SensorData.FO_elevation_sensor_fault);
+					} else {
+					screen_write_formatted_text("%3d/ %3d   ", 5, ALIGN_RIGHT,
+					Target.elevation,
+					SensorData.Elevation);
+				}
 				screen_write_formatted_text("Azimuth:", 6, ALIGN_LEFT);
 				//1. Azimuth sensor data and fault FO_azimuth_sensor_fault
-				screen_write_formatted_text("%3d/ %3d%s", 6, ALIGN_RIGHT, Target.azimuth, SensorData.Azimuth, SensorData.FO_azimuth_sensor_fault ? "!E": "  ");
+				if (SensorData.FO_azimuth_sensor_fault != 0) {
+					screen_write_formatted_text("%3d/ %3d !E%d", 6, ALIGN_RIGHT,
+					Target.azimuth,
+					SensorData.Azimuth,
+					SensorData.FO_azimuth_sensor_fault);
+					} else {
+					screen_write_formatted_text("%3d/ %3d   ", 6, ALIGN_RIGHT,
+					Target.azimuth,
+					SensorData.Azimuth);
+				}
 				screen_write_formatted_text("%s %s", 7, ALIGN_LEFT, SensorData.AzMin ? "AzMin" : "     ", SensorData.AzMax ? "AzMax" : "     ");
 				screen_write_formatted_text("%s %s", 7, ALIGN_RIGHT, SensorData.ElMin ? "ElMin" : "     ", SensorData.ElMax ? "ElMax" : "     ");
 			}
