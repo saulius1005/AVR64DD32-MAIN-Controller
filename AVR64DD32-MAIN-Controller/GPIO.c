@@ -20,7 +20,8 @@ void GPIO_init(){
     PORTA.DIRSET = PIN2_bm | PIN3_bm | PIN4_bm | PIN6_bm | PIN7_bm; // Set PA2, PA3, PA4, PA7 as output (RX LED, I2C SDA, SCL, USART0 TX, TX LED, XDIR)
     PORTA.DIRCLR = PIN1_bm | PIN5_bm; // Set  PA1 as Joystick button,  PA5 as input (USART0 RX)
 	PORTA.PIN1CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA1 (Joystick button)
-    PORTA.PIN4CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA4 (I2C SCL)
+	//PORTA.PIN3CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA3 (I2C SDA)
+   //PORTA.PIN4CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA4 (I2C SCL)
     PORTA.PIN5CTRL = PORT_PULLUPEN_bm; // Enable pull-up for PA5 (USART0 RX)
 
     // Configure ADC pins for Joystick x and y axis

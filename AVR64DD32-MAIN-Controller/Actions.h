@@ -9,17 +9,18 @@
 #ifndef ACTIONS_H_
 #define ACTIONS_H_
 
-#define MIN_AZIMUTH 45
-#define MAX_AZIMUTH 315
-#define MIN_ELEVATION 10
+#define MIN_AZIMUTH 44
+#define MAX_AZIMUTH 316
+#define MIN_ELEVATION 14
 #define MAX_ELEVATION 60
 #define MAX_WIND 15
 #define SAFE_ELEVATION 45
-#define MIN_LIGHT_LEVEL 400 // need to measure in real world, for now this.
+#define MIN_LIGHT_LEVEL 400 //4,15kW generates around 230w at 400mV
 
 #define ELEVATION_BACKLASH 2 //2.00 degree
-#define AZIMUTH_BACKLASH 4 // 4.00 degree
+#define AZIMUTH_BACKLASH 3 // 3.00 degree
 #define SENSOR_DEADBAND 50   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
+#define START_DEALY 50	//delay count which means how long motor should spin till it start to spin sensor axle
 #define STUCK_LIMIT 4      // ciklø skaièius prieð fault
 #define MOTION_DELAY_CYCLES  25
 
@@ -73,7 +74,8 @@ typedef struct {
 	int32_t backlash;
 	uint16_t* voltage;
 	int16_t* current; 
-	uint8_t motionDelayCount;
+	uint8_t startDelay;
+	bool lastDir;
 } MotorControlObj;
 
 extern MotorControlObj LinearMotorCtrl;
