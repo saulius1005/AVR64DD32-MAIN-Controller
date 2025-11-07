@@ -46,7 +46,7 @@ void AutoMotorControl(MotorType motor)
 
 	uint8_t stuck_limit = STUCK_LIMIT;
 	int16_t deadband = SENSOR_DEADBAND;
-	uint8_t start_delay_limit = START_DEALY;
+	uint8_t start_delay_limit = START_DELAY;
 
 	int32_t pos = *m->sensor.position;
 	int32_t target = *m->sensor.target;
@@ -57,9 +57,9 @@ void AutoMotorControl(MotorType motor)
 	// 2. Kryptis
 	bool dir = (pos < target);
 	m->iface.set_direction(dir);
-	// Jeigu pasikeitë kryptis, duodam laiko reduktoriams
+	// Jei kryptis pasikeitë ? resetinam start delay
 	if (dir != m->lastDir) {
-		m->startDelay = 0;   // resetuojam „atleidimo“ laikmatá
+		m->startDelay = 0;
 		m->lastDir = dir;
 	}
 
@@ -69,6 +69,7 @@ void AutoMotorControl(MotorType motor)
 	if ((dir && atMax) || (!dir && atMin)) {
 		m->iface.stop();
 		m->iface.disable();
+		m->moving = false;
 		*m->sensor.targetReached = true;
 		return;
 	}
@@ -77,31 +78,49 @@ void AutoMotorControl(MotorType motor)
 	if (pos == target) {
 		m->iface.stop();
 		m->iface.disable();
-		*m->sensor.faultFlag = 0; //no fault
+		m->moving = false;
+		*m->sensor.faultFlag = 0; // no fault
 		*m->sensor.targetReached = true;
 		m->stuckCount = 0;
 		m->noChangeCount = 0;
-		m->startDelay = 0;   // resetuojam „atleidimo“ laikmatá
+		m->startDelay = 0; // resetuojam atleidimo laikmatá
 		return;
 	}
 
 	// 5. Backlash logika
-	if ((pos < target - m->backlash || pos > target + m->backlash) || !*m->sensor.targetReached) {
-		m->iface.enable();
-		m->iface.start();
+	bool needToMove = (pos < target - m->backlash || pos > target + m->backlash);
+
+	if (needToMove || !*m->sensor.targetReached) {
+		if (!m->moving) {
+			// Variklis iki ðiol nestartavo – paleidþiam já ir resetinam delay
+			m->iface.enable();
+			m->iface.start();
+			m->startDelay = 0;
+			m->moving = true;
+		}
 		*m->sensor.targetReached = false;
+	}
+	else {
+		// Viduje backlash ribø – laikom, kad pasiekta
+		if (m->moving) {
+			m->iface.stop();
+			m->iface.disable();
+			m->moving = false;
+		}
+		*m->sensor.targetReached = true;
 	}
 
 	// 6. Delta filtras
 	if (delta > -deadband && delta < deadband) delta = 0;
 
-	// 7. Uþstrigimo tikrinimas
+	// 7. Uþstrigimo tikrinimas (kryptinis)
 	if (pos < target - m->backlash) {
 		if (delta < -deadband) {
 			if (++m->stuckCount >= stuck_limit) {
 				*m->sensor.faultFlag = 1; //stuck at moving forward
 				m->iface.stop();
 				m->iface.disable();
+				m->moving = false;
 			}
 			} else if (delta > deadband) {
 			m->stuckCount = 0;
@@ -113,6 +132,7 @@ void AutoMotorControl(MotorType motor)
 				*m->sensor.faultFlag = 2; //stuck at moving backward
 				m->iface.stop();
 				m->iface.disable();
+				m->moving = false;
 			}
 			} else if (delta < -deadband) {
 			m->stuckCount = 0;
@@ -120,21 +140,30 @@ void AutoMotorControl(MotorType motor)
 	}
 
 	// 8. Uþstrigimo tikrinimas su "start delay"
-	if (m->startDelay < start_delay_limit) {
-		m->startDelay++;
-		} else {		
-		if (delta == 0 && !*m->sensor.targetReached) {// èia eina áprasta uþstrigimo logika:
-			if (++m->noChangeCount >= stuck_limit) {
-				*m->sensor.faultFlag = 3;
-				m->iface.stop();
-				m->iface.disable();
-			}
+	if (m->moving) { // tik jei variklis faktiðkai juda
+		if (m->startDelay < start_delay_limit) {
+			m->startDelay++;
 			} else {
-			m->noChangeCount = 0;
+			if (delta == 0 && !*m->sensor.targetReached) {
+				if (++m->noChangeCount >= stuck_limit) {
+					*m->sensor.faultFlag = 3; // motor or sensor not spinning
+					m->iface.stop();
+					m->iface.disable();
+					m->moving = false;
+				}
+				} else {
+				m->noChangeCount = 0;
+			}
 		}
+		} else {
+		// jei nestartavæs, neskaièiuojam stuck
+		m->noChangeCount = 0;
 	}
+
+	// 9. Atnaujinimas
 	*m->sensor.lastPosition = filtered;
 }
+
 
 void ManualMotorControl(MotorType motor){
 	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl; //choose motor control stepper or linear

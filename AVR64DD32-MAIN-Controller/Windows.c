@@ -100,30 +100,48 @@ void windows() {
 					//3. Bad CRC returns FO_data_fault											
 					screen_write_formatted_text("T.C: %s %s %s    ", 3, ALIGN_LEFT, SensorData.FO_lost_connecton_fault ? "LCE": "   ", SensorData.FO_bad_signal_fault ? "TCE": "   ", SensorData.FO_data_fault ? "CRC": "   "  );
 				}
+				char elevationAngleRange[5]=" /";
 				//same part for both modes
 				screen_write_formatted_text("---------------------", 4, ALIGN_CENTER);
 				screen_write_formatted_text("Elevation:", 5, ALIGN_LEFT);
 				//1. Elevation sensordata and fault FO_elevation_sensor_fault error
+				
+				if(WSData.elevation < MIN_ELEVATION)
+					strcpy(elevationAngleRange,"m/");
+				else if(WSData.elevation > MAX_ELEVATION)
+					strcpy(elevationAngleRange,"M/");
+
 				if (SensorData.FO_elevation_sensor_fault != 0) {
-					screen_write_formatted_text("%3d/ %3d !E%d", 5, ALIGN_RIGHT,
-					Target.elevation,
+					screen_write_formatted_text("%3d%s%3d!E%d", 5, ALIGN_RIGHT,
+					WSData.elevation,
+					elevationAngleRange,
 					SensorData.Elevation,
 					SensorData.FO_elevation_sensor_fault);
 					} else {
-					screen_write_formatted_text("%3d/ %3d   ", 5, ALIGN_RIGHT,
-					Target.elevation,
+					screen_write_formatted_text("%3d%s%3d   ", 5, ALIGN_RIGHT,
+					WSData.elevation,
+					elevationAngleRange,
 					SensorData.Elevation);
 				}
+
+				char azimuthAngleRange[5];
 				screen_write_formatted_text("Azimuth:", 6, ALIGN_LEFT);
 				//1. Azimuth sensor data and fault FO_azimuth_sensor_fault
+				if(WSData.azimuth < MIN_AZIMUTH)
+					strcpy(azimuthAngleRange,"m/");
+				else if(WSData.azimuth > MAX_AZIMUTH)
+					strcpy(azimuthAngleRange,"M/");
+
 				if (SensorData.FO_azimuth_sensor_fault != 0) {
-					screen_write_formatted_text("%3d/ %3d !E%d", 6, ALIGN_RIGHT,
-					Target.azimuth,
+					screen_write_formatted_text("%3d%s%3d!E%d", 6, ALIGN_RIGHT,
+					WSData.azimuth,
+					azimuthAngleRange,
 					SensorData.Azimuth,
 					SensorData.FO_azimuth_sensor_fault);
 					} else {
-					screen_write_formatted_text("%3d/ %3d   ", 6, ALIGN_RIGHT,
-					Target.azimuth,
+					screen_write_formatted_text("%3d%s%3d   ", 6, ALIGN_RIGHT,
+					WSData.azimuth,
+					azimuthAngleRange,
 					SensorData.Azimuth);
 				}
 				screen_write_formatted_text("%s %s", 7, ALIGN_LEFT, SensorData.AzMin ? "AzMin" : "     ", SensorData.AzMax ? "AzMax" : "     ");
