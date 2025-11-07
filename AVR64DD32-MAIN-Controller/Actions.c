@@ -46,20 +46,13 @@ void AutoMotorControl(MotorType motor)
 
 	uint8_t stuck_limit = STUCK_LIMIT;
 	int16_t deadband = SENSOR_DEADBAND;
-	uint8_t start_delay_limit = motor ?	START_DEALY * 4 : START_DEALY;
+	uint8_t start_delay_limit = START_DEALY;
 
 	int32_t pos = *m->sensor.position;
 	int32_t target = *m->sensor.target;
 	int32_t filtered = *m->sensor.positionFiltered;
 	int32_t last = *m->sensor.lastPosition;
 	int32_t delta = filtered - last;
-
-	// 1. FO jungties klaida
-	if (SensorData.FO_lost_connecton_fault) {
-		m->iface.stop();
-		m->iface.disable();
-		return;
-	}
 
 	// 2. Kryptis
 	bool dir = (pos < target);
@@ -129,10 +122,9 @@ void AutoMotorControl(MotorType motor)
 	// 8. Uþstrigimo tikrinimas su "start delay"
 	if (m->startDelay < start_delay_limit) {
 		m->startDelay++;
-		} else {
-		// èia eina tavo áprasta uþstrigimo logika:
-		if (delta == 0 && !*m->sensor.targetReached) {
-			if (++m->noChangeCount >= STUCK_LIMIT) {
+		} else {		
+		if (delta == 0 && !*m->sensor.targetReached) {// èia eina áprasta uþstrigimo logika:
+			if (++m->noChangeCount >= stuck_limit) {
 				*m->sensor.faultFlag = 3;
 				m->iface.stop();
 				m->iface.disable();
@@ -173,6 +165,13 @@ void ManualMotorControl(MotorType motor){
 	m->iface.start();
 }
 
+void Emergency_STOP(MotorType motor){
+	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl; //choose motor control stepper or linear
+	m->iface.stop();
+	m->iface.disable();
+	*m->sensor.faultFlag = 4; //emergency stop
+}
+
 void ReadMotorData(MotorType motor){
 	MotorControlObj* m = motor ? &StepperMotorCtrl : &LinearMotorCtrl; //choose motor control stepper or linear
 	*m->voltage = m->iface.read_voltage(); //read and save voltage
@@ -188,7 +187,7 @@ void work(){
 		ManualMotorControl(MOTOR_LINEAR);
 	}
 	else{//Auto mode
-		if(!WSData.WS_lost_connecton_fault){ // only receiving data from RS485 network (Weather Station)
+		if((!WSData.WS_lost_connecton_fault) && (!SensorData.FO_lost_connecton_fault) && (!SensorData.FO_bad_signal_fault)){ // only receiving data from RS485 network (Weather Station) and from top controller
 			if(WSData.windspeed > MAX_WIND){
 				get_safe_azimuth();
 			Target.elevation = SAFE_ELEVATION;
@@ -215,6 +214,10 @@ void work(){
 				AutoMotorControl(MOTOR_LINEAR);
 				AutoMotorControl(MOTOR_STEPPER);
 			}
-		}		
+		}	
+		else{// when connection was lost in action
+			Emergency_STOP(MOTOR_STEPPER);
+			Emergency_STOP(MOTOR_LINEAR);
+		}	
 	}
 }

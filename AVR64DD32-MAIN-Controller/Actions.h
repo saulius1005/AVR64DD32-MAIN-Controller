@@ -19,9 +19,9 @@
 
 #define ELEVATION_BACKLASH 2 //2.00 degree (this is not real backlash I just call it like that. Actually meaning of this is "how long don't do anything"- elevate only every 2 degree)
 #define AZIMUTH_BACKLASH 3 // 3.00 degree
-#define SENSOR_DEADBAND 50   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
-#define START_DEALY 50	//delay count which means how long motor should spin till it start to spin sensor axle
-#define STUCK_LIMIT 4      // ciklø skaièius prieð fault
+#define SENSOR_DEADBAND 20   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
+#define START_DEALY 5	//delay count which means how long motor should spin till it start to spin sensor axle
+#define STUCK_LIMIT 3      // ciklø skaièius prieð fault
 #define MOTION_DELAY_CYCLES  25
 
 typedef struct {
