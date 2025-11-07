@@ -88,6 +88,7 @@ void AutoMotorControl(MotorType motor)
 		*m->sensor.targetReached = true;
 		m->stuckCount = 0;
 		m->noChangeCount = 0;
+		m->startDelay = 0;   // resetuojam „atleidimo“ laikmatá
 		return;
 	}
 
