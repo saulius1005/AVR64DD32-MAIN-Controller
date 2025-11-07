@@ -295,11 +295,11 @@ void AutoMotorControl(MotorType motor)
 
 	uint8_t stuck_limit = STUCK_LIMIT;
 	int16_t deadband = SENSOR_DEADBAND;
-	uint8_t start_delay_limit = motor ?	START_DEALY * 2 : START_DEALY;
+	uint8_t start_delay_limit = motor ?	START_DEALY * 4 : START_DEALY;
      1ec:	88 23       	and	r24, r24
      1ee:	29 f0       	breq	.+10     	; 0x1fa <AutoMotorControl+0x40>
      1f0:	0f 2e       	mov	r0, r31
-     1f2:	f4 e6       	ldi	r31, 0x64	; 100
+     1f2:	f8 ec       	ldi	r31, 0xC8	; 200
      1f4:	2f 2e       	mov	r2, r31
      1f6:	f0 2d       	mov	r31, r0
      1f8:	04 c0       	rjmp	.+8      	; 0x202 <AutoMotorControl+0x48>

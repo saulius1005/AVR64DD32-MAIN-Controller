@@ -15,9 +15,9 @@
 #define MAX_ELEVATION 60
 #define MAX_WIND 15
 #define SAFE_ELEVATION 45
-#define MIN_LIGHT_LEVEL 400 //4,15kW generates around 230w at 400mV
+#define MIN_LIGHT_LEVEL 400 //4,15kW generates around 160w at 400mV
 
-#define ELEVATION_BACKLASH 2 //2.00 degree
+#define ELEVATION_BACKLASH 2 //2.00 degree (this is not real backlash I just call it like that. Actually meaning of this is "how long don't do anything"- elevate only every 2 degree)
 #define AZIMUTH_BACKLASH 3 // 3.00 degree
 #define SENSOR_DEADBAND 50   // maþiausias pokytis, kurá laikome tikru judesiu exp. 20=0.02 degree
 #define START_DEALY 50	//delay count which means how long motor should spin till it start to spin sensor axle

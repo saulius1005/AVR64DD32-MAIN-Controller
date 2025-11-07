@@ -46,7 +46,7 @@ void AutoMotorControl(MotorType motor)
 
 	uint8_t stuck_limit = STUCK_LIMIT;
 	int16_t deadband = SENSOR_DEADBAND;
-	uint8_t start_delay_limit = motor ?	START_DEALY * 2 : START_DEALY;
+	uint8_t start_delay_limit = motor ?	START_DEALY * 4 : START_DEALY;
 
 	int32_t pos = *m->sensor.position;
 	int32_t target = *m->sensor.target;
