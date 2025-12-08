@@ -1375,22 +1375,19 @@ uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc) {
 
 uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
      85c:	ac 01       	movw	r20, r24
-	uint16_t saveOneBit = ((data[4] & 0x07) << 12) | (data[5] & 0x0FFF); //wind direction (F)(values only 0- 7) + light level(FFF)(values only 0-4095) = (F+FFF)
-	buf[7] = (uint8_t)(saveOneBit >> 8); //split wind direction and part of light level data
-	buf[8] = (uint8_t)(saveOneBit & 0xFF); // left part of light level*/
 
 	uint8_t calculatedcrc = 0xFF;
-	for (size_t i = 0; i < 9; i++) { // length = 8 baitai
+	for (size_t i = 0; i < 7; i++) { // length = 8 baitai
      85e:	20 e0       	ldi	r18, 0x00	; 0
      860:	30 e0       	ldi	r19, 0x00	; 0
-	buf[6] = (uint8_t)data[3]; // uint8_t wind speed (FF)
-	uint16_t saveOneBit = ((data[4] & 0x07) << 12) | (data[5] & 0x0FFF); //wind direction (F)(values only 0- 7) + light level(FFF)(values only 0-4095) = (F+FFF)
-	buf[7] = (uint8_t)(saveOneBit >> 8); //split wind direction and part of light level data
-	buf[8] = (uint8_t)(saveOneBit & 0xFF); // left part of light level*/
+}
+
+
+uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
 
 	uint8_t calculatedcrc = 0xFF;
      862:	ef ef       	ldi	r30, 0xFF	; 255
-	for (size_t i = 0; i < 9; i++) { // length = 8 baitai
+	for (size_t i = 0; i < 7; i++) { // length = 8 baitai
      864:	0b c0       	rjmp	.+22     	; 0x87c <verify_crc8_cdma2000_v2+0x20>
 		calculatedcrc = crc8_table[calculatedcrc ^ data[i]];
      866:	da 01       	movw	r26, r20
@@ -1402,15 +1399,15 @@ uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
      872:	ed 53       	subi	r30, 0x3D	; 61
      874:	fc 49       	sbci	r31, 0x9C	; 156
      876:	e0 81       	ld	r30, Z
-	uint16_t saveOneBit = ((data[4] & 0x07) << 12) | (data[5] & 0x0FFF); //wind direction (F)(values only 0- 7) + light level(FFF)(values only 0-4095) = (F+FFF)
-	buf[7] = (uint8_t)(saveOneBit >> 8); //split wind direction and part of light level data
-	buf[8] = (uint8_t)(saveOneBit & 0xFF); // left part of light level*/
+
+
+uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
 
 	uint8_t calculatedcrc = 0xFF;
-	for (size_t i = 0; i < 9; i++) { // length = 8 baitai
+	for (size_t i = 0; i < 7; i++) { // length = 8 baitai
      878:	2f 5f       	subi	r18, 0xFF	; 255
      87a:	3f 4f       	sbci	r19, 0xFF	; 255
-     87c:	29 30       	cpi	r18, 0x09	; 9
+     87c:	27 30       	cpi	r18, 0x07	; 7
      87e:	31 05       	cpc	r19, r1
      880:	90 f3       	brcs	.-28     	; 0x866 <verify_crc8_cdma2000_v2+0xa>
 		calculatedcrc = crc8_table[calculatedcrc ^ data[i]];
@@ -2877,7 +2874,7 @@ void RS485DataSplitter(char *command) {
     10a8:	df 93       	push	r29
     10aa:	cd b7       	in	r28, 0x3d	; 61
     10ac:	de b7       	in	r29, 0x3e	; 62
-    10ae:	a5 97       	sbiw	r28, 0x25	; 37
+    10ae:	6f 97       	sbiw	r28, 0x1f	; 31
     10b0:	cd bf       	out	0x3d, r28	; 61
     10b2:	de bf       	out	0x3e, r29	; 62
     10b4:	7c 01       	movw	r14, r24
@@ -2894,19 +2891,19 @@ void RS485DataSplitter(char *command) {
 	char temp[MESSAGE_LENGTH_RS485-2]; //data storage
 
 	strncpy(temp, command, MESSAGE_LENGTH_RS485-2); //copy data without crc
-    10c8:	42 e1       	ldi	r20, 0x12	; 18
+    10c8:	4e e0       	ldi	r20, 0x0E	; 14
     10ca:	50 e0       	ldi	r21, 0x00	; 0
     10cc:	b7 01       	movw	r22, r14
     10ce:	ce 01       	movw	r24, r28
     10d0:	06 96       	adiw	r24, 0x06	; 6
     10d2:	0e 94 6c 15 	call	0x2ad8	; 0x2ad8 <strncpy>
 	temp[MESSAGE_LENGTH_RS485-2] = '\0';
-    10d6:	18 8e       	std	Y+24, r1	; 0x18
+    10d6:	1c 8a       	std	Y+20, r1	; 0x14
 
 	uint8_t datatocheck[(MESSAGE_LENGTH_RS485-2)/2]={0};
     10d8:	fe 01       	movw	r30, r28
-    10da:	78 96       	adiw	r30, 0x18	; 24
-    10dc:	89 e0       	ldi	r24, 0x09	; 9
+    10da:	74 96       	adiw	r30, 0x14	; 20
+    10dc:	87 e0       	ldi	r24, 0x07	; 7
     10de:	df 01       	movw	r26, r30
     10e0:	1d 92       	st	X+, r1
     10e2:	8a 95       	dec	r24
@@ -2928,7 +2925,7 @@ void RS485DataSplitter(char *command) {
     10fc:	e8 0f       	add	r30, r24
     10fe:	f9 1f       	adc	r31, r25
     1100:	20 81       	ld	r18, Z
-    1102:	29 a3       	std	Y+33, r18	; 0x21
+    1102:	2b 8f       	std	Y+27, r18	; 0x1b
     1104:	01 96       	adiw	r24, 0x01	; 1
     1106:	e6 e0       	ldi	r30, 0x06	; 6
     1108:	f0 e0       	ldi	r31, 0x00	; 0
@@ -2937,17 +2934,17 @@ void RS485DataSplitter(char *command) {
     110e:	e8 0f       	add	r30, r24
     1110:	f9 1f       	adc	r31, r25
     1112:	80 81       	ld	r24, Z
-    1114:	8a a3       	std	Y+34, r24	; 0x22
-    1116:	1b a2       	std	Y+35, r1	; 0x23
+    1114:	8c 8f       	std	Y+28, r24	; 0x1c
+    1116:	1d 8e       	std	Y+29, r1	; 0x1d
 		datatocheck[i] = (uint8_t)strtol(buf, NULL, 16);
     1118:	40 e1       	ldi	r20, 0x10	; 16
     111a:	50 e0       	ldi	r21, 0x00	; 0
     111c:	60 e0       	ldi	r22, 0x00	; 0
     111e:	70 e0       	ldi	r23, 0x00	; 0
     1120:	ce 01       	movw	r24, r28
-    1122:	81 96       	adiw	r24, 0x21	; 33
+    1122:	4b 96       	adiw	r24, 0x1b	; 27
     1124:	0e 94 26 14 	call	0x284c	; 0x284c <strtol>
-    1128:	e8 e1       	ldi	r30, 0x18	; 24
+    1128:	e4 e1       	ldi	r30, 0x14	; 20
     112a:	f0 e0       	ldi	r31, 0x00	; 0
     112c:	ec 0f       	add	r30, r28
     112e:	fd 1f       	adc	r31, r29
@@ -2961,7 +2958,7 @@ void RS485DataSplitter(char *command) {
 
 	for (uint8_t i = 0; i < (MESSAGE_LENGTH_RS485-2)/2; i++) {
     1136:	d3 94       	inc	r13
-    1138:	b8 e0       	ldi	r27, 0x08	; 8
+    1138:	b6 e0       	ldi	r27, 0x06	; 6
     113a:	bd 15       	cp	r27, r13
     113c:	b0 f6       	brcc	.-84     	; 0x10ea <RS485DataSplitter+0x54>
 		char buf[3] = { temp[i * 2], temp[i * 2 + 1], '\0' }; // du simboliai + '\0'
@@ -2971,7 +2968,7 @@ void RS485DataSplitter(char *command) {
     113e:	42 e0       	ldi	r20, 0x02	; 2
     1140:	50 e0       	ldi	r21, 0x00	; 0
     1142:	b7 01       	movw	r22, r14
-    1144:	6e 5e       	subi	r22, 0xEE	; 238
+    1144:	62 5f       	subi	r22, 0xF2	; 242
     1146:	7f 4f       	sbci	r23, 0xFF	; 255
     1148:	ce 01       	movw	r24, r28
     114a:	06 96       	adiw	r24, 0x06	; 6
@@ -2990,7 +2987,7 @@ void RS485DataSplitter(char *command) {
 
 	if(verify_crc8_cdma2000_v2(datatocheck, crctocheck)){ //if data valid update it
     1162:	ce 01       	movw	r24, r28
-    1164:	48 96       	adiw	r24, 0x18	; 24
+    1164:	44 96       	adiw	r24, 0x14	; 20
     1166:	0e 94 2e 04 	call	0x85c	; 0x85c <verify_crc8_cdma2000_v2>
     116a:	81 11       	cpse	r24, r1
     116c:	80 c0       	rjmp	.+256    	; 0x126e <RS485DataSplitter+0x1d8>
@@ -3001,7 +2998,7 @@ void RS485DataSplitter(char *command) {
 		for (uint8_t i = 0; i < 5; i++) {
 			char token[5] = {0}; //longest token length + 1
     1170:	5e 01       	movw	r10, r28
-    1172:	e1 e2       	ldi	r30, 0x21	; 33
+    1172:	eb e1       	ldi	r30, 0x1B	; 27
     1174:	ae 0e       	add	r10, r30
     1176:	b1 1c       	adc	r11, r1
     1178:	85 e0       	ldi	r24, 0x05	; 5
@@ -3051,7 +3048,7 @@ void RS485DataSplitter(char *command) {
     11c6:	60 e0       	ldi	r22, 0x00	; 0
     11c8:	70 e0       	ldi	r23, 0x00	; 0
     11ca:	ce 01       	movw	r24, r28
-    11cc:	81 96       	adiw	r24, 0x21	; 33
+    11cc:	4b 96       	adiw	r24, 0x1b	; 27
     11ce:	0e 94 26 14 	call	0x284c	; 0x284c <strtol>
     11d2:	9b 01       	movw	r18, r22
     11d4:	36 95       	lsr	r19
@@ -3072,7 +3069,7 @@ void RS485DataSplitter(char *command) {
     11f6:	60 e0       	ldi	r22, 0x00	; 0
     11f8:	70 e0       	ldi	r23, 0x00	; 0
     11fa:	ce 01       	movw	r24, r28
-    11fc:	81 96       	adiw	r24, 0x21	; 33
+    11fc:	4b 96       	adiw	r24, 0x1b	; 27
     11fe:	0e 94 26 14 	call	0x284c	; 0x284c <strtol>
     1202:	9b 01       	movw	r18, r22
     1204:	36 95       	lsr	r19
@@ -3093,7 +3090,7 @@ void RS485DataSplitter(char *command) {
     1226:	60 e0       	ldi	r22, 0x00	; 0
     1228:	70 e0       	ldi	r23, 0x00	; 0
     122a:	ce 01       	movw	r24, r28
-    122c:	81 96       	adiw	r24, 0x21	; 33
+    122c:	4b 96       	adiw	r24, 0x1b	; 27
     122e:	0e 94 26 14 	call	0x284c	; 0x284c <strtol>
     1232:	60 93 42 66 	sts	0x6642, r22	; 0x806642 <WSData+0x4>
     1236:	17 c0       	rjmp	.+46     	; 0x1266 <RS485DataSplitter+0x1d0>
@@ -3103,7 +3100,7 @@ void RS485DataSplitter(char *command) {
     123c:	60 e0       	ldi	r22, 0x00	; 0
     123e:	70 e0       	ldi	r23, 0x00	; 0
     1240:	ce 01       	movw	r24, r28
-    1242:	81 96       	adiw	r24, 0x21	; 33
+    1242:	4b 96       	adiw	r24, 0x1b	; 27
     1244:	0e 94 26 14 	call	0x284c	; 0x284c <strtol>
     1248:	60 93 43 66 	sts	0x6643, r22	; 0x806643 <WSData+0x5>
     124c:	0c c0       	rjmp	.+24     	; 0x1266 <RS485DataSplitter+0x1d0>
@@ -3113,7 +3110,7 @@ void RS485DataSplitter(char *command) {
     1252:	60 e0       	ldi	r22, 0x00	; 0
     1254:	70 e0       	ldi	r23, 0x00	; 0
     1256:	ce 01       	movw	r24, r28
-    1258:	81 96       	adiw	r24, 0x21	; 33
+    1258:	4b 96       	adiw	r24, 0x1b	; 27
     125a:	0e 94 26 14 	call	0x284c	; 0x284c <strtol>
     125e:	60 93 44 66 	sts	0x6644, r22	; 0x806644 <WSData+0x6>
     1262:	70 93 45 66 	sts	0x6645, r23	; 0x806645 <WSData+0x7>
@@ -3157,7 +3154,7 @@ void RS485DataSplitter(char *command) {
 	}
 
 }
-    1286:	a5 96       	adiw	r28, 0x25	; 37
+    1286:	6f 96       	adiw	r28, 0x1f	; 31
     1288:	cd bf       	out	0x3d, r28	; 61
     128a:	de bf       	out	0x3e, r29	; 62
     128c:	df 91       	pop	r29
@@ -3182,14 +3179,14 @@ void RS485Receiver() {
     12aa:	df 93       	push	r29
     12ac:	cd b7       	in	r28, 0x3d	; 61
     12ae:	de b7       	in	r29, 0x3e	; 62
-    12b0:	64 97       	sbiw	r28, 0x14	; 20
+    12b0:	60 97       	sbiw	r28, 0x10	; 16
     12b2:	cd bf       	out	0x3d, r28	; 61
     12b4:	de bf       	out	0x3e, r29	; 62
 	uint8_t index = 0;
 	char command[MESSAGE_LENGTH_RS485] = {0}; // Empty command array
     12b6:	fe 01       	movw	r30, r28
     12b8:	31 96       	adiw	r30, 0x01	; 1
-    12ba:	84 e1       	ldi	r24, 0x14	; 20
+    12ba:	80 e1       	ldi	r24, 0x10	; 16
     12bc:	df 01       	movw	r26, r30
     12be:	1d 92       	st	X+, r1
     12c0:	8a 95       	dec	r24
@@ -3272,7 +3269,7 @@ void RS485Receiver() {
 				break;
     1310:	13 c0       	rjmp	.+38     	; 0x1338 <RS485Receiver+0x96>
 				} else if (index < MESSAGE_LENGTH_RS485) {
-    1312:	04 31       	cpi	r16, 0x14	; 20
+    1312:	00 31       	cpi	r16, 0x10	; 16
     1314:	40 f4       	brcc	.+16     	; 0x1326 <RS485Receiver+0x84>
 				command[index++] = c; // Store received character in command array
     1316:	e1 e0       	ldi	r30, 0x01	; 1
@@ -3307,7 +3304,7 @@ void RS485Receiver() {
 			RS485_Led(RX_LED_ON);
 		}
 	}
-    1338:	64 96       	adiw	r28, 0x14	; 20
+    1338:	60 96       	adiw	r28, 0x10	; 16
     133a:	cd bf       	out	0x3d, r28	; 61
     133c:	de bf       	out	0x3e, r29	; 62
     133e:	df 91       	pop	r29
