@@ -11,7 +11,7 @@
 
 #define MIN_AZIMUTH 44
 #define MAX_AZIMUTH 316
-#define MIN_ELEVATION 14
+#define MIN_ELEVATION 5
 #define MAX_ELEVATION 60
 #define MAX_WIND 15
 #define SAFE_ELEVATION 45

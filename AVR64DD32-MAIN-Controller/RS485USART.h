@@ -20,7 +20,6 @@
 typedef struct {
 	uint16_t azimuth;
 	uint16_t elevation;
-	uint16_t topelevation;
 	uint8_t windspeed;
 	uint8_t winddirection;
 	uint16_t lightlevel;

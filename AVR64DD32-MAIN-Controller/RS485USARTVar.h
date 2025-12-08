@@ -12,7 +12,6 @@
 Wearther_Station WSData = {
 	.azimuth = 0,
 	.elevation = 0,
-	.topelevation = 0,
 	.windspeed = 0,
 	.winddirection = 0,
 	.lightlevel = 0,

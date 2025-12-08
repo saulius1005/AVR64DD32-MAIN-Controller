@@ -236,9 +236,7 @@ void work(){
 					else
 						Target.elevation = WSData.elevation;
 				}
-				else{ // if not go to best day position (early morning, late at evening, or just dark day)
-					Target.azimuth = 171; //South -9 degree
-					Target.elevation = WSData.topelevation; //day top elevation
+				else{ // if not elevation and azimuth is at last position when light level was >= MIN_LIGHT_LEVEL
 				}		 
 				AutoMotorControl(MOTOR_LINEAR);
 				AutoMotorControl(MOTOR_STEPPER);

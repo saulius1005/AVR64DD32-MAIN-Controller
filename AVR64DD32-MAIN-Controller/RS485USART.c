@@ -9,7 +9,7 @@
 
 
 void RS485DataSplitter(char *command) {
-	const uint8_t lengths[] = {4, 4, 4, 2, 1, 3}; //tokens length without crc
+	const uint8_t lengths[] = {4, 4, 2, 1, 3}; //tokens length without crc
 	char temp[MESSAGE_LENGTH_RS485-2]; //data storage
 
 	strncpy(temp, command, MESSAGE_LENGTH_RS485-2); //copy data without crc
@@ -30,7 +30,7 @@ void RS485DataSplitter(char *command) {
 		//screen_write_formatted_text("data is correct", 1, ALIGN_CENTER);//uncomment if nedded// crc ok
 		const char *p = command;
 
-		for (uint8_t i = 0; i < 6; i++) {
+		for (uint8_t i = 0; i < 5; i++) {
 			char token[5] = {0}; //longest token length + 1
 
 			memcpy(token, p, lengths[i]);
@@ -39,10 +39,9 @@ void RS485DataSplitter(char *command) {
 			switch (i) {
 				case 0: WSData.azimuth   = (uint16_t)strtol(token, NULL, 16) / Angle_Precizion; break;
 				case 1: WSData.elevation     = (uint16_t)strtol(token, NULL, 16) / Angle_Precizion; break;
-				case 2: WSData.topelevation         = (uint16_t)strtol(token, NULL, 16) / Angle_Precizion; break;
-				case 3: WSData.windspeed         = (uint8_t)strtol(token, NULL, 16); break;
-				case 4: WSData.winddirection       = (uint8_t)strtol(token, NULL, 16); break;
-				case 5: WSData.lightlevel	= (uint16_t)strtol(token, NULL, 16); break;
+				case 2: WSData.windspeed         = (uint8_t)strtol(token, NULL, 16); break;
+				case 3: WSData.winddirection       = (uint8_t)strtol(token, NULL, 16); break;
+				case 4: WSData.lightlevel	= (uint16_t)strtol(token, NULL, 16); break;
 			}
 
 			p += lengths[i];

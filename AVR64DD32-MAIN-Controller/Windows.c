@@ -124,7 +124,7 @@ void windows() {
 					SensorData.Elevation);
 				}
 
-				char azimuthAngleRange[5];
+				char azimuthAngleRange[5]=" /";
 				screen_write_formatted_text("Azimuth:", 6, ALIGN_LEFT);
 				//1. Azimuth sensor data and fault FO_azimuth_sensor_fault
 				if(WSData.azimuth < MIN_AZIMUTH)
