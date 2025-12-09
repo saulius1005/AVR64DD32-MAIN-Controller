@@ -11,7 +11,7 @@
 #ifndef SETTINGS_H_
 #define SETTINGS_H_
 
-#define DEVICE_ID_NUMBER 1
+#define DEVICE_ID_NUMBER 2
 
 /**
  * @brief CPU clock frequency (F_CPU).
@@ -444,6 +444,12 @@ void RTC_ON(uint16_t period_ms);
 
 // Disable RTC
 void RTC_OFF();
+
+uint8_t hexchar2val(char c);
+
+uint16_t hex2uint(const char *p, uint8_t len);
+
+uint64_t hex2uint64(const char *p, uint8_t len);
 
 
 #endif /* SETTINGS_H_ */
