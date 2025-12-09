@@ -26,6 +26,8 @@ RS485LED.c
 
 RS485USART.c
 
+RTC.c
+
 SSD1306.c
 
 StepperMotor.c

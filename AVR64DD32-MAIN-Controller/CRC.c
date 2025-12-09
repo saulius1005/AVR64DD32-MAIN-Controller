@@ -82,9 +82,52 @@ uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc) {
 uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
 
 	uint8_t calculatedcrc = 0xFF;
-	for (size_t i = 0; i < 7; i++) { // length = 8 baitai
+	for (size_t i = 0; i < 8; i++) { // length = 8 baitai
 		calculatedcrc = crc8_table[calculatedcrc ^ data[i]];
 	}
 	return calculatedcrc == crc ? calculatedcrc : 0 ;
 
+}
+
+
+uint8_t crc8_cdma2000_id(uint8_t device_id)
+{
+	uint8_t buf[16];
+	uint8_t i = 0;
+
+	buf[i++] = device_id;
+
+	buf[i++] = SensorData.HPElevation >> 8;
+	buf[i++] = SensorData.HPElevation & 0xFF;
+
+	buf[i++] = SensorData.HPAzimuth >> 8;
+	buf[i++] = SensorData.HPAzimuth & 0xFF;
+
+	// Pack PVU & PVI
+	uint32_t pv = ((SensorData.PVU & 0x0FFF) << 12) |
+	(abs(SensorData.PVI) & 0x0FFF);
+	buf[i++] = (pv >> 16) & 0xFF;
+	buf[i++] = (pv >> 8) & 0xFF;
+	buf[i++] = pv & 0xFF;
+
+	// Stepper Voltage + Current
+	uint32_t stepper = ((StepperMotor.measuredVoltage & 0x0FFF) << 12) |
+	(abs(StepperMotor.measuredCurrent) & 0x0FFF);
+	buf[i++] = (stepper >> 16) & 0xFF;
+	buf[i++] = (stepper >> 8) & 0xFF;
+	buf[i++] = stepper & 0xFF;
+
+	// Linear V + I
+	uint32_t linear = ((LinearMotor.measuredVoltage & 0x0FFF) << 12) |
+	(abs(LinearMotor.measuredCurrent) & 0x0FFF);
+	buf[i++] = (linear >> 16) & 0xFF;
+	buf[i++] = (linear >> 8) & 0xFF;
+	buf[i++] = linear & 0xFF;
+
+	// CRC
+	uint8_t crc = 0xFF;
+	for (uint8_t j = 0; j < i; j++)
+	crc = crc8_table[crc ^ buf[j]];
+
+	return crc;
 }

@@ -49,6 +49,7 @@ C_SRCS +=  \
 ../main.c \
 ../RS485LED.c \
 ../RS485USART.c \
+../RTC.c \
 ../SSD1306.c \
 ../StepperMotor.c \
 ../TCA.c \
@@ -76,6 +77,7 @@ LinearMotor.o \
 main.o \
 RS485LED.o \
 RS485USART.o \
+RTC.o \
 SSD1306.o \
 StepperMotor.o \
 TCA.o \
@@ -96,6 +98,7 @@ LinearMotor.o \
 main.o \
 RS485LED.o \
 RS485USART.o \
+RTC.o \
 SSD1306.o \
 StepperMotor.o \
 TCA.o \
@@ -116,6 +119,7 @@ LinearMotor.d \
 main.d \
 RS485LED.d \
 RS485USART.d \
+RTC.d \
 SSD1306.d \
 StepperMotor.d \
 TCA.d \
@@ -136,6 +140,7 @@ LinearMotor.d \
 main.d \
 RS485LED.d \
 RS485USART.d \
+RTC.d \
 SSD1306.d \
 StepperMotor.d \
 TCA.d \
@@ -235,6 +240,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./RS485USART.o: .././RS485USART.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./RTC.o: .././RTC.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=avr64dd32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\AVR-Dx_DFP\2.7.321\gcc\dev\avr64dd32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

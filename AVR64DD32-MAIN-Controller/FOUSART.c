@@ -120,7 +120,7 @@ void FODataSplitter(char *command) {
 	uint8_t crcToCheck = (uint8_t)strtol(command + MESSAGE_LENGTH_FO - 2, NULL, 16);
 
 	bool crc_ok = crc8_cdma2000(dataToCheck) == crcToCheck ?  true : false;
-	uint8_t endSwitches = 0;
+	//uint8_t endSwitches = 0;
 
 	// Detect “bad signal”
 	if (strncmp(command, "00000000000000", 14) == 0) {
@@ -130,7 +130,7 @@ void FODataSplitter(char *command) {
 			char token[2];
 			token[0] = command[14];
 			token[1] = '\0';
-			endSwitches = (uint8_t)strtol(token, NULL, 16);
+			SensorData.endSwitches = (uint8_t)strtol(token, NULL, 16);
 			} else {
 			SensorData.FO_data_fault = true;
 			return;
@@ -150,7 +150,7 @@ void FODataSplitter(char *command) {
 				case 1: SensorData.HPAzimuth   = (uint16_t)strtol(token, NULL, 16); break;
 				case 2: SensorData.PVU = (uint16_t)strtol(token, NULL, 16) / U_I_Precizion; break;
 				case 3: SensorData.PVI = (uint16_t)strtol(token, NULL, 16) / U_I_Precizion; break;
-				case 4: endSwitches = (uint8_t)strtol(token, NULL, 16); break;
+				case 4: SensorData.endSwitches = (uint8_t)strtol(token, NULL, 16); break;
 			}
 		}
 
@@ -162,10 +162,10 @@ void FODataSplitter(char *command) {
 	}
 
 	// Common: update switch flags (executed for both valid and “bad signal” cases)
-	SensorData.ElMin = (endSwitches & 0x01);
-	SensorData.ElMax = (endSwitches & 0x02);
-	SensorData.AzMin = (endSwitches & 0x04);
-	SensorData.AzMax = (endSwitches & 0x08);
+	SensorData.ElMin = (SensorData.endSwitches & 0x01);
+	SensorData.ElMax = (SensorData.endSwitches & 0x02);
+	SensorData.AzMin = (SensorData.endSwitches & 0x04);
+	SensorData.AzMax = (SensorData.endSwitches & 0x08);
 }
 
 
@@ -185,6 +185,41 @@ void FOReceiver() {
 	SensorData.FO_lost_signal_fault = false;// usart1 while loop exit
 	SensorData.FO_lost_connecton_fault = false; // while lop exit below
 
+	RTC_ON(500);
+		while (!(RTC.INTFLAGS & RTC_OVF_bm)) {
+			char c = USART1_readCharRTC(); // Reading a character from USART
+
+		if(SensorData.FO_lost_signal_fault){
+			//if (++timeout == CountForError_FO) { // Timeout condition if usart1 reading is halted
+				SensorData.FO_lost_connecton_fault = true;
+				break;
+			//}
+		}
+		if (start) {
+			
+			if (c == '>') { // If received data end symbol
+				start = 0;
+				command[index] = '\0';
+				index = 0;
+				if (strcmp(command, SensorData.FreshDataPack) != 0){ //only if message is different
+					FODataSplitter(command); // Execute the received command //comment when testing lines below
+				}
+				strcpy(SensorData.FreshDataPack, command); // prevents from same message data splitting
+				break;
+				} else if (index < MESSAGE_LENGTH_FO) {
+				command[index++] = c; // Store received character in command array
+			}
+		}
+		if (c == '<') { // If received data start symbol
+			start = 1;
+			index = 0;
+		}
+
+	}
+	RTC.INTFLAGS = RTC_OVF_bm;
+	RTC_OFF();
+
+/*
     while (1) {
         char c = USART1_readChar(); // Reading a character from USART
 
@@ -213,6 +248,6 @@ void FOReceiver() {
             start = 1;
             index = 0;
         }
-    }
+    }*/
 }
 

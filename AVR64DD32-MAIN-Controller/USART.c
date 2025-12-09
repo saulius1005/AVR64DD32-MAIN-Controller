@@ -39,6 +39,17 @@ char USART0_readChar() {
 	return USART0.RXDATAL; // Return received character
 }
 
+char USART0_readCharRTC() {
+	USART0.STATUS = USART_RXCIF_bm;
+	while (!(USART0.STATUS & USART_RXCIF_bm)) {
+		if (RTC.INTFLAGS & RTC_OVF_bm){ // Timeout detected
+			WSData.WS_lost_signal_fault = true;
+			break;
+		}
+	}
+	return USART0.RXDATAL;
+}
+
 /**
  * @brief Sends a single character via USART0.
  * 
@@ -152,6 +163,17 @@ char USART1_readChar() {
 		}
 	}
 	return USART1.RXDATAL; // Return received character
+}
+
+char USART1_readCharRTC() {
+	USART1.STATUS = USART_RXCIF_bm;
+	while (!(USART1.STATUS & USART_RXCIF_bm)) {
+		if (RTC.INTFLAGS & RTC_OVF_bm){ // Timeout detected
+			SensorData.FO_lost_signal_fault = true;
+			break;
+		}
+	}
+	return USART1.RXDATAL;
 }
 
 /**

@@ -214,6 +214,9 @@
     <Compile Include="RS485USARTVar.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="RTC.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Settings.h">
       <SubType>compile</SubType>
     </Compile>

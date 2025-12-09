@@ -17,6 +17,7 @@ FOdata SensorData = {
 	.HPAzimuth = 0,
 	.PVU = 0, //Sun Panel Voltage
 	.PVI = 0, //Sun Panel Current
+	.endSwitches = 0,
 	.ElMin = false,	//Separeted Elevation min End Switch value
 	.ElMax = false,	//Separeted Elevation max End Switch value
 	.AzMin = false,	//Separeted Azimuth min End Switch value

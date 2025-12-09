@@ -26,6 +26,7 @@ typedef struct {
 	uint16_t HPAzimuth;
 	uint16_t PVU;
 	uint16_t PVI;
+	uint8_t endSwitches;
 	bool ElMin;
 	bool ElMax;
 	bool AzMin;

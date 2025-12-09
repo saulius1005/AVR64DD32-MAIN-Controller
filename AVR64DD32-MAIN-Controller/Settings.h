@@ -11,6 +11,8 @@
 #ifndef SETTINGS_H_
 #define SETTINGS_H_
 
+#define DEVICE_ID_NUMBER 1
+
 /**
  * @brief CPU clock frequency (F_CPU).
  * 
@@ -429,6 +431,19 @@ void work();
 void AutoMotorControl(MotorType motor);
 
 void windows();
+
+uint8_t crc8_cdma2000_id(uint8_t device_id);
+
+// Read a character from USART1 using RTC as timeout control
+char USART0_readCharRTC();
+
+char USART1_readCharRTC();
+
+// Enable Real-Time Counter (RTC) with given period in milliseconds
+void RTC_ON(uint16_t period_ms);
+
+// Disable RTC
+void RTC_OFF();
 
 
 #endif /* SETTINGS_H_ */

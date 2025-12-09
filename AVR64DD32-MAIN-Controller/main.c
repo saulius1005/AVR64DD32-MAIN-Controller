@@ -22,8 +22,10 @@ int main(void)
     while (1) 
     {
 		
-		RS485Receiver(); //RS485 communication
-		FOReceiver(); // Received Fiber optic data
+		FOReceiver(); // Read Sensor data from TopController
+		//USART_printf(0, "S");
+		RS485Receiver(); //Read data and send answer to Weather station
+		//USART_printf(0, "s");
 		if(JustBoot)
 			work();//Actions with motors
 		windows();

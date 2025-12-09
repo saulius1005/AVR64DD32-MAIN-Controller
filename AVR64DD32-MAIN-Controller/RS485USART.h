@@ -14,7 +14,7 @@
  */
 #define RS485_TIMEOUT_COUNTER 200000 ///< Timeout counter value for operations slower speed meaning more this
 #define CountForError_RS485 3 //times to receive signal error and after this number will be set up connection fault
-#define MESSAGE_LENGTH_RS485 16
+#define MESSAGE_LENGTH_RS485 18
 
 
 typedef struct {
