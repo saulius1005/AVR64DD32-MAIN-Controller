@@ -82,7 +82,7 @@ void windows() {
 	switch (show.window){
 		case 0:
 			if(screenUpdater(0)){
-				screen_write_formatted_text("%s", 0, ALIGN_CENTER, Joystick.LatchSwitch ? "Manual mode": " Auto mode ");			
+				screen_write_formatted_text("%s  T%02d", 0, ALIGN_RIGHT, Joystick.LatchSwitch ? "Manual mode": " Auto mode ", DEVICE_ID_NUMBER);			
 				screen_write_formatted_text("---------------------", 1, ALIGN_CENTER);
 				if(Joystick.LatchSwitch){ //Show motor data in Manual mode
 					screen_write_formatted_text("St.M:", 2, ALIGN_LEFT);

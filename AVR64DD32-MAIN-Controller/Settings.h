@@ -387,8 +387,8 @@ void screen_write_formatted_text(const char *format, uint8_t line, alignment_t a
  */
 void RS485_Led(RS485_LED_t LED);
 uint8_t crc8_cdma2000(uint64_t data);
-uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
-uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc);
+bool verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc);
+bool verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc);
 
 void FOReceiver();
 

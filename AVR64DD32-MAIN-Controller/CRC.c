@@ -72,20 +72,20 @@ uint8_t crc8_cdma2000(uint64_t data) {
  * @param data_with_crc The input data with the CRC byte appended.
  * @return The data without the CRC byte if the checksum is valid, or 0 if invalid.
  */
-uint8_t verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc) {
+bool verify_crc8_cdma2000(uint64_t data_without_crc, uint8_t crc) {
 
-	return crc8_cdma2000(data_without_crc) == crc ?  data_without_crc : 0;
+	return crc8_cdma2000(data_without_crc) == crc ?  true : false;
 
 }
 
 
-uint8_t verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
+bool verify_crc8_cdma2000_v2(uint8_t *data, uint8_t crc) {
 
 	uint8_t calculatedcrc = 0xFF;
 	for (size_t i = 0; i < 8; i++) { // length = 8 baitai
 		calculatedcrc = crc8_table[calculatedcrc ^ data[i]];
 	}
-	return calculatedcrc == crc ? calculatedcrc : 0 ;
+	return calculatedcrc == crc ? true : false ;
 
 }
 

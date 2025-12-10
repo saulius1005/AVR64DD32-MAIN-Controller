@@ -20,12 +20,9 @@ int main(void)
 	_delay_ms(300); //Let to boot Top controller
 	bool JustBoot = false;
     while (1) 
-    {
-		
+    {		
 		FOReceiver(); // Read Sensor data from TopController
-		//USART_printf(0, "S");
 		RS485Receiver(); //Read data and send answer to Weather station
-		//USART_printf(0, "s");
 		if(JustBoot)
 			work();//Actions with motors
 		windows();

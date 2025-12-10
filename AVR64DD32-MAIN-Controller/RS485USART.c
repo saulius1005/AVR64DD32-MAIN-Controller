@@ -29,22 +29,18 @@ void RS485DataSplitter(char *command) {
 	for (uint8_t i = 0; i < data_len / 2; i++) //preparing data to check
 		datatocheck[i] = hex2uint(&command[i*2], 2);
 	uint8_t crc_received = hex2uint(&command[data_len], 2); //only crc
-
 	if (!verify_crc8_cdma2000_v2(datatocheck, crc_received)) { //checking crc
 		WSData.WS_data_fault = true;
 		return;
 	}
 	const char *p = command + 2;// if crc ok removing id simbols
-
 	WSData.azimuth       = hex2uint(p, 4) / Angle_Precizion; p += 4; //converting ancii hex into uint16_t, uint8_t
 	WSData.elevation     = hex2uint(p, 4) / Angle_Precizion; p += 4;
 	WSData.windspeed     = hex2uint(p, 2); p += 2;
 	WSData.winddirection = hex2uint(p, 1); p += 1;
 	WSData.lightlevel    = hex2uint(p, 3); p += 3;
-
 	WSData.WS_data_fault = false;
 	WSData.WS_lost_signal_fault = false;
-
 	RS485_Led(TX_LED_ON); //sending answer
 	USART_printf(0, "[%02x%04x%04x%03x%03x%x%03x%03x%03x%03x%02x]\r\n",
 	(uint8_t)DEVICE_ID_NUMBER,
