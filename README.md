@@ -168,7 +168,7 @@ The controller reacts automatically to **extreme weather conditions** received f
 
 ---
 
-> ⚙️ *Automatic Mode ensures full autonomous operation and protection of the solar tracking system based on live meteorological data.*
+>  *Automatic Mode ensures full autonomous operation and protection of the solar tracking system based on live meteorological data.*
 
 ---
 
@@ -276,6 +276,32 @@ By navigating the joystick:
 **Date:** 2025-10-14
 
 ---
+
+**2026-03-13 Update**
+
+---
+
+While observing the operation of the towers, I noticed that electricity generation begins even when the Sun is still below the horizon. The current illumination sensor threshold of **400 mV** is therefore too high, because some energy is lost before this level is reached. Until the threshold is reached, the towers do not rotate to the position indicated by the meteorological station (east). This was originally implemented to conserve energy.
+
+However, based on statistics from the past few days, it appears that the **400 mV** threshold is indeed too high, so I have reduced it to **200 mV**.
+
+*Actions.h*
+
+old value:
+
+```
+#define MIN_LIGHT_LEVEL 400 //4,15kW generates around 160w at 400mV
+```
+
+new value (not updated in github)
+
+```
+#define MIN_LIGHT_LEVEL 200 //4,15kW generates around 160w at 400mV //2026-03-13 changed from 400-> 200
+```
+
+I have also attached a graph that explains this in more detail:
+
+
 
 
 
