@@ -293,7 +293,7 @@ old value:
 #define MIN_LIGHT_LEVEL 400 //4,15kW generates around 160w at 400mV
 ```
 
-new value (not updated in github)
+new value
 
 ```
 #define MIN_LIGHT_LEVEL 200 //4,15kW generates around 160w at 400mV //2026-03-13 changed from 400-> 200
@@ -301,7 +301,7 @@ new value (not updated in github)
 
 I have also attached a graph that explains this in more detail:
 
-
+![Graphic](/clear_day_sun graph.jpg)
 
 
 
