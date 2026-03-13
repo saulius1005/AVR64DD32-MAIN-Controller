@@ -975,8 +975,8 @@ void work(){
 				if(WSData.lightlevel >= MIN_LIGHT_LEVEL){ // if minimum light level reached work as normal
      5de:	80 91 73 66 	lds	r24, 0x6673	; 0x806673 <WSData+0x6>
      5e2:	90 91 74 66 	lds	r25, 0x6674	; 0x806674 <WSData+0x7>
-     5e6:	80 39       	cpi	r24, 0x90	; 144
-     5e8:	91 40       	sbci	r25, 0x01	; 1
+     5e6:	88 3c       	cpi	r24, 0xC8	; 200
+     5e8:	91 05       	cpc	r25, r1
      5ea:	c8 f1       	brcs	.+114    	; 0x65e <work+0xd4>
 					if(WSData.azimuth > MAX_AZIMUTH)
      5ec:	80 91 6d 66 	lds	r24, 0x666D	; 0x80666d <WSData>

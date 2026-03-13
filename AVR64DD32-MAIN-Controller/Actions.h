@@ -15,7 +15,7 @@
 #define MAX_ELEVATION 60
 #define MAX_WIND 15
 #define SAFE_ELEVATION 45
-#define MIN_LIGHT_LEVEL 400 //4,15kW generates around 160w at 400mV
+#define MIN_LIGHT_LEVEL 200 //4,15kW generates around 160w at 400mV //2026-03-13 changed from 400-> 200
 
 #define ELEVATION_BACKLASH 1 //1.00 degree (this is not real backlash I just call it like that. Actually meaning of this is "how long don't do anything"- elevate only every 1 degree)
 #define AZIMUTH_BACKLASH 1 // 1.00 degree
