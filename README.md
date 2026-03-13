@@ -280,8 +280,8 @@ By navigating the joystick:
 **2026-03-13 Update**
 
 ---
-
-While observing the operation of the towers, I noticed that electricity generation begins even when the Sun is still below the horizon. The current illumination sensor threshold of **400 mV** is therefore too high, because some energy is lost before this level is reached. Until the threshold is reached, the towers do not rotate to the position indicated by the meteorological station (east). This was originally implemented to conserve energy.
+> [!NOTE]
+> While observing the operation of the towers, I noticed that electricity generation begins even when the Sun is still below the horizon. The current illumination sensor threshold of **400 mV** is therefore too high, because some energy is lost before this level is reached. Until the threshold is reached, the towers do not rotate to the position indicated by the meteorological station (east). This was originally implemented to conserve energy.
 
 However, based on statistics from the past few days, it appears that the **400 mV** threshold is indeed too high, so I have reduced it to **200 mV**.
 
@@ -301,7 +301,7 @@ new value
 
 I have also attached a graph that explains this in more detail:
 
-![Graphic](/clear_day_sun graph.jpg)
+![GRAPHIC](clear_day_sun graph.jpg)
 
 
 
