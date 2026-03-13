@@ -301,7 +301,7 @@ new value
 
 I have also attached a graph that explains this in more detail:
 
-![GRAPHIC](clear_day_sun graph.jpg)
+![GRAPHIC](clear_day_sun_graph.jpg)
 
 
 
